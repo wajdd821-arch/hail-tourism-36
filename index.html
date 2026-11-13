@@ -1,411 +1,1854 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hail360 | حائل 360 - Smart Tourism & Heritage Explorer</title>
-  <style>
-    :root {
-      --primary: #8b4513;
-      --primary-dark: #5c2d0c;
-      --gold: #d4a359;
-      --bg-sand: #faf6f0;
-      --card-bg: #ffffff;
-      --text-main: #2c1e16;
-      --text-muted: #6e5a4f;
-      --border: #e6d8c8;
-      --shadow: 0 10px 30px rgba(44, 30, 22, 0.08);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hail360 | Smart Tourism & Heritage Guide</title>
+    <style>
+        /* ==========================================================================
+           SELF-CONTAINED MODERN DESIGN SYSTEM (ZERO EXTERNAL DEPENDENCIES)
+           ========================================================================== */
+        :root {
+            --hail-green: #14452F;
+            --hail-green-dark: #0D2E1F;
+            --hail-green-light: #E8F1EC;
+            --hail-gold: #C8963E;
+            --hail-gold-dark: #A67828;
+            --hail-gold-light: #F6EEDB;
+            --hail-sand: #FAF7F2;
+            --hail-terracotta: #A64B2A;
+            --surface: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+            --shadow-md: 0 10px 25px rgba(15, 23, 42, 0.08);
+            --shadow-lg: 0 20px 40px rgba(13, 46, 31, 0.16);
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Tahoma, Arial, sans-serif; }
-    body { background-color: var(--bg-sand); color: var(--text-main); line-height: 1.6; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Tahoma", sans-serif;
+        }
 
-    /* Top Navigation */
-    header {
-      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-      color: #fff;
-      padding: 1rem 5%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    }
-    .logo { font-size: 1.6rem; font-weight: 800; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px; }
-    .logo span { color: var(--gold); }
-    .nav-actions { display: flex; gap: 12px; align-items: center; }
-    .btn {
-      padding: 0.55rem 1.2rem;
-      border-radius: 8px;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      font-size: 0.92rem;
-      transition: all 0.2s ease;
-    }
-    .btn-gold { background: var(--gold); color: var(--primary-dark); }
-    .btn-gold:hover { background: #e2b46b; transform: translateY(-1px); }
-    .btn-outline { background: transparent; border: 1.5px solid rgba(255,255,255,0.6); color: #fff; }
-    .btn-outline:hover { background: rgba(255,255,255,0.12); }
-    .btn-primary { background: var(--primary); color: #fff; width: 100%; padding: 0.8rem; font-size: 1rem; margin-top: 10px; }
-    .btn-primary:hover { background: var(--primary-dark); }
+        body {
+            background-color: var(--hail-sand);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
 
-    /* Views */
-    .view { display: none; padding: 2.5rem 5%; max-width: 1280px; margin: 0 auto; }
-    .view.active { display: block; }
+        .hidden { display: none !important; }
 
-    /* Auth / Registration Page (Section 4.3.1) */
-    .auth-wrapper {
-      max-width: 460px;
-      margin: 2rem auto;
-      background: var(--card-bg);
-      padding: 2.5rem;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-    }
-    .auth-header { text-align: center; margin-bottom: 1.5rem; }
-    .auth-header h2 { color: var(--primary-dark); font-size: 1.7rem; margin-bottom: 6px; }
-    .auth-header p { color: var(--text-muted); font-size: 0.92rem; }
-    .tabs { display: flex; background: var(--bg-sand); border-radius: 10px; padding: 4px; margin-bottom: 1.5rem; }
-    .tab { flex: 1; text-align: center; padding: 0.6rem; cursor: pointer; border-radius: 8px; font-weight: 600; color: var(--text-muted); }
-    .tab.active { background: var(--card-bg); color: var(--primary); box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
-    .form-group { margin-bottom: 1rem; }
-    .form-group label { display: block; font-size: 0.88rem; font-weight: 600; margin-bottom: 5px; color: var(--text-main); }
-    .form-group input, .form-group select {
-      width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px;
-      font-size: 0.95rem; background: #fff;
-    }
-    .guest-link { display: block; text-align: center; margin-top: 1rem; color: var(--primary); font-weight: 600; cursor: pointer; text-decoration: underline; font-size: 0.9rem; }
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 9999;
+            background: var(--hail-green-dark);
+            color: #fff;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            border: 1px solid rgba(200, 150, 62, 0.45);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: slideUp 0.25s ease-out;
+        }
+        [dir="rtl"] .toast { right: auto; left: 24px; }
 
-    /* Main Dashboard & Landmarks (Section 4.3.2) */
-    .hero-banner {
-      background: linear-gradient(120deg, rgba(92,45,12,0.92), rgba(139,69,19,0.85));
-      color: #fff;
-      padding: 2.5rem;
-      border-radius: 18px;
-      margin-bottom: 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 20px;
-    }
-    .hero-banner h1 { font-size: 2rem; margin-bottom: 8px; }
-    .hero-banner p { max-width: 650px; opacity: 0.92; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
-      gap: 24px;
-    }
-    .card {
-      background: var(--card-bg);
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.25s ease;
-    }
-    .card:hover { transform: translateY(-5px); }
-    .card-img-wrap { position: relative; height: 210px; background: #e8dccb; overflow: hidden; }
-    .card-img-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .badge-360 {
-      position: absolute; top: 12px; right: 12px;
-      background: rgba(44, 30, 22, 0.85); color: var(--gold);
-      padding: 4px 10px; border-radius: 20px; font-size: 0.78rem; font-weight: 700;
-    }
-    [dir="rtl"] .badge-360 { right: auto; left: 12px; }
-    .card-body { padding: 1.3rem; flex: 1; display: flex; flex-direction: column; }
-    .card-body h3 { font-size: 1.2rem; color: var(--primary-dark); margin-bottom: 6px; }
-    .card-body p { font-size: 0.9rem; color: var(--text-muted); flex: 1; margin-bottom: 1rem; }
-    .card-footer { display: flex; gap: 10px; }
+        /* ==========================================================================
+           VIEW 1: AUTHENTICATION PAGE (LOGIN & REGISTRATION - FIGURE 4.1)
+           ========================================================================== */
+        .auth-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: row;
+        }
 
-    /* Modal for 360 Panorama View */
-    .modal {
-      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75);
-      z-index: 999; align-items: center; justify-content: center; padding: 20px;
-    }
-    .modal.open { display: flex; }
-    .modal-content {
-      background: var(--card-bg); max-width: 780px; width: 100%; border-radius: 16px;
-      overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.4);
-    }
-    .modal-header {
-      padding: 1rem 1.5rem; background: var(--primary-dark); color: #fff;
-      display: flex; justify-content: space-between; align-items: center;
-    }
-    .pano-viewer {
-      height: 360px; overflow: hidden; position: relative; cursor: grab; background: #1a120d;
-    }
-    .pano-viewer img {
-      width: 140%; height: 100%; object-fit: cover; transition: transform 0.2s ease-out;
-    }
-    .pano-hint {
-      position: absolute; bottom: 14px; left: 50%; transform: translateX(-50%);
-      background: rgba(0,0,0,0.7); color: #fff; padding: 6px 14px; border-radius: 20px; font-size: 0.82rem;
-    }
-    .modal-body { padding: 1.3rem 1.5rem; }
+        .auth-brand-panel {
+            flex: 1;
+            background: linear-gradient(145deg, var(--hail-green-dark) 0%, var(--hail-green) 65%, #1D5C40 100%);
+            color: #FFFFFF;
+            padding: 48px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
 
-    footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.88rem; border-top: 1px solid var(--border); margin-top: 3rem; }
-  </style>
+        .auth-brand-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image: radial-gradient(rgba(200, 150, 62, 0.18) 1.5px, transparent 1.5px);
+            background-size: 20px 20px;
+            pointer-events: none;
+        }
+
+        .brand-header {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--hail-gold);
+            color: var(--hail-green-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo-text h1 {
+            font-size: 1.55rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            line-height: 1.1;
+        }
+
+        .logo-text h1 span { color: var(--hail-gold); }
+        .logo-text p {
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--hail-gold-light);
+            opacity: 0.85;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            color: #FFFFFF;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s;
+        }
+        .lang-btn:hover { background: rgba(255, 255, 255, 0.22); }
+
+        .brand-hero {
+            position: relative;
+            z-index: 2;
+            max-width: 520px;
+            margin: 32px 0;
+        }
+
+        .vision-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(200, 150, 62, 0.2);
+            border: 1px solid rgba(200, 150, 62, 0.45);
+            color: var(--hail-gold-light);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .brand-hero h2 {
+            font-size: 2.35rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+
+        .brand-hero p {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.86);
+            margin-bottom: 28px;
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 14px;
+            border-radius: 14px;
+        }
+
+        .stat-box strong {
+            display: block;
+            font-size: 1.25rem;
+            color: var(--hail-gold);
+            font-weight: 800;
+        }
+
+        .stat-box span {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .brand-footer {
+            position: relative;
+            z-index: 2;
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.65);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Right Form Container */
+        .auth-form-panel {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 32px;
+            background: var(--hail-sand);
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 450px;
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            padding: 36px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .tab-switcher {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #F1F5F9;
+            padding: 5px;
+            border-radius: 14px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            background: var(--surface);
+            color: var(--hail-green);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-header { margin-bottom: 22px; }
+        .form-header h3 { font-size: 1.45rem; font-weight: 800; color: #0F172A; }
+        .form-header p { font-size: 0.86rem; color: var(--text-muted); margin-top: 4px; }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #475569;
+            margin-bottom: 6px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            background: #F8FAFC;
+            border: 1px solid #CBD5E1;
+            border-radius: 12px;
+            font-size: 0.92rem;
+            color: #0F172A;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--hail-green);
+            background: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(20, 69, 47, 0.12);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: var(--hail-green);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 8px 20px rgba(20, 69, 47, 0.22);
+            transition: background 0.2s, transform 0.1s;
+        }
+        .btn-primary:hover { background: var(--hail-green-dark); }
+        .btn-primary:active { transform: scale(0.99); }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+        }
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--border-color);
+        }
+        .divider span {
+            position: relative;
+            background: var(--surface);
+            padding: 0 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #94A3B8;
+            text-transform: uppercase;
+        }
+
+        .btn-guest {
+            width: 100%;
+            padding: 12px;
+            background: var(--hail-gold-light);
+            color: var(--hail-green-dark);
+            border: 1px solid rgba(200, 150, 62, 0.45);
+            border-radius: 12px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-guest:hover { background: #EFE0BE; }
+
+        /* ==========================================================================
+           VIEW 2: MAIN PLATFORM DASHBOARD (FIGURE 4.2)
+           ========================================================================== */
+        .navbar {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .nav-container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #475569;
+            font-size: 0.9rem;
+            font-weight: 700;
+            transition: color 0.2s;
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--hail-green); }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-outline {
+            background: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            color: #334155;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-outline:hover { background: #E2E8F0; }
+
+        .btn-itinerary {
+            background: var(--hail-gold-light);
+            border: 1px solid rgba(200, 150, 62, 0.45);
+            color: var(--hail-green-dark);
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .badge-count {
+            background: var(--hail-green);
+            color: #fff;
+            padding: 2px 7px;
+            border-radius: 999px;
+            font-size: 0.72rem;
+            font-weight: 800;
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--hail-green);
+            color: var(--hail-gold);
+            font-weight: 800;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-logout {
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            color: #DC2626;
+            padding: 7px 11px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-logout:hover { background: #FEE2E2; }
+
+        .main-container {
+            max-width: 1240px;
+            margin: 0 auto;
+            padding: 28px 24px 64px;
+        }
+
+        /* Hero Banner */
+        .hero-banner {
+            background: linear-gradient(125deg, var(--hail-green-dark) 0%, var(--hail-green) 65%, #236B4B 100%);
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            color: #FFFFFF;
+            display: grid;
+            grid-template-columns: 1.35fr 1fr;
+            gap: 32px;
+            align-items: center;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .weather-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--hail-gold-light);
+            margin-bottom: 16px;
+        }
+
+        .dot-live {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #34D399;
+        }
+
+        .hero-content h2 {
+            font-size: 2.15rem;
+            font-weight: 800;
+            line-height: 1.22;
+            margin-bottom: 14px;
+        }
+
+        .hero-content p {
+            color: rgba(255, 255, 255, 0.86);
+            font-size: 0.96rem;
+            margin-bottom: 24px;
+            max-width: 580px;
+        }
+
+        .search-bar {
+            background: #FFFFFF;
+            padding: 6px;
+            border-radius: 14px;
+            display: flex;
+            gap: 8px;
+            max-width: 520px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 10px 14px;
+            font-size: 0.9rem;
+            color: #0F172A;
+            border-radius: 10px;
+        }
+        .search-bar input:focus { outline: none; }
+
+        .btn-gold {
+            background: var(--hail-gold);
+            color: var(--hail-green-dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .btn-gold:hover { background: #D9A54A; }
+
+        /* Featured 360 Spotlight Card */
+        .featured-card {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+        }
+
+        .featured-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-size: 0.76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: var(--hail-gold);
+        }
+
+        .vr-tag {
+            background: rgba(13, 46, 31, 0.85);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 8px;
+        }
+
+        .featured-thumb {
+            position: relative;
+            height: 175px;
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            margin-bottom: 14px;
+            background: #0D2E1F;
+        }
+
+        .featured-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.28);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .play-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            color: var(--hail-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+        }
+
+        .featured-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .featured-bottom h4 { font-size: 1rem; font-weight: 800; }
+        .featured-bottom span { font-size: 0.78rem; color: rgba(255, 255, 255, 0.78); }
+
+        .btn-white-sm {
+            background: #FFFFFF;
+            color: var(--hail-green-dark);
+            border: none;
+            padding: 9px 14px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        /* Section Header & Category Filter Pills */
+        .section-header {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .section-kicker {
+            font-size: 0.76rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            color: var(--hail-gold-dark);
+        }
+
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: #0F172A;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .filter-pill {
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            color: #475569;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-pill.active {
+            background: var(--hail-green);
+            color: #FFFFFF;
+            border-color: var(--hail-green);
+        }
+
+        /* Landmarks Grid */
+        .landmarks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .landmark-card {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-color);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .landmark-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-media {
+            position: relative;
+            height: 205px;
+            background: #E2E8F0;
+            overflow: hidden;
+        }
+
+        .card-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .badge-360 {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            background: rgba(15, 23, 42, 0.76);
+            color: #FFFFFF;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.74rem;
+            font-weight: 800;
+        }
+        [dir="rtl"] .badge-360 { left: auto; right: 12px; }
+
+        .badge-rating {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(255, 255, 255, 0.95);
+            color: #0F172A;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 800;
+        }
+        [dir="rtl"] .badge-rating { right: auto; left: 12px; }
+
+        .card-body { padding: 20px; }
+        .card-loc {
+            font-size: 0.76rem;
+            font-weight: 800;
+            color: var(--hail-gold-dark);
+            margin-bottom: 4px;
+        }
+        .card-title {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0F172A;
+            margin-bottom: 8px;
+        }
+        .card-desc {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            line-height: 1.55;
+        }
+
+        .card-footer {
+            padding: 0 20px 20px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-card-vr {
+            flex: 1;
+            background: var(--hail-green);
+            color: #FFFFFF;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-card-vr:hover { background: var(--hail-green-dark); }
+
+        .btn-card-save {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            color: #334155;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .btn-card-save.saved {
+            background: var(--hail-gold-light);
+            border-color: var(--hail-gold);
+            color: var(--hail-green-dark);
+        }
+
+        /* Smart Trip Planner & Guides Split Section */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1.35fr 1fr;
+            gap: 28px;
+        }
+
+        .panel-card {
+            background: var(--surface);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--border-color);
+            padding: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .planner-controls {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .route-output {
+            background: var(--hail-sand);
+            border: 1px solid rgba(200, 150, 62, 0.35);
+            border-radius: 14px;
+            padding: 18px;
+        }
+
+        .route-step {
+            background: #FFFFFF;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 12px 14px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .step-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--hail-green);
+            color: #FFFFFF;
+            font-weight: 800;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .guide-item {
+            background: #F8FAFC;
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 14px;
+            margin-top: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .guide-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .guide-initials {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--hail-green);
+            color: var(--hail-gold);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        /* ==========================================================================
+           360° PANORAMIC MODAL & ITINERARY DRAWER
+           ========================================================================== */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 200;
+            background: rgba(15, 23, 42, 0.78);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-box {
+            background: #FFFFFF;
+            border-radius: var(--radius-xl);
+            max-width: 780px;
+            width: 100%;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35);
+        }
+
+        .modal-header {
+            background: var(--hail-green-dark);
+            color: #FFFFFF;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .pano-stage {
+            height: 360px;
+            width: 100%;
+            background-color: #0F172A;
+            background-size: 165% 100%;
+            background-position: 50% 50%;
+            cursor: grab;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 20px;
+            user-select: none;
+        }
+        .pano-stage:active { cursor: grabbing; }
+
+        .pano-hint {
+            background: rgba(0, 0, 0, 0.72);
+            color: #FFFFFF;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            background: var(--hail-sand);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        /* Drawer */
+        .drawer-backdrop {
+            position: fixed;
+            inset: 0;
+            z-index: 210;
+            background: rgba(15, 23, 42, 0.6);
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .drawer-panel {
+            background: #FFFFFF;
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .footer-bar {
+            background: var(--hail-green-dark);
+            color: rgba(255, 255, 255, 0.75);
+            padding: 24px;
+            font-size: 0.82rem;
+        }
+
+        .footer-inner {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 920px) {
+            .auth-wrapper { flex-direction: column; }
+            .auth-brand-panel { padding: 32px 24px; }
+            .brand-hero h2 { font-size: 1.8rem; }
+            .hero-banner { grid-template-columns: 1fr; padding: 28px; }
+            .bottom-grid { grid-template-columns: 1fr; }
+            .planner-controls { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">🏜️ Hail<span>360</span></div>
-    <div class="nav-actions">
-      <button class="btn btn-outline" onclick="switchView('authView')" id="navAuthBtn">Login / Register</button>
-      <button class="btn btn-outline" onclick="switchView('exploreView')" id="navExploreBtn">Explore Hail</button>
-      <button class="btn btn-gold" onclick="toggleLang()" id="langBtn">عربي</button>
-    </div>
-  </header>
-
-  <!-- VIEW 1: REGISTRATION & LOGIN PAGE (Chapter 4 - Section 4.3.1) -->
-  <section id="authView" class="view active">
-    <div class="auth-wrapper">
-      <div class="auth-header">
-        <h2 id="authTitle">Welcome to Hail360</h2>
-        <p id="authSub">Create an account or sign in to explore Hail's heritage in 360°</p>
-      </div>
-      <div class="tabs">
-        <div class="tab active" id="tabRegister" onclick="setAuthMode('register')">Register</div>
-        <div class="tab" id="tabLogin" onclick="setAuthMode('login')">Sign In</div>
-      </div>
-      <form onsubmit="handleAuth(event)">
-        <div class="form-group" id="nameField">
-          <label id="lblName">Full Name</label>
-          <input type="text" placeholder="e.g., Wajd Al-Shammari" required />
-        </div>
-        <div class="form-group">
-          <label id="lblEmail">Email Address</label>
-          <input type="email" placeholder="visitor@hail360.sa" required />
-        </div>
-        <div class="form-group" id="interestField">
-          <label id="lblInterest">Preferred Tourism Category</label>
-          <select>
-            <option value="heritage">Historical & Heritage Sites</option>
-            <option value="nature">Desert & Nature Reserves</option>
-            <option value="local">Local Culture & Markets</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label id="lblPass">Password</label>
-          <input type="password" placeholder="••••••••" required />
-        </div>
-        <button type="submit" class="btn btn-primary" id="submitAuthBtn">Create Account & Explore</button>
-      </form>
-      <span class="guest-link" onclick="switchView('exploreView')" id="guestLink">Continue as Guest Explorer →</span>
-    </div>
-  </section>
-
-  <!-- VIEW 2: MAIN EXPLORER PAGE (Chapter 4 - Section 4.3.2) -->
-  <section id="exploreView" class="view">
-    <div class="hero-banner">
-      <div>
-        <h1 id="heroTitle">Discover Hail in Interactive 360°</h1>
-        <p id="heroDesc">Explore authentic historical fortresses, golden dunes of Al-Nafud, and natural reserves across the Hail region.</p>
-      </div>
-      <button class="btn btn-gold" onclick="switchView('authView')" id="heroCta">Member Portal</button>
+    <!-- Toast Message Container -->
+    <div id="toast" class="toast hidden">
+        <span>✓</span>
+        <span id="toast-text">Action completed</span>
     </div>
 
-    <div class="grid" id="landmarksGrid"></div>
-  </section>
+    <!-- =====================================================================
+         VIEW 1: LOGIN & REGISTRATION PAGE (FIGURE 4.1)
+         ===================================================================== -->
+    <div id="auth-view" class="auth-wrapper">
+        
+        <!-- Left Brand & Heritage Panel -->
+        <div class="auth-brand-panel">
+            <div class="brand-header">
+                <div class="logo-group">
+                    <div class="logo-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 17l5-7 4 5 3-4 6 6H3z"/>
+                            <circle cx="17.5" cy="6.5" r="2.5"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>Hail<span>360</span></h1>
+                        <p data-i18n="brandTag">Smart Heritage & Tourism</p>
+                    </div>
+                </div>
 
-  <!-- 360 INTERACTIVE MODAL -->
-  <div class="modal" id="panoModal" onclick="if(event.target===this) closeModal()">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 id="modalTitle">Landmark 360°</h3>
-        <button class="btn btn-gold" onclick="closeModal()">✕</button>
-      </div>
-      <div class="pano-viewer" onmousemove="panImage(event)">
-        <img id="modalImg" src="" alt="360 Panorama" />
-        <div class="pano-hint" id="panoHint">Move cursor left/right to pan 360° view</div>
-      </div>
-      <div class="modal-body">
-        <p id="modalDesc"></p>
-      </div>
-    </div>
-  </div>
-
-  <footer>
-    Hail360 Smart Tourism System • Graduation Project Prototype (Chapter 4 Implementation)
-  </footer>
-
-  <script>
-    let currentLang = 'en';
-    let authMode = 'register';
-
-    const places = [
-      {
-        id: 'airif',
-        enTitle: 'A’arif Fort (قلعة أعيرف)',
-        arTitle: 'قلعة أعيرف التاريخية',
-        enDesc: 'Historic mud-brick fortress perched atop a rocky hill overlooking the entire city of Hail.',
-        arDesc: 'قلعة تاريخية مبنية من الطين والحجر تتربع على قمة جبل وسط مدينة حائل وتوفر إطلالة بانورامية.',
-        img: 'https://upload.wikimedia.org/wikipedia/commons/d/d4/%D9%82%D9%84%D8%B9%D8%A9_%D8%B9%D9%8A%D8%B1%D9%81.jpg'
-      },
-      {
-        id: 'ramlah',
-        enTitle: 'Ramlah Tourist Reserve (محمية رملة)',
-        arTitle: 'محمية رملة السياحية',
-        enDesc: 'Scenic desert reserve featuring golden sands, wild flora, and authentic Hail eco-tourism camps.',
-        arDesc: 'محمية طبيعية خلابة تجمع بين الرمال الذهبية والحياة الفطرية والتجارب السياحية البيئية في حائل.',
-        img: 'https://www.visitsaudi.com/images/ramlah-reserve.2e16d0ba.fill-760x570.jpg'
-      },
-      {
-        id: 'didhan',
-        enTitle: 'Al-Didhan Reserve (محمية الديدحان)',
-        arTitle: 'محمية الديدحان',
-        enDesc: 'Famous seasonal reserve carpeted with vibrant red wild poppies and spring desert blossoms.',
-        arDesc: 'تشتهر بتفتح أزهار الديدحان الحمراء الساحرة في موسم الربيع وسط طبيعة حائل البكر.',
-        img: 'https://cdn.platinumlist.net/upload/event-media-item/27480_al_didhan_reserve-original1738159150.jpeg'
-      },
-      {
-        id: 'central',
-        enTitle: 'Hail Central District (المنطقة المركزية)',
-        arTitle: 'المنطقة المركزية بحائل',
-        enDesc: 'The vibrant cultural and commercial heart of Hail connecting traditional markets and modern plazas.',
-        arDesc: 'القلب النابض لمدينة حائل الذي يجمع بين الأسواق التراثية والميادين الحديثة والفعاليات الثقافية.',
-        img: 'https://static.srpcdigital.com/styles/1037xauto/public/2025-04/1030717.jpeg.webp'
-      },
-      {
-        id: 'nafud',
-        enTitle: 'Great Nafud Desert (نفود حائل الكبير)',
-        arTitle: 'نفود حائل الكبير',
-        enDesc: 'Vast sea of iconic reddish-orange sand dunes offering desert safaris, stargazing, and heritage trails.',
-        arDesc: 'بحر من الكثبان الرملية الذهبية المائلة للحمرة، وجهة مثالية لرحلات السفاري والتخييم وتأمل النجوم.',
-        img: 'https://imagedelivery.net/nU9Yamkp250UHNYBIVAE6w/f26e1890-c619-4c0e-d1f3-f10eaa5d6f00/public'
-      },
-      {
-        id: 'samra',
-        enTitle: 'Mount Al-Samra (جبل السمراء)',
-        arTitle: 'جبل السمراء',
-        enDesc: 'Legendary mountain associated with Hatim Al-Tai’s hospitality beacon, featuring panoramic views and parks.',
-        arDesc: 'المعلم المرتبط بكرم حاتم الطائي وموقدته الشهيرة، يضم منتزهات ومطلات بانورامية على حائل.',
-        img: 'https://upload.wikimedia.org/wikipedia/commons/f/fe/Alsamra.jpg'
-      },
-      {
-        id: 'barzan',
-        enTitle: 'Barzan Palace (قصر برزان)',
-        arTitle: 'قصر برزان التاريخي',
-        enDesc: 'Iconic 19th-century historical palace complex and traditional marketplace in the heart of Hail.',
-        arDesc: 'قصر تاريخي عريق يعود للقرن التاسع عشر يقع في قلب حائل ويحيط به سوق برزان الشعبي الشهير.',
-        img: 'https://upload.wikimedia.org/wikipedia/ar/b/b8/Barzan_palace.jpg'
-      }
-    ];
-
-    function fallbackSVG(title) {
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400"><rect width="100%" height="100%" fill="#d9c3a3"/><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="22" fill="#5c2d0c">${title}</text></svg>`;
-      return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
-    }
-
-    function renderPlaces() {
-      const grid = document.getElementById('landmarksGrid');
-      grid.innerHTML = places.map(p => {
-        const title = currentLang === 'en' ? p.enTitle : p.arTitle;
-        const desc = currentLang === 'en' ? p.enDesc : p.arDesc;
-        const btnText = currentLang === 'en' ? 'Launch 360° Tour' : 'بدء الجولة 360°';
-        return `
-          <div class="card">
-            <div class="card-img-wrap">
-              <span class="badge-360">360° VR</span>
-              <img src="${p.img}" alt="${title}" onerror="this.onerror=null;this.src='${fallbackSVG(title)}';" />
+                <button class="lang-btn" onclick="toggleLanguage()">
+                    <span>🌐</span>
+                    <span id="lang-label-auth">العربية</span>
+                </button>
             </div>
-            <div class="card-body">
-              <h3>${title}</h3>
-              <p>${desc}</p>
-              <div class="card-footer">
-                <button class="btn btn-primary" onclick="openModal('${p.id}')">${btnText}</button>
-              </div>
+
+            <div class="brand-hero">
+                <div class="vision-badge" data-i18n="visionBadge">Saudi Vision 2030 • Hail Region</div>
+                <h2 data-i18n="authHeroTitle">Experience the Soul of Northern Arabia in 360°</h2>
+                <p data-i18n="authHeroDesc">
+                    Explore historic mud-brick fortresses, nature reserves, and golden Al-Nafud dunes through an interactive smart tourism and heritage platform.
+                </p>
+
+                <div class="stats-row">
+                    <div class="stat-box">
+                        <strong>360°</strong>
+                        <span data-i18n="pill1">Virtual Tours</span>
+                    </div>
+                    <div class="stat-box">
+                        <strong>7+</strong>
+                        <span data-i18n="pill2">Hail Landmarks</span>
+                    </div>
+                    <div class="stat-box">
+                        <strong>AI</strong>
+                        <span data-i18n="pill3">Smart Planner</span>
+                    </div>
+                </div>
             </div>
-          </div>
-        `;
-      }).join('');
-    }
 
-    function switchView(viewId) {
-      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-      document.getElementById(viewId).classList.add('active');
-      window.scrollTo(0, 0);
-    }
+            <div class="brand-footer">
+                <span>© 2026 Hail360 MIS Graduation Project</span>
+                <span data-i18n="locationTag">Hail, Kingdom of Saudi Arabia</span>
+            </div>
+        </div>
 
-    function setAuthMode(mode) {
-      authMode = mode;
-      document.getElementById('tabRegister').classList.toggle('active', mode === 'register');
-      document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
-      document.getElementById('nameField').style.display = mode === 'register' ? 'block' : 'none';
-      document.getElementById('interestField').style.display = mode === 'register' ? 'block' : 'none';
-      updateTexts();
-    }
+        <!-- Right Login / Registration Card -->
+        <div class="auth-form-panel">
+            <div class="auth-card">
+                <div class="tab-switcher">
+                    <button id="tab-login" class="tab-btn active" onclick="switchAuthTab('login')" data-i18n="loginTab">Sign In</button>
+                    <button id="tab-register" class="tab-btn" onclick="switchAuthTab('register')" data-i18n="registerTab">Create Account</button>
+                </div>
 
-    function handleAuth(e) {
-      e.preventDefault();
-      switchView('exploreView');
-    }
+                <div class="form-header">
+                    <h3 id="form-title" data-i18n="welcomeBack">Welcome to Hail360</h3>
+                    <p id="form-subtitle" data-i18n="enterDetails">Sign in to access your saved itineraries and 360° tours.</p>
+                </div>
 
-    function openModal(id) {
-      const p = places.find(item => item.id === id);
-      const title = currentLang === 'en' ? p.enTitle : p.arTitle;
-      const desc = currentLang === 'en' ? p.enDesc : p.arDesc;
-      document.getElementById('modalTitle').innerText = title;
-      document.getElementById('modalDesc').innerText = desc;
-      const imgEl = document.getElementById('modalImg');
-      imgEl.src = p.img;
-      imgEl.onerror = () => { imgEl.src = fallbackSVG(title); };
-      document.getElementById('panoModal').classList.add('open');
-    }
+                <form onsubmit="handleAuthSubmit(event)">
+                    <div id="field-name" class="form-group hidden">
+                        <label data-i18n="fullNameLabel">Full Name</label>
+                        <input type="text" id="input-name" class="form-control" placeholder="Sara Al-Shammari">
+                    </div>
 
-    function closeModal() {
-      document.getElementById('panoModal').classList.remove('open');
-    }
+                    <div id="field-role" class="form-group hidden">
+                        <label data-i18n="roleLabel">Visitor Category</label>
+                        <select id="input-role" class="form-control">
+                            <option value="Tourist">Visitor / Tourist</option>
+                            <option value="Local">Hail Resident</option>
+                            <option value="Guide">Certified Local Tour Guide</option>
+                        </select>
+                    </div>
 
-    function panImage(e) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const xPct = (e.clientX - rect.left) / rect.width;
-      const shift = (0.5 - xPct) * 25;
-      document.getElementById('modalImg').style.transform = `translateX(${shift}%) scale(1.15)`;
-    }
+                    <div class="form-group">
+                        <label data-i18n="emailLabel">Email Address</label>
+                        <input type="email" id="input-email" class="form-control" required value="visitor@hail360.sa">
+                    </div>
 
-    function toggleLang() {
-      currentLang = currentLang === 'en' ? 'ar' : 'en';
-      document.documentElement.lang = currentLang;
-      document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-      updateTexts();
-      renderPlaces();
-    }
+                    <div class="form-group">
+                        <label data-i18n="passwordLabel">Password</label>
+                        <input type="password" id="input-password" class="form-control" required value="••••••••••••">
+                    </div>
 
-    function updateTexts() {
-      const isEn = currentLang === 'en';
-      document.getElementById('langBtn').innerText = isEn ? 'عربي' : 'English';
-      document.getElementById('navAuthBtn').innerText = isEn ? 'Login / Register' : 'تسجيل الدخول / حساب جديد';
-      document.getElementById('navExploreBtn').innerText = isEn ? 'Explore Hail' : 'استكشف حائل';
-      document.getElementById('authTitle').innerText = isEn ? 'Welcome to Hail360' : 'مرحباً بك في حائل 360';
-      document.getElementById('authSub').innerText = isEn ? "Create an account or sign in to explore Hail's heritage in 360°" : 'أنشئ حساباً أو سجل الدخول لاستكشاف معالم حائل بتقنية 360°';
-      document.getElementById('tabRegister').innerText = isEn ? 'Register' : 'إنشاء حساب';
-      document.getElementById('tabLogin').innerText = isEn ? 'Sign In' : 'تسجيل الدخول';
-      document.getElementById('lblName').innerText = isEn ? 'Full Name' : 'الاسم الكامل';
-      document.getElementById('lblEmail').innerText = isEn ? 'Email Address' : 'البريد الإلكتروني';
-      document.getElementById('lblInterest').innerText = isEn ? 'Preferred Tourism Category' : 'الاهتمام السياحي المفضل';
-      document.getElementById('lblPass').innerText = isEn ? 'Password' : 'كلمة المرور';
-      document.getElementById('submitAuthBtn').innerText = isEn
-        ? (authMode === 'register' ? 'Create Account & Explore' : 'Sign In to Hail360')
-        : (authMode === 'register' ? 'إنشاء حساب واستكشاف' : 'دخول إلى حائل 360');
-      document.getElementById('guestLink').innerText = isEn ? 'Continue as Guest Explorer →' : 'المتابعة كزائر مستكشف ←';
-      document.getElementById('heroTitle').innerText = isEn ? 'Discover Hail in Interactive 360°' : 'اكتشف معالم حائل بتقنية 360° التفاعلية';
-      document.getElementById('heroDesc').innerText = isEn
-        ? 'Explore authentic historical fortresses, golden dunes of Al-Nafud, and natural reserves across the Hail region.'
-        : 'تجول افتراضياً في القلاع التاريخية، رمال النفود الذهبية، والمحميات الطبيعية في منطقة حائل.';
-      document.getElementById('heroCta').innerText = isEn ? 'Member Portal' : 'بوابة الأعضاء';
-      document.getElementById('panoHint').innerText = isEn ? 'Move cursor left/right to pan 360° view' : 'حرّك المؤشر يميناً ويساراً للتجول بزاوية 360°';
-    }
+                    <button type="submit" class="btn-primary">
+                        <span id="submit-btn-text" data-i18n="signInBtn">Sign In to Hail360</span>
+                        <span>→</span>
+                    </button>
+                </form>
 
-    renderPlaces();
-  </script>
+                <div class="divider"><span data-i18n="orDivider">Or Quick Demo Access</span></div>
+
+                <button class="btn-guest" onclick="loginAsGuest()" data-i18n="guestBtn">
+                    ✨ Continue as Guest Explorer
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =====================================================================
+         VIEW 2: MAIN PLATFORM INTERFACE (FIGURE 4.2)
+         ===================================================================== -->
+    <div id="app-view" class="hidden">
+        
+        <!-- Top Navigation -->
+        <header class="navbar">
+            <div class="nav-container">
+                <div class="logo-group" style="cursor:pointer" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+                    <div class="logo-icon" style="width:40px;height:40px;">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 17l5-7 4 5 3-4 6 6H3z"/>
+                            <circle cx="17.5" cy="6.5" r="2.5"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1 style="font-size:1.3rem;color:#0D2E1F;">Hail<span>360</span></h1>
+                    </div>
+                </div>
+
+                <nav class="nav-links">
+                    <a href="#landmarks-section" class="active" data-i18n="navExplore">Explore 360°</a>
+                    <a href="#planner-section" data-i18n="navPlanner">Smart Trip Planner</a>
+                    <a href="#guides-section" data-i18n="navGuides">Local Guides</a>
+                </nav>
+
+                <div class="nav-actions">
+                    <button class="btn-outline" onclick="toggleLanguage()">
+                        🌐 <span id="lang-label-app">العربية</span>
+                    </button>
+
+                    <button class="btn-itinerary" onclick="openTripDrawer()">
+                        <span>📍</span>
+                        <span data-i18n="myTripBtn">My Itinerary</span>
+                        <span id="trip-count" class="badge-count">2</span>
+                    </button>
+
+                    <div id="user-avatar" class="user-avatar">SA</div>
+
+                    <button class="btn-logout" onclick="logout()" data-i18n="logoutBtn">Exit</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-container">
+            
+            <!-- Hero Section -->
+            <section class="hero-banner">
+                <div class="hero-content">
+                    <div class="weather-pill">
+                        <span class="dot-live"></span>
+                        <span data-i18n="weatherStatus">Hail Weather: 22°C • Clear Desert Sky</span>
+                    </div>
+                    <h2 data-i18n="dashHeroTitle">Discover Hail’s Timeless Heritage & Mountain Beauty</h2>
+                    <p data-i18n="dashHeroDesc">
+                        Navigate Hail’s iconic fortresses, nature reserves, and golden dunes with interactive 360° virtual previews and smart itinerary planning.
+                    </p>
+                    <div class="search-bar">
+                        <input type="text" id="search-input" onkeyup="renderLandmarks()" placeholder="Search A'arif Castle, Ramlah, Al-Didhan, Nafud...">
+                        <button class="btn-gold" onclick="renderLandmarks()" data-i18n="exploreNowBtn">Explore Now</button>
+                    </div>
+                </div>
+
+                <!-- Featured 360° Spotlight -->
+                <div class="featured-card">
+                    <div class="featured-top">
+                        <span data-i18n="featured360">Featured 360° Virtual Tour</span>
+                        <span class="vr-tag">360° VR</span>
+                    </div>
+                    <div class="featured-thumb" onclick="open360Modal(0)">
+                        <img id="hero-featured-img" src="https://upload.wikimedia.org/wikipedia/commons/d/d4/%D9%82%D9%84%D8%B9%D8%A9_%D8%B9%D9%8A%D8%B1%D9%81.jpg" alt="A'arif Castle Hail">
+                        <div class="play-overlay">
+                            <div class="play-circle">▶</div>
+                        </div>
+                    </div>
+                    <div class="featured-bottom">
+                        <div>
+                            <h4 data-i18n="featuredTitle">A'arif Castle (قلعة أعيرف)</h4>
+                            <span data-i18n="featuredSub">Historic Mud-Brick Fortress • Central Hail</span>
+                        </div>
+                        <button class="btn-white-sm" onclick="open360Modal(0)" data-i18n="launch360Btn">Launch 360°</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Landmarks Explorer Section -->
+            <section id="landmarks-section">
+                <div class="section-header">
+                    <div>
+                        <div class="section-kicker" data-i18n="destSubtitle">Authentic Hail Destinations</div>
+                        <h3 class="section-title" data-i18n="destTitle">Explore Hail Landmarks in 360°</h3>
+                    </div>
+
+                    <div class="filter-group">
+                        <button class="filter-pill active" data-cat="all" onclick="setCategory('all')" data-i18n="catAll">All Sites (7)</button>
+                        <button class="filter-pill" data-cat="heritage" onclick="setCategory('heritage')" data-i18n="catHeritage">Heritage & Palaces</button>
+                        <button class="filter-pill" data-cat="nature" onclick="setCategory('nature')" data-i18n="catNature">Reserves & Nafud</button>
+                        <button class="filter-pill" data-cat="urban" onclick="setCategory('urban')" data-i18n="catUrban">Central & Al-Samra</button>
+                    </div>
+                </div>
+
+                <div id="landmarks-grid" class="landmarks-grid"></div>
+            </section>
+
+            <!-- Bottom Split Section: Smart Trip Planner + Local Guides -->
+            <section id="planner-section" class="bottom-grid">
+                
+                <!-- Smart Itinerary Generator -->
+                <div class="panel-card">
+                    <div class="section-kicker">AI Route Optimizer</div>
+                    <h3 class="section-title" style="font-size:1.35rem;" data-i18n="plannerTitle">Smart Hail Trip Generator</h3>
+
+                    <div class="planner-controls">
+                        <div>
+                            <label style="font-size:0.75rem;font-weight:700;color:#475569;display:block;margin-bottom:4px;" data-i18n="durationLabel">Duration</label>
+                            <select id="plan-duration" class="form-control">
+                                <option value="1 Day">1 Day Express</option>
+                                <option value="2 Days" selected>2 Days Weekend</option>
+                                <option value="3 Days">3 Days Full Hail Tour</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:0.75rem;font-weight:700;color:#475569;display:block;margin-bottom:4px;" data-i18n="interestLabel">Focus</label>
+                            <select id="plan-interest" class="form-control">
+                                <option value="Heritage & Castles">Heritage & Castles</option>
+                                <option value="Nature Reserves & Desert">Reserves & Nafud</option>
+                                <option value="City & Night Views">Central & Al-Samra</option>
+                            </select>
+                        </div>
+                        <div style="display:flex;align-items:flex-end;">
+                            <button class="btn-primary" style="padding:12px;" onclick="generateSmartPlan()" data-i18n="generateBtn">Generate Plan</button>
+                        </div>
+                    </div>
+
+                    <div id="route-output" class="route-output">
+                        <div style="display:flex;justify-content:space-between;font-size:0.78rem;font-weight:800;color:var(--hail-green);">
+                            <span data-i18n="recommendedRoute">RECOMMENDED ROUTE • 2 DAYS WEEKEND</span>
+                            <span style="color:var(--hail-terracotta);">4 Stops • Hail Province</span>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-num">1</div>
+                            <div>
+                                <strong style="font-size:0.9rem;display:block;">Morning: A'arif Castle & Barzan Palace</strong>
+                                <span style="font-size:0.78rem;color:#64748B;">09:00 AM • Historic mud-brick architecture in Central Hail</span>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-num" style="background:var(--hail-gold);color:var(--hail-green-dark);">2</div>
+                            <div>
+                                <strong style="font-size:0.9rem;display:block;">Afternoon: Ramlah Reserve & Al-Samra Lookout</strong>
+                                <span style="font-size:0.78rem;color:#64748B;">03:30 PM • Granite rock formations & sunset city panorama</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Certified Local Guides -->
+                <div id="guides-section" class="panel-card">
+                    <div class="section-kicker" data-i18n="guidesTag">Authentic Hospitality</div>
+                    <h3 class="section-title" style="font-size:1.35rem;" data-i18n="guidesTitle">Certified Hail Tour Guides</h3>
+
+                    <div class="guide-item">
+                        <div class="guide-info">
+                            <div class="guide-initials">FA</div>
+                            <div>
+                                <strong style="font-size:0.92rem;display:block;">Faisal Al-Shammari</strong>
+                                <span style="font-size:0.78rem;color:#64748B;">Al-Nafud & Ramlah Specialist • ★ 4.9</span>
+                            </div>
+                        </div>
+                        <button class="btn-card-vr" style="flex:none;" onclick="showToast('Booking request sent to Faisal Al-Shammari!')" data-i18n="bookBtn">Book</button>
+                    </div>
+
+                    <div class="guide-item">
+                        <div class="guide-info">
+                            <div class="guide-initials" style="background:var(--hail-terracotta);color:#fff;">NA</div>
+                            <div>
+                                <strong style="font-size:0.92rem;display:block;">Noura Al-Tamimi</strong>
+                                <span style="font-size:0.78rem;color:#64748B;">A'arif Castle & Barzan Heritage • ★ 5.0</span>
+                            </div>
+                        </div>
+                        <button class="btn-card-vr" style="flex:none;" onclick="showToast('Booking request sent to Noura Al-Tamimi!')" data-i18n="bookBtn">Book</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer-bar">
+            <div class="footer-inner">
+                <div><strong>Hail360</strong> | Smart Tourism & Heritage Information System</div>
+                <div>Graduation Project Prototype • Hail, Saudi Arabia</div>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- =====================================================================
+         360° INTERACTIVE VIRTUAL TOUR MODAL
+         ===================================================================== -->
+    <div id="modal-360" class="modal-backdrop hidden">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div style="display:flex;align-items:center;gap:10px;">
+                    <span style="background:var(--hail-gold);color:var(--hail-green-dark);padding:3px 9px;border-radius:6px;font-size:0.75rem;font-weight:800;">360° VIEW</span>
+                    <h3 id="modal-title" style="font-size:1.1rem;font-weight:800;">A'arif Castle</h3>
+                </div>
+                <button onclick="close360Modal()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-weight:800;">✕</button>
+            </div>
+
+            <div id="pano-stage" class="pano-stage">
+                <div class="pano-hint">↔ Drag left or right across the panorama to rotate 360° view</div>
+            </div>
+
+            <div class="modal-footer">
+                <p id="modal-desc" style="font-size:0.86rem;color:#475569;max-width:520px;"></p>
+                <button class="btn-card-vr" style="flex:none;padding:12px 18px;" onclick="addModalSiteToTrip()">+ Add to Itinerary</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- =====================================================================
+         SAVED ITINERARY DRAWER
+         ===================================================================== -->
+    <div id="trip-drawer" class="drawer-backdrop hidden">
+        <div class="drawer-panel">
+            <div>
+                <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:14px;border-bottom:1px solid var(--border-color);">
+                    <h3 style="font-size:1.15rem;font-weight:800;color:var(--hail-green-dark);">My Hail360 Itinerary</h3>
+                    <button onclick="closeTripDrawer()" style="background:#F1F5F9;border:none;padding:6px 11px;border-radius:8px;cursor:pointer;font-weight:800;">✕</button>
+                </div>
+                <div id="saved-trip-list" style="margin-top:16px;display:flex;flex-direction:column;gap:10px;"></div>
+            </div>
+            <button class="btn-primary" onclick="closeTripDrawer();showToast('Itinerary saved & ready for your Hail trip!')">Confirm Trip Schedule</button>
+        </div>
+    </div>
+
+
+    <script>
+        /* ==========================================================================
+           STATE & AUTHENTIC HAIL LANDMARKS DATA (WITH BUILT-IN SVG FALLBACKS)
+           ========================================================================== */
+        let currentLang = 'en';
+        let authMode = 'login';
+        let currentCategory = 'all';
+        let savedTripIds = [0, 1];
+        let activeModalId = 0;
+
+        // Custom SVG Fallback Generator per Landmark (ensures 100% visual reliability if external hotlinks are blocked)
+        function getLandmarkFallbackSVG(id, title) {
+            const palettes = {
+                0: { bg: '#D9A773', sky: '#1E4D3B', accent: '#8C4A27', label: "A'arif Mud-Brick Fortress" },
+                1: { bg: '#E3B778', sky: '#2C5E4F', accent: '#A65E2E', label: "Ramlah Granite Reserve" },
+                2: { bg: '#C84B31', sky: '#1F4E3D', accent: '#E8A838', label: "Al-Didhan Wildflower Reserve" },
+                3: { bg: '#C69C6D', sky: '#14452F', accent: '#3B6E5C', label: "Hail Central District" },
+                4: { bg: '#D97B43', sky: '#1A3C40', accent: '#F2C14E', label: "Great Nafud Red Dunes" },
+                5: { bg: '#4A5568', sky: '#0F2922', accent: '#C8963E', label: "Mount Al-Samra Lookout" },
+                6: { bg: '#C29563', sky: '#16423C', accent: '#7A3E1D', label: "Historic Barzan Palace" }
+            };
+            const p = palettes[id] || palettes[0];
+            const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+                <defs>
+                    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="${p.sky}"/>
+                        <stop offset="100%" stop-color="${p.bg}"/>
+                    </linearGradient>
+                </defs>
+                <rect width="800" height="450" fill="url(#g)"/>
+                <circle cx="650" cy="95" r="42" fill="#F6E05E" opacity="0.85"/>
+                <path d="M0 320 Q200 220 420 310 T800 280 L800 450 L0 450 Z" fill="${p.accent}" opacity="0.85"/>
+                <path d="M0 360 Q280 290 540 365 T800 340 L800 450 L0 450 Z" fill="#0D2E1F" opacity="0.65"/>
+                <text x="40" y="405" fill="#FFFFFF" font-family="sans-serif" font-size="24" font-weight="bold">${p.label} • Hail360</text>
+            </svg>`;
+            return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
+        }
+
+        const landmarks = [
+            {
+                id: 0,
+                category: 'heritage',
+                nameEn: "A'arif Castle",
+                nameAr: "قلعة أعيرف",
+                locEn: "Central Hail",
+                locAr: "وسط مدينة حائل",
+                rating: "4.9",
+                img: "https://upload.wikimedia.org/wikipedia/commons/d/d4/%D9%82%D9%84%D8%B9%D8%A9_%D8%B9%D9%8A%D8%B1%D9%81.jpg",
+                descEn: "A historic mud-brick fortress perched atop a rocky hill in central Hail offering panoramic city views.",
+                descAr: "قلعة تاريخية شامخة تتربع على قمة جبل وسط مدينة حائل وتوفر إطلالة بانورامية ساحرة على المدينة."
+            },
+            {
+                id: 1,
+                category: 'nature',
+                nameEn: "Ramlah Tourist Reserve",
+                nameAr: "محمية رملة",
+                locEn: "Hail Nature Reserve",
+                locAr: "منطقة حائل",
+                rating: "4.9",
+                img: "https://www.visitsaudi.com/images/ramlah-reserve.2e16d0ba.fill-760x570.jpg",
+                descEn: "A scenic nature and adventure reserve blending dramatic granite rock formations with golden sands.",
+                descAr: "وجهة سياحية طبيعية تجمع بين التشكيلات الصخرية الفريدة والرمال الذهبية وأنشطة التخييم والمغامرات."
+            },
+            {
+                id: 2,
+                category: 'nature',
+                nameEn: "Al-Didhan Reserve",
+                nameAr: "محمية الديدحان",
+                locEn: "Hail Province",
+                locAr: "منطقة حائل",
+                rating: "4.8",
+                img: "https://cdn.platinumlist.net/upload/event-media-item/27480_al_didhan_reserve-original1738159150.jpeg",
+                descEn: "A vibrant seasonal reserve famous for blooming red wildflower meadows and open desert skies in Hail.",
+                descAr: "محمية طبيعية خلابة تشتهر بزهور الديدحان الحمراء الموسمية وأجوائها الربيعية الساحرة في حائل."
+            },
+            {
+                id: 3,
+                category: 'urban',
+                nameEn: "Hail Central District",
+                nameAr: "المنطقة المركزية بحائل",
+                locEn: "Downtown Hail",
+                locAr: "وسط حائل",
+                rating: "4.8",
+                img: "https://static.srpcdigital.com/styles/1037xauto/public/2025-04/1030717.jpeg.webp",
+                descEn: "The vibrant historic and commercial heart of Hail, featuring traditional markets and modern urban development.",
+                descAr: "القلب النابض لمدينة حائل، وتضم الأسواق الشعبية التاريخية والمرافق الحيوية والتطوير الحضري."
+            },
+            {
+                id: 4,
+                category: 'nature',
+                nameEn: "Al-Nafud Al-Kabir Desert",
+                nameAr: "نفود حائل الكبير",
+                locEn: "Northern Hail",
+                locAr: "شمال حائل",
+                rating: "5.0",
+                img: "https://imagedelivery.net/nU9Yamkp250UHNYBIVAE6w/f26e1890-c619-4c0e-d1f3-f10eaa5d6f00/public",
+                descEn: "Iconic towering red sand dunes stretching north of Hail, famous for desert safaris and stargazing.",
+                descAr: "كثبان رملية حمراء شاهقة تمتد في شمال حائل وتعد وجهة عالمية لرحلات السفاري والتخييم."
+            },
+            {
+                id: 5,
+                category: 'urban',
+                nameEn: "Mount Al-Samra",
+                nameAr: "جبل السمراء",
+                locEn: "Eastern Hail",
+                locAr: "شرق حائل",
+                rating: "4.9",
+                img: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Alsamra.jpg",
+                descEn: "A famous volcanic mountain overlooking Hail city, home to Al-Samra Park, lake views, and night vistas.",
+                descAr: "معلم جغرافي وتاريخي بارز يطل على مدينة حائل ويضم منتزه السمراء والبحيرة والإطلالات الليلية."
+            },
+            {
+                id: 6,
+                category: 'heritage',
+                nameEn: "Barzan Palace",
+                nameAr: "قصر برزان",
+                locEn: "Central Hail",
+                locAr: "وسط حائل",
+                rating: "4.9",
+                img: "https://upload.wikimedia.org/wikipedia/ar/b/b8/Barzan_palace.jpg",
+                descEn: "The historic landmark palace in central Hail, representing classic northern Arabian mud-brick architecture.",
+                descAr: "القصر التاريخي الشهير وسط حائل وأحد أبرز معالم التراث المعماري النجدي والشمالي في المنطقة."
+            }
+        ];
+
+        // Attach fallback to hero featured image immediately
+        document.getElementById('hero-featured-img').onerror = function() {
+            this.onerror = null;
+            this.src = getLandmarkFallbackSVG(0, "A'arif Castle");
+        };
+
+        const i18n = {
+            en: {
+                brandTag: "Smart Heritage & Tourism",
+                visionBadge: "Saudi Vision 2030 • Hail Region",
+                authHeroTitle: "Experience the Soul of Northern Arabia in 360°",
+                authHeroDesc: "Explore historic mud-brick fortresses, nature reserves, and golden Al-Nafud dunes through an interactive smart tourism and heritage platform.",
+                pill1: "Virtual Tours",
+                pill2: "Hail Landmarks",
+                pill3: "Smart Planner",
+                locationTag: "Hail, Kingdom of Saudi Arabia",
+                loginTab: "Sign In",
+                registerTab: "Create Account",
+                welcomeBack: "Welcome to Hail360",
+                enterDetails: "Sign in to access your saved itineraries and 360° tours.",
+                createTitle: "Create Hail360 Account",
+                createSub: "Register to personalize your Hail heritage & tourism experience.",
+                fullNameLabel: "Full Name",
+                roleLabel: "Visitor Category",
+                emailLabel: "Email Address",
+                passwordLabel: "Password",
+                signInBtn: "Sign In to Hail360",
+                registerBtn: "Complete Registration",
+                orDivider: "Or Quick Demo Access",
+                guestBtn: "✨ Continue as Guest Explorer",
+                navExplore: "Explore 360°",
+                navPlanner: "Smart Trip Planner",
+                navGuides: "Local Guides",
+                myTripBtn: "My Itinerary",
+                logoutBtn: "Exit",
+                weatherStatus: "Hail Weather: 22°C • Clear Desert Sky",
+                dashHeroTitle: "Discover Hail’s Timeless Heritage & Mountain Beauty",
+                dashHeroDesc: "Navigate Hail’s iconic fortresses, nature reserves, and golden dunes with interactive 360° virtual previews and smart itinerary planning.",
+                exploreNowBtn: "Explore Now",
+                featured360: "Featured 360° Virtual Tour",
+                featuredTitle: "A'arif Castle (قلعة أعيرف)",
+                featuredSub: "Historic Mud-Brick Fortress • Central Hail",
+                launch360Btn: "Launch 360°",
+                destSubtitle: "Authentic Hail Destinations",
+                destTitle: "Explore Hail Landmarks in 360°",
+                catAll: "All Sites (7)",
+                catHeritage: "Heritage & Palaces",
+                catNature: "Reserves & Nafud",
+                catUrban: "Central & Al-Samra",
+                plannerTitle: "Smart Hail Trip Generator",
+                durationLabel: "Duration",
+                interestLabel: "Focus",
+                generateBtn: "Generate Plan",
+                recommendedRoute: "RECOMMENDED ROUTE • 2 DAYS WEEKEND",
+                guidesTag: "Authentic Hospitality",
+                guidesTitle: "Certified Hail Tour Guides",
+                bookBtn: "Book"
+            },
+            ar: {
+                brandTag: "منصة السياحة والتراث الذكية",
+                visionBadge: "رؤية السعودية 2030 • منطقة حائل",
+                authHeroTitle: "اكتشف روح شمال المملكة بتقنية 360° التفاعلية",
+                authHeroDesc: "استكشف القلاع التاريخية والمحميات الطبيعية وكثبان النفود الذهبية عبر منصة سياحية ذكية متكاملة.",
+                pill1: "جولات افتراضية",
+                pill2: "معالم حائل",
+                pill3: "مخطط ذكي",
+                locationTag: "حائل، المملكة العربية السعودية",
+                loginTab: "تسجيل الدخول",
+                registerTab: "إنشاء حساب",
+                welcomeBack: "مرحباً بك في حائل 360",
+                enterDetails: "سجل دخولك للوصول إلى مساراتك السياحية والجولات الافتراضية.",
+                createTitle: "إنشاء حساب جديد في حائل 360",
+                createSub: "سجل بياناتك لتخصيص تجربتك السياحية والتراثية في حائل.",
+                fullNameLabel: "الاسم الكامل",
+                roleLabel: "فئة الزائر",
+                emailLabel: "البريد الإلكتروني",
+                passwordLabel: "كلمة المرور",
+                signInBtn: "دخول إلى المنصة",
+                registerBtn: "إتمام التسجيل",
+                orDivider: "أو الدخول السريع للمعاينة",
+                guestBtn: "✨ المتابعة كزائر مستكشف",
+                navExplore: "استكشف 360°",
+                navPlanner: "مخطط الرحلات",
+                navGuides: "المرشدون المحليون",
+                myTripBtn: "مسار رحلتي",
+                logoutBtn: "خروج",
+                weatherStatus: "طقس حائل: 22°م • سماء صافية",
+                dashHeroTitle: "اكتشف عراقة حائل وجمال جبالها ومحمياتها",
+                dashHeroDesc: "تصفح أشهر معالم حائل بجولات افتراضية 360 درجة، واحجز مرشدين محليين معتمدين، وصمم برنامجك السياحي.",
+                exploreNowBtn: "استكشف الآن",
+                featured360: "جولة افتراضية مميزة 360°",
+                featuredTitle: "قلعة أعيرف التاريخية",
+                featuredSub: "قلعة طينية تاريخية • وسط حائل",
+                launch360Btn: "بدء الجولة 360°",
+                destSubtitle: "وجهات حائل الأصيلة",
+                destTitle: "معالم حائل السياحية بتقنية 360°",
+                catAll: "جميع المعالم (7)",
+                catHeritage: "التراث والقصور",
+                catNature: "المحميات والنفود",
+                catUrban: "المنطقة المركزية والسمراء",
+                plannerTitle: "مولّد الرحلات الذكي في حائل",
+                durationLabel: "مدة الزيارة",
+                interestLabel: "الاهتمام",
+                generateBtn: "إنشاء المسار",
+                recommendedRoute: "المسار المقترح • عطلة نهاية الأسبوع",
+                guidesTag: "الضيافة الحاتمية",
+                guidesTitle: "المرشدون السياحيون المعتمدون",
+                bookBtn: "احجز"
+            }
+        };
+
+        /* ==========================================================================
+           INTERACTIVE FUNCTIONS
+           ========================================================================== */
+        function switchAuthTab(mode) {
+            authMode = mode;
+            const loginTab = document.getElementById('tab-login');
+            const regTab = document.getElementById('tab-register');
+            const fName = document.getElementById('field-name');
+            const fRole = document.getElementById('field-role');
+            const title = document.getElementById('form-title');
+            const sub = document.getElementById('form-subtitle');
+            const btnText = document.getElementById('submit-btn-text');
+
+            if (mode === 'register') {
+                regTab.classList.add('active');
+                loginTab.classList.remove('active');
+                fName.classList.remove('hidden');
+                fRole.classList.remove('hidden');
+                title.textContent = i18n[currentLang].createTitle;
+                sub.textContent = i18n[currentLang].createSub;
+                btnText.textContent = i18n[currentLang].registerBtn;
+            } else {
+                loginTab.classList.add('active');
+                regTab.classList.remove('active');
+                fName.classList.add('hidden');
+                fRole.classList.add('hidden');
+                title.textContent = i18n[currentLang].welcomeBack;
+                sub.textContent = i18n[currentLang].enterDetails;
+                btnText.textContent = i18n[currentLang].signInBtn;
+            }
+        }
+
+        function handleAuthSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('input-email').value;
+            const name = document.getElementById('input-name').value || email.split('@')[0];
+            document.getElementById('user-avatar').textContent = name.substring(0, 2).toUpperCase();
+            enterApp();
+            showToast(authMode === 'register'
+                ? (currentLang === 'en' ? 'Account created! Welcome to Hail360.' : 'تم إنشاء الحساب بنجاح! أهلاً بك في حائل 360')
+                : (currentLang === 'en' ? 'Signed in successfully!' : 'تم تسجيل الدخول بنجاح!'));
+        }
+
+        function loginAsGuest() {
+            document.getElementById('user-avatar').textContent = 'GU';
+            enterApp();
+            showToast(currentLang === 'en' ? 'Entered as Guest Explorer' : 'تم الدخول كزائر مستكشف');
+        }
+
+        function enterApp() {
+            document.getElementById('auth-view').classList.add('hidden');
+            document.getElementById('app-view').classList.remove('hidden');
+            renderLandmarks();
+            updateTripBadge();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function logout() {
+            document.getElementById('app-view').classList.add('hidden');
+            document.getElementById('auth-view').classList.remove('hidden');
+            showToast(currentLang === 'en' ? 'Returned to Login / Registration page' : 'تم العودة لصفحة تسجيل الدخول');
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.filter-pill').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.cat === cat);
+            });
+            renderLandmarks();
+        }
+
+        function renderLandmarks() {
+            const grid = document.getElementById('landmarks-grid');
+            const query = (document.getElementById('search-input').value || '').toLowerCase();
+
+            const filtered = landmarks.filter(item => {
+                const matchCat = currentCategory === 'all' || item.category === currentCategory;
+                const matchQuery = item.nameEn.toLowerCase().includes(query) ||
+                                   item.nameAr.includes(query) ||
+                                   item.descEn.toLowerCase().includes(query);
+                return matchCat && matchQuery;
+            });
+
+            grid.innerHTML = filtered.map(site => {
+                const title = currentLang === 'en' ? site.nameEn : site.nameAr;
+                const loc = currentLang === 'en' ? site.locEn : site.locAr;
+                const desc = currentLang === 'en' ? site.descEn : site.descAr;
+                const isSaved = savedTripIds.includes(site.id);
+                const fallbackUri = getLandmarkFallbackSVG(site.id, site.nameEn);
+
+                return `
+                <div class="landmark-card">
+                    <div>
+                        <div class="card-media">
+                            <img src="${site.img}" alt="${title}" onerror="this.onerror=null;this.src='${fallbackUri}';">
+                            <span class="badge-360">360° VR</span>
+                            <span class="badge-rating">★ ${site.rating}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-loc">${loc}</div>
+                            <h4 class="card-title">${title}</h4>
+                            <p class="card-desc">${desc}</p>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-card-vr" onclick="open360Modal(${site.id})">
+                            ${currentLang === 'en' ? '👁 Launch 360° View' : '👁 معاينة 360°'}
+                        </button>
+                        <button class="btn-card-save ${isSaved ? 'saved' : ''}" onclick="toggleSaveSite(${site.id})">
+                            ${isSaved ? (currentLang === 'en' ? '✓ Saved' : '✓ محفوظ') : (currentLang === 'en' ? '+ Save' : '+ حفظ')}
+                        </button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        /* 360° Modal & Drag-to-Pan */
+        function open360Modal(id) {
+            const site = landmarks.find(s => s.id === id) || landmarks[0];
+            activeModalId = site.id;
+            document.getElementById('modal-title').textContent = currentLang === 'en' ? site.nameEn : site.nameAr;
+            document.getElementById('modal-desc').textContent = currentLang === 'en' ? site.descEn : site.descAr;
+
+            const stage = document.getElementById('pano-stage');
+            const fallbackUri = getLandmarkFallbackSVG(site.id, site.nameEn);
+            const testImg = new Image();
+            testImg.onload = () => { stage.style.backgroundImage = `url('${site.img}')`; };
+            testImg.onerror = () => { stage.style.backgroundImage = `url('${fallbackUri}')`; };
+            testImg.src = site.img;
+
+            document.getElementById('modal-360').classList.remove('hidden');
+        }
+
+        function close360Modal() {
+            document.getElementById('modal-360').classList.add('hidden');
+        }
+
+        const panoStage = document.getElementById('pano-stage');
+        let dragging = false, lastX = 0, posX = 50;
+        panoStage.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; });
+        window.addEventListener('mouseup', () => { dragging = false; });
+        window.addEventListener('mousemove', e => {
+            if (!dragging) return;
+            posX = Math.max(0, Math.min(100, posX - (e.clientX - lastX) * 0.25));
+            panoStage.style.backgroundPosition = `${posX}% 50%`;
+            lastX = e.clientX;
+        });
+
+        /* Itinerary Functions */
+        function toggleSaveSite(id) {
+            if (savedTripIds.includes(id)) {
+                savedTripIds = savedTripIds.filter(x => x !== id);
+                showToast(currentLang === 'en' ? 'Removed from itinerary' : 'تمت الإزالة من المسار');
+            } else {
+                savedTripIds.push(id);
+                showToast(currentLang === 'en' ? 'Added to Hail360 itinerary!' : 'تمت الإضافة لمسار رحلتك!');
+            }
+            updateTripBadge();
+            renderLandmarks();
+        }
+
+        function addModalSiteToTrip() {
+            if (!savedTripIds.includes(activeModalId)) {
+                savedTripIds.push(activeModalId);
+                updateTripBadge();
+                renderLandmarks();
+            }
+            close360Modal();
+            showToast(currentLang === 'en' ? 'Landmark added to your trip plan!' : 'تمت إضافة المعلم لجدول رحلتك!');
+        }
+
+        function updateTripBadge() {
+            document.getElementById('trip-count').textContent = savedTripIds.length;
+        }
+
+        function openTripDrawer() {
+            const list = document.getElementById('saved-trip-list');
+            const items = landmarks.filter(s => savedTripIds.includes(s.id));
+            list.innerHTML = items.length ? items.map(s => `
+                <div style="padding:12px;background:#F8FAFC;border:1px solid var(--border-color);border-radius:12px;display:flex;justify-content:space-between;align-items:center;">
+                    <div>
+                        <strong style="font-size:0.9rem;display:block;">${currentLang === 'en' ? s.nameEn : s.nameAr}</strong>
+                        <span style="font-size:0.76rem;color:#64748B;">${currentLang === 'en' ? s.locEn : s.locAr}</span>
+                    </div>
+                    <button onclick="toggleSaveSite(${s.id});openTripDrawer();" style="border:none;background:none;color:#DC2626;font-weight:700;font-size:0.78rem;cursor:pointer;">Remove</button>
+                </div>
+            `).join('') : '<p style="text-align:center;color:#94A3B8;padding:24px;">No landmarks saved yet.</p>';
+            document.getElementById('trip-drawer').classList.remove('hidden');
+        }
+
+        function closeTripDrawer() {
+            document.getElementById('trip-drawer').classList.add('hidden');
+        }
+
+        function generateSmartPlan() {
+            const dur = document.getElementById('plan-duration').value;
+            const focus = document.getElementById('plan-interest').value;
+            document.getElementById('route-output').innerHTML = `
+                <div style="display:flex;justify-content:space-between;font-size:0.78rem;font-weight:800;color:var(--hail-green);">
+                    <span>CUSTOM ROUTE • ${dur.toUpperCase()} (${focus.toUpperCase()})</span>
+                    <span style="color:var(--hail-terracotta);">Optimized by Hail360</span>
+                </div>
+                <div class="route-step">
+                    <div class="step-num">1</div>
+                    <div>
+                        <strong style="font-size:0.9rem;display:block;">Stop 1: ${focus.includes('Reserves') ? 'Ramlah Reserve & Al-Didhan Meadows' : "A'arif Castle & Hail Central District"}</strong>
+                        <span style="font-size:0.78rem;color:#64748B;">09:30 AM • Guided exploration with 360° checkpoints</span>
+                    </div>
+                </div>
+                <div class="route-step">
+                    <div class="step-num" style="background:var(--hail-gold);color:var(--hail-green-dark);">2</div>
+                    <div>
+                        <strong style="font-size:0.9rem;display:block;">Stop 2: Great Nafud Dunes & Mount Al-Samra</strong>
+                        <span style="font-size:0.78rem;color:#64748B;">05:00 PM • Golden sunset panorama & traditional hospitality</span>
+                    </div>
+                </div>`;
+            showToast(currentLang === 'en' ? 'Personalized Hail route generated!' : 'تم إنشاء مسارك السياحي المخصص!');
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+            document.getElementById('lang-label-auth').textContent = currentLang === 'en' ? 'العربية' : 'English';
+            document.getElementById('lang-label-app').textContent = currentLang === 'en' ? 'العربية' : 'English';
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (i18n[currentLang][key]) {
+                    el.textContent = i18n[currentLang][key];
+                }
+            });
+
+            switchAuthTab(authMode);
+            renderLandmarks();
+        }
+
+        let toastTimer;
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = msg;
+            toast.classList.remove('hidden');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+    </script>
 </body>
 </html>
