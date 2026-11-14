@@ -47,18 +47,51 @@
         .card-media img { width: 100%; height: 100%; object-fit: cover; }
         .card-body { padding: 18px; }
         .card-title { font-size: 1.1rem; font-weight: 800; color: #0F172A; margin-bottom: 6px; }
-        .card-footer { padding: 0 18px 18px; }
-        .btn-card-vr { width: 100%; background: var(--hail-green); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        .card-footer { padding: 0 18px 18px; display: flex; gap: 8px; }
+        .btn-card-vr { flex: 1; background: var(--hail-green); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
+        .btn-card-booking { flex: 1; background: var(--hail-gold); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
         
-        /* AI Assistant & Guides Styling */
+        /* AI Assistant & Booking Styling */
         .ai-chat-box { background: var(--surface); border-radius: var(--radius-xl); border: 1px solid var(--border-color); padding: 24px; margin-top: 40px; box-shadow: var(--shadow-md); }
         .chat-messages { height: 200px; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; overflow-y: auto; margin-bottom: 14px; font-size: 0.9rem; line-height: 1.5; }
         .chat-input-row { display: flex; gap: 10px; }
+        
+        /* Booking Modal Styling */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .modal-card { background: var(--surface); width: 100%; max-width: 400px; border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
     </style>
 </head>
 <body>
 
     <div id="toast" class="toast hidden"><span id="toast-text">Action completed</span></div>
+
+    <!-- BOOKING MODAL -->
+    <div id="booking-modal" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3 id="booking-modal-title" style="margin-bottom: 14px; color: var(--hail-green);">حجز موعد الزيارة</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">اختر التاريخ واليوم المناسب لترتيب رحلتك:</p>
+            <div class="form-group">
+                <label>اختر اليوم (Day)</label>
+                <select id="booking-day" class="form-control">
+                    <option>الأحد (Sunday)</option>
+                    <option>الإثنين (Monday)</option>
+                    <option>الثلاثاء (Tuesday)</option>
+                    <option>الأربعاء (Wednesday)</option>
+                    <option>الخميس (Thursday)</option>
+                    <option>الجمعة (Friday)</option>
+                    <option>السبت (Saturday)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>التاريخ (Date)</label>
+                <input type="date" id="booking-date" class="form-control" value="2026-06-01">
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button type="button" class="btn-primary" onclick="confirmBooking()">تأكيد الحجز</button>
+                <button type="button" class="btn-guest" style="margin-top:0;" onclick="closeBookingModal()">إلغاء</button>
+            </div>
+        </div>
+    </div>
 
     <!-- AUTHENTICATION -->
     <div id="auth-view" class="auth-wrapper">
@@ -99,7 +132,7 @@
             <section class="hero-banner">
                 <div>
                     <h2>Discover Hail’s Timeless Heritage & Luxury</h2>
-                    <p>Explore heritage sites, hotels, cafes, unique desert experiences, and certified local guides.</p>
+                    <p>Explore heritage sites, hotels, cafes, unique experiences, and certified local guides.</p>
                 </div>
             </section>
 
@@ -113,158 +146,4 @@
                 <div id="hotels-grid" class="landmarks-grid"></div>
             </section>
 
-            <section style="margin-top:30px;">
-                <h3>Cafes & Dining (الكافيهات والمطاعم والمقاهي)</h3>
-                <div id="cafes-grid" class="landmarks-grid"></div>
-            </section>
-
-            <section style="margin-top:30px;">
-                <h3>Unique Experience (تجارب فريدة)</h3>
-                <div id="unique-grid" class="landmarks-grid"></div>
-            </section>
-
-            <!-- Certified Tour Guides Section -->
-            <section style="margin-top:40px;">
-                <h3>Certified Tour Guides (المرشدون السياحيون المعتمدون)</h3>
-                <div id="guides-grid" class="landmarks-grid"></div>
-            </section>
-
-            <!-- AI Assistant Section (Trip Planner) -->
-            <section class="ai-chat-box">
-                <h3 style="margin-bottom: 8px; color: var(--hail-green);">🤖 Hail360 AI Trip Planner & Assistant (المساعد الذكي لتخطيط الرحلات)</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Ask me to plan your trip, arrange your schedule, or recommend places in Hail!</p>
-                <div id="chat-messages" class="chat-messages">
-                    <div><strong>AI:</strong> مرحباً بك في مساعد حائل 360 الذكي! اكتب لي (اقترح جدول رحلة) أو اسألني عن أي معلم سكي أُرتبه لك فوراَ.</div>
-                </div>
-                <div class="chat-input-row">
-                    <input type="text" id="chat-input" class="form-control" placeholder="اكتب سؤالك أو اطلب ترتيب جدول (مثلاً: أريد جدول ليوم واحد)...">
-                    <button type="button" class="btn-primary" style="width: 120px;" onclick="sendAiMessage()">Send</button>
-                </div>
-            </section>
-        </main>
-    </div>
-
-    <script>
-        var currentLang = 'en';
-
-        // أكواد الصور الدقيقة والمعتمدة التي ضبطت معك 100%
-        var categoriesData = {
-            heritage: [
-                { id: 101, nameEn: "Tuwarun", nameAr: "توارن", locEn: "Hail", locAr: "حائل", img: "IMG_4367.jpeg", descEn: "Historic valley and village.", descAr: "قرية تاريخية ووادٍ عريق." },
-                { id: 102, nameEn: "Jubbah Rock Art", nameAr: "جبه", locEn: "UNESCO", locAr: "يونسكو", img: "IMG_4368.jpeg", descEn: "UNESCO heritage site.", descAr: "موقع تراث عالمي." },
-                { id: 103, nameEn: "Mount Um Sinman", nameAr: "جبل أم سنمان", locEn: "Jubbah", locAr: "جبة", img: "IMG_4369.jpeg", descEn: "Sandstone mountain.", descAr: "الجبل الصخري الشهير." },
-                { id: 104, nameEn: "Hatim Al-Tai Palace", nameAr: "قصر حاتم الطائي", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4370.webp", descEn: "Historical generosity site.", descAr: "الموقع التاريخي المرتبط بحاتم الطائي." },
-                { id: 105, nameEn: "Uqdah Village", nameAr: "عقده", locEn: "Aja Mountains", locAr: "جبال أجاء", img: "IMG_4371.jpeg", descEn: "Mountain oasis.", descAr: "واحة جبلية ساحرة." },
-                { id: 106, nameEn: "Shuaib Jaw", nameAr: "شعيب جو", locEn: "Hail Valleys", locAr: "شعاب حائل", img: "IMG_4372.webp", descEn: "Scenic seasonal valley.", descAr: "وادي طبيعي خلاب." }
-            ],
-            hotels: [
-                { id: 201, nameEn: "Rich Lobby Hotel", nameAr: "ريتش لوبي فندق", locEn: "Hail", locAr: "حائل", img: "IMG_4373.jpeg", descEn: "Contemporary luxury hotel.", descAr: "فندق عصري فاخر." },
-                { id: 202, nameEn: "Millennium Hail Hotel", nameAr: "فندق ميلينيوم حائل", locEn: "Hail", locAr: "حائل", img: "IMG_4374.jpeg", descEn: "Five-star hotel.", descAr: "فندق عالمي خمس نجوم." },
-                { id: 203, nameEn: "Suknai Royal Hotel", nameAr: "فندق سكنى رويال", locEn: "Hail", locAr: "حائل", img: "IMG_4375.jpeg", descEn: "Comfortable royal accommodation.", descAr: "فندق راقٍ يوفر أجنحة واسعة." },
-                { id: 204, nameEn: "Golden Tulip Hotel", nameAr: "فندق جولدن توليب حائل", locEn: "Hail", locAr: "حائل", img: "IMG_4376.jpeg", descEn: "Renowned brand hotel.", descAr: "علامة فندقية عالمية شهيرة." },
-                { id: 205, nameEn: "Ayas Hotel Hail", nameAr: "فندق أياس حائل", locEn: "Hail", locAr: "حائل", img: "IMG_4377.jpeg", descEn: "Modern boutique hotel.", descAr: "فندق بوتيكي عصري." }
-            ],
-            cafes: [
-                { id: 301, nameEn: "Camel Step Coffee", nameAr: "خطوة جمل", locEn: "Hail", locAr: "حائل", img: "IMG_4383.jpeg", descEn: "Pioneer specialty coffee.", descAr: "محمصة القهوة الشهيرة." },
-                { id: 302, nameEn: "Bonchai Cafe", nameAr: "بنشاي", locEn: "Hail", locAr: "حائل", img: "IMG_4401.jpeg", descEn: "Specialty coffee spot.", descAr: "مقهى مختص عصري." },
-                { id: 303, nameEn: "AL Adham Cafe", nameAr: "الأدهم", locEn: "Hail", locAr: "حائل", img: "IMG_4403.jpeg", descEn: "Fusion cafe.", descAr: "مقهى يجمع بين التراث والأصالة." },
-                { id: 304, nameEn: "Peacock Cafe Roaster", nameAr: "بيكوك", locEn: "Hail", locAr: "حائل", img: "IMG_4405.jpeg", descEn: "Artisanal roastery.", descAr: "محمصة ومقهى فاخر." }
-            ],
-            unique: [
-                { id: 501, nameEn: "Desert Buggy Safari", nameAr: "تطعيس ودبابات", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4406.jpeg", descEn: "Off-road buggy safari.", descAr: "تجربة سفاري ودبابات صحراوية." },
-                { id: 502, nameEn: "Al-Tai Horse Riding", nameAr: "مربط الطائي", locEn: "Hail", locAr: "حائل", img: "IMG_4388.jpeg", descEn: "Equestrian experience.", descAr: "تجربة فروسية وركوب الخيل." },
-                { id: 503, nameEn: "Mountain Hiking", nameAr: "هايكينج", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4408.jpeg", descEn: "Mountain hiking.", descAr: "رحلة تسلق وهايكنج جبلي." }
-            ]
-        };
-
-        // المرشدين السياحيين المعتمدين الاثنين
-        var guidesData = [
-            { id: 701, nameEn: "Fahad Al-Shammari", nameAr: "فهد الشمري", specEn: "Heritage & History Expert", specAr: "خبير التراث والآثار بحائل", img: "IMG_4367.jpeg" },
-            { id: 702, nameEn: "Noura Al-Rasheed", nameAr: "نورة الرشيد", specEn: "Desert Safari & Adventure Guide", specAr: "مرشدة المغامرات والرحلات الصحراوية", img: "IMG_4406.jpeg" }
-        ];
-
-        function enterApp() {
-            document.getElementById('auth-view').classList.add('hidden');
-            document.getElementById('app-view').classList.remove('hidden');
-            renderAllSections();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function logout() {
-            document.getElementById('app-view').classList.add('hidden');
-            document.getElementById('auth-view').classList.remove('hidden');
-        }
-
-        function renderSectionGrid(categoryKey, gridId) {
-            var grid = document.getElementById(gridId);
-            if (!grid) return;
-            var items = categoriesData[categoryKey] || [];
-            grid.innerHTML = items.map(function(site) {
-                var title = currentLang === 'en' ? site.nameEn : site.nameAr;
-                var loc = currentLang === 'en' ? site.locEn : site.locAr;
-                var desc = currentLang === 'en' ? site.descEn : site.descAr;
-                return '<div class="landmark-card">' +
-                    '<div><div class="card-media"><img src="' + site.img + '" alt="' + title + '"></div>' +
-                    '<div class="card-body"><div style="font-size:0.75rem;font-weight:700;color:var(--hail-gold-dark);">' + loc + '</div>' +
-                    '<h4 class="card-title">' + title + '</h4><p style="font-size:0.84rem;color:var(--text-muted);">' + desc + '</p></div></div>' +
-                    '<div class="card-footer"><button type="button" class="btn-card-vr" onclick="showToast(\'Loaded 360 view for ' + title + '\')">👁 360° View</button></div>' +
-                '</div>';
-            }).join('');
-        }
-
-        function renderGuidesGrid() {
-            var grid = document.getElementById('guides-grid');
-            if (!grid) return;
-            grid.innerHTML = guidesData.map(function(guide) {
-                var name = currentLang === 'en' ? guide.nameEn : guide.nameAr;
-                var spec = currentLang === 'en' ? guide.specEn : guide.specAr;
-                return '<div class="landmark-card">' +
-                    '<div><div class="card-media"><img src="' + guide.img + '" alt="' + name + '"></div>' +
-                    '<div class="card-body"><h4 class="card-title">' + name + '</h4><p style="font-size:0.84rem;color:var(--text-muted);">' + spec + '</p></div></div>' +
-                    '<div class="card-footer"><button type="button" class="btn-card-vr" onclick="showToast(\'Booking request sent to ' + name + '\')">📞 Book Guide</button></div>' +
-                '</div>';
-            }).join('');
-        }
-
-        function renderAllSections() {
-            renderSectionGrid('heritage', 'heritage-grid');
-            renderSectionGrid('hotels', 'hotels-grid');
-            renderSectionGrid('cafes', 'cafes-grid');
-            renderSectionGrid('unique', 'unique-grid');
-            renderGuidesGrid();
-        }
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'ar' : 'en';
-            document.documentElement.lang = currentLang;
-            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-            document.getElementById('lang-label-auth').textContent = currentLang === 'en' ? 'العربية' : 'English';
-            document.getElementById('lang-label-app').textContent = currentLang === 'en' ? 'العربية' : 'English';
-            renderAllSections();
-        }
-
-        function showToast(msg) {
-            var toast = document.getElementById('toast');
-            document.getElementById('toast-text').textContent = msg;
-            toast.classList.remove('hidden');
-            setTimeout(function() { toast.classList.add('hidden'); }, 2500);
-        }
-
-        // تفاعل المساعد الذكي لتنسيق الجداول السياحية
-        function sendAiMessage() {
-            var input = document.getElementById('chat-input');
-            var text = input.value.trim();
-            if (!text) return;
-            var box = document.getElementById('chat-messages');
-            box.innerHTML += '<div style="margin-top:6px;"><strong>You:</strong> ' + text + '</div>';
-            input.value = '';
-            
-            setTimeout(function() {
-                var reply = "<strong>AI Trip Planner:</strong> بناءً على طلبك، إليك جدول مقترح لزيارة حائل:<br>• <strong>الصباح:</strong> زيارة جبه ونقوش أم سنمان التراثية.<br>• <strong>الظهيرة:</strong> الاستراحة في مقهى خطوة جمل أو بيكوك.<br>• <strong>المساء:</strong> تجربة التطعيس الصحراوية في توارن مع المرشد فهد الشمري!";
-                box.innerHTML += '<div style="margin-top:8px; color:var(--hail-green); background:#E8F1EC; padding:10px; border-radius:8px;">' + reply + '</div>';
-                box.scrollTop = box.scrollHeight;
-            }, 600);
-        }
-    </script>
-</body>
-</html>
+            <section
