@@ -52,7 +52,7 @@
         
         /* AI Assistant & Guides Styling */
         .ai-chat-box { background: var(--surface); border-radius: var(--radius-xl); border: 1px solid var(--border-color); padding: 24px; margin-top: 40px; box-shadow: var(--shadow-md); }
-        .chat-messages { height: 180px; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; overflow-y: auto; margin-bottom: 14px; font-size: 0.9rem; }
+        .chat-messages { height: 200px; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; overflow-y: auto; margin-bottom: 14px; font-size: 0.9rem; line-height: 1.5; }
         .chat-input-row { display: flex; gap: 10px; }
     </style>
 </head>
@@ -99,7 +99,7 @@
             <section class="hero-banner">
                 <div>
                     <h2>Discover Hail’s Timeless Heritage & Luxury</h2>
-                    <p>Explore heritage sites, hotels, cafes, unique experiences, and certified local guides.</p>
+                    <p>Explore heritage sites, hotels, cafes, unique desert experiences, and certified local guides.</p>
                 </div>
             </section>
 
@@ -114,7 +114,7 @@
             </section>
 
             <section style="margin-top:30px;">
-                <h3>Cafes & Dining (الكافيهات والمطاعم)</h3>
+                <h3>Cafes & Dining (الكافيهات والمطاعم والمقاهي)</h3>
                 <div id="cafes-grid" class="landmarks-grid"></div>
             </section>
 
@@ -129,15 +129,15 @@
                 <div id="guides-grid" class="landmarks-grid"></div>
             </section>
 
-            <!-- AI Assistant Section -->
+            <!-- AI Assistant Section (Trip Planner) -->
             <section class="ai-chat-box">
-                <h3 style="margin-bottom: 12px; color: var(--hail-green);">🤖 Hail360 AI Assistant (المساعد الذكي)</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Ask anything about Hail's heritage, cafes, or best travel plans.</p>
+                <h3 style="margin-bottom: 8px; color: var(--hail-green);">🤖 Hail360 AI Trip Planner & Assistant (المساعد الذكي لتخطيط الرحلات)</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Ask me to plan your trip, arrange your schedule, or recommend places in Hail!</p>
                 <div id="chat-messages" class="chat-messages">
-                    <div><strong>AI:</strong> Welcome! Ask me about Hail tourist spots, weather, or heritage tours.</div>
+                    <div><strong>AI:</strong> مرحباً بك في مساعد حائل 360 الذكي! اكتب لي (اقترح جدول رحلة) أو اسألني عن أي معلم سكي أُرتبه لك فوراَ.</div>
                 </div>
                 <div class="chat-input-row">
-                    <input type="text" id="chat-input" class="form-control" placeholder="Type your question here...">
+                    <input type="text" id="chat-input" class="form-control" placeholder="اكتب سؤالك أو اطلب ترتيب جدول (مثلاً: أريد جدول ليوم واحد)...">
                     <button type="button" class="btn-primary" style="width: 120px;" onclick="sendAiMessage()">Send</button>
                 </div>
             </section>
@@ -147,6 +147,7 @@
     <script>
         var currentLang = 'en';
 
+        // أكواد الصور الدقيقة والمعتمدة التي ضبطت معك 100%
         var categoriesData = {
             heritage: [
                 { id: 101, nameEn: "Tuwarun", nameAr: "توارن", locEn: "Hail", locAr: "حائل", img: "IMG_4367.jpeg", descEn: "Historic valley and village.", descAr: "قرية تاريخية ووادٍ عريق." },
@@ -164,21 +165,22 @@
                 { id: 205, nameEn: "Ayas Hotel Hail", nameAr: "فندق أياس حائل", locEn: "Hail", locAr: "حائل", img: "IMG_4377.jpeg", descEn: "Modern boutique hotel.", descAr: "فندق بوتيكي عصري." }
             ],
             cafes: [
-                { id: 301, nameEn: "Camel Step Coffee", nameAr: "محمصة خطوة الكاميل", locEn: "Hail", locAr: "حائل", img: "IMG_4383.jpeg", descEn: "Pioneer specialty coffee.", descAr: "محمصة القهوة الشهيرة." },
-                { id: 302, nameEn: "Bonchai Cafe", nameAr: "مقهى بونشاي", locEn: "Hail", locAr: "حائل", img: "IMG_4401.jpeg", descEn: "Specialty coffee spot.", descAr: "مقهى مختص عصري." },
-                { id: 303, nameEn: "AL Adham Cafe", nameAr: "مقهى الأدهم", locEn: "Hail", locAr: "حائل", img: "IMG_4403.jpeg", descEn: "Fusion cafe.", descAr: "مقهى يجمع بين التراث والأصالة." },
-                { id: 304, nameEn: "Peacock Cafe Roaster", nameAr: "بيكوك كافيه وروستر", locEn: "Hail", locAr: "حائل", img: "IMG_4405.jpeg", descEn: "Artisanal roastery.", descAr: "محمصة ومقهى فاخر." }
+                { id: 301, nameEn: "Camel Step Coffee", nameAr: "خطوة جمل", locEn: "Hail", locAr: "حائل", img: "IMG_4383.jpeg", descEn: "Pioneer specialty coffee.", descAr: "محمصة القهوة الشهيرة." },
+                { id: 302, nameEn: "Bonchai Cafe", nameAr: "بنشاي", locEn: "Hail", locAr: "حائل", img: "IMG_4401.jpeg", descEn: "Specialty coffee spot.", descAr: "مقهى مختص عصري." },
+                { id: 303, nameEn: "AL Adham Cafe", nameAr: "الأدهم", locEn: "Hail", locAr: "حائل", img: "IMG_4403.jpeg", descEn: "Fusion cafe.", descAr: "مقهى يجمع بين التراث والأصالة." },
+                { id: 304, nameEn: "Peacock Cafe Roaster", nameAr: "بيكوك", locEn: "Hail", locAr: "حائل", img: "IMG_4405.jpeg", descEn: "Artisanal roastery.", descAr: "محمصة ومقهى فاخر." }
             ],
             unique: [
-                { id: 501, nameEn: "Desert Buggy Safari - Tuwarun", nameAr: "تطعيس ودبابات صحراوية - توارن", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4406.jpeg", descEn: "Off-road buggy safari.", descAr: "تجربة سفاري ودبابات صحراوية." },
-                { id: 502, nameEn: "Al-Tai Arabian Horse Riding", nameAr: "مربط الطائي للخيل", locEn: "Hail", locAr: "حائل", img: "IMG_4388.jpeg", descEn: "Equestrian experience.", descAr: "تجربة فروسية وركوب الخيل." },
-                { id: 503, nameEn: "Mountain Hiking - Tuwarun", nameAr: "هايكنج جبلي - توارن", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4408.jpeg", descEn: "Mountain hiking.", descAr: "رحلة تسلق وهايكنج جبلي." }
+                { id: 501, nameEn: "Desert Buggy Safari", nameAr: "تطعيس ودبابات", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4406.jpeg", descEn: "Off-road buggy safari.", descAr: "تجربة سفاري ودبابات صحراوية." },
+                { id: 502, nameEn: "Al-Tai Horse Riding", nameAr: "مربط الطائي", locEn: "Hail", locAr: "حائل", img: "IMG_4388.jpeg", descEn: "Equestrian experience.", descAr: "تجربة فروسية وركوب الخيل." },
+                { id: 503, nameEn: "Mountain Hiking", nameAr: "هايكينج", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4408.jpeg", descEn: "Mountain hiking.", descAr: "رحلة تسلق وهايكنج جبلي." }
             ]
         };
 
+        // المرشدين السياحيين المعتمدين الاثنين
         var guidesData = [
-            { id: 701, nameEn: "Fahad Al-Shammari", nameAr: "فهد الشمري", specEn: "Heritage & History Expert", specAr: "خبير التراث والتاريخ", img: "IMG_4367.jpeg" },
-            { id: 702, nameEn: "Noura Al-Rasheed", nameAr: "نورة الرشيد", specEn: "Desert Safari & Adventure Guide", specAr: "مرشدة المغامرات والسفاري", img: "IMG_4406.jpeg" }
+            { id: 701, nameEn: "Fahad Al-Shammari", nameAr: "فهد الشمري", specEn: "Heritage & History Expert", specAr: "خبير التراث والآثار بحائل", img: "IMG_4367.jpeg" },
+            { id: 702, nameEn: "Noura Al-Rasheed", nameAr: "نورة الرشيد", specEn: "Desert Safari & Adventure Guide", specAr: "مرشدة المغامرات والرحلات الصحراوية", img: "IMG_4406.jpeg" }
         ];
 
         function enterApp() {
@@ -219,7 +221,7 @@
                 return '<div class="landmark-card">' +
                     '<div><div class="card-media"><img src="' + guide.img + '" alt="' + name + '"></div>' +
                     '<div class="card-body"><h4 class="card-title">' + name + '</h4><p style="font-size:0.84rem;color:var(--text-muted);">' + spec + '</p></div></div>' +
-                    '<div class="card-footer"><button type="button" class="btn-card-vr" onclick="showToast(\'Contact request sent to ' + name + '\')">📞 Book Guide</button></div>' +
+                    '<div class="card-footer"><button type="button" class="btn-card-vr" onclick="showToast(\'Booking request sent to ' + name + '\')">📞 Book Guide</button></div>' +
                 '</div>';
             }).join('');
         }
@@ -248,6 +250,7 @@
             setTimeout(function() { toast.classList.add('hidden'); }, 2500);
         }
 
+        // تفاعل المساعد الذكي لتنسيق الجداول السياحية
         function sendAiMessage() {
             var input = document.getElementById('chat-input');
             var text = input.value.trim();
@@ -255,8 +258,10 @@
             var box = document.getElementById('chat-messages');
             box.innerHTML += '<div style="margin-top:6px;"><strong>You:</strong> ' + text + '</div>';
             input.value = '';
+            
             setTimeout(function() {
-                box.innerHTML += '<div style="margin-top:6px; color:var(--hail-green);"><strong>AI:</strong> Hail has amazing heritage sites like Jubbah and Tuwarun! Let me know if you need a tour guide or hotel recommendation.</div>';
+                var reply = "<strong>AI Trip Planner:</strong> بناءً على طلبك، إليك جدول مقترح لزيارة حائل:<br>• <strong>الصباح:</strong> زيارة جبه ونقوش أم سنمان التراثية.<br>• <strong>الظهيرة:</strong> الاستراحة في مقهى خطوة جمل أو بيكوك.<br>• <strong>المساء:</strong> تجربة التطعيس الصحراوية في توارن مع المرشد فهد الشمري!";
+                box.innerHTML += '<div style="margin-top:8px; color:var(--hail-green); background:#E8F1EC; padding:10px; border-radius:8px;">' + reply + '</div>';
                 box.scrollTop = box.scrollHeight;
             }, 600);
         }
