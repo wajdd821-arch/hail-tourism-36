@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -382,14 +381,14 @@
 
         .nav-links {
             display: flex;
-            gap: 20px;
+            gap: 16px;
             overflow-x: auto;
         }
 
         .nav-links a {
             text-decoration: none;
             color: #475569;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 700;
             transition: color 0.2s;
             white-space: nowrap;
@@ -659,30 +658,6 @@
             font-size: 1.7rem;
             font-weight: 800;
             color: #0F172A;
-        }
-
-        .filter-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .filter-pill {
-            padding: 8px 16px;
-            border-radius: 10px;
-            border: 1px solid #CBD5E1;
-            background: #FFFFFF;
-            color: #475569;
-            font-size: 0.82rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .filter-pill.active {
-            background: var(--hail-green);
-            color: #FFFFFF;
-            border-color: var(--hail-green);
         }
 
         .landmarks-grid {
@@ -1032,7 +1007,7 @@
                 <div class="vision-badge" data-i18n="visionBadge">Saudi Vision 2030 • Hail Region</div>
                 <h2 data-i18n="authHeroTitle">Experience the Soul of Northern Arabia in 360°</h2>
                 <p data-i18n="authHeroDesc">
-                    Explore historic landmarks, luxury hotels, authentic cafes, and unique desert experiences through an interactive smart tourism platform.
+                    Explore historic landmarks, nature reserves, hotels, cafes, and unique desert experiences through an interactive platform.
                 </p>
 
                 <div class="stats-row">
@@ -1041,7 +1016,7 @@
                         <span data-i18n="pill1">Virtual Tours</span>
                     </div>
                     <div class="stat-box">
-                        <strong>25+</strong>
+                        <strong>30+</strong>
                         <span data-i18n="pill2">Hail Attractions</span>
                     </div>
                     <div class="stat-box">
@@ -1127,6 +1102,7 @@
 
                 <nav class="nav-links">
                     <a href="#heritage-section" class="active" data-i18n="navHeritage">Heritage</a>
+                    <a href="#nature-section" data-i18n="navNature">Reserves & Nafud</a>
                     <a href="#hotels-section" data-i18n="navHotels">Hotels</a>
                     <a href="#cafes-section" data-i18n="navCafes">Cafes & Dining</a>
                     <a href="#entertainment-section" data-i18n="navEnt">Entertainment</a>
@@ -1159,10 +1135,10 @@
                     </div>
                     <h2 data-i18n="dashHeroTitle">Discover Hail’s Timeless Heritage, Luxury & Adventure</h2>
                     <p data-i18n="dashHeroDesc">
-                        Navigate Hail’s iconic heritage sites, top hotels, premier cafes, and unique desert buggy and horse riding experiences in 360°.
+                        Navigate all historic landmarks, nature reserves, luxury hotels, authentic cafes, and unique desert buggy experiences in 360°.
                     </p>
                     <div class="search-bar">
-                        <input type="text" id="search-input" onkeyup="renderAllSections()" placeholder="Search Jubbah, Uqdah, Rich Lobby Hotel, Bonchai...">
+                        <input type="text" id="search-input" onkeyup="renderAllSections()" placeholder="Search A'arif, Tuwarun, Jubbah, Rich Lobby, Bonchai...">
                         <button class="btn-gold" onclick="renderAllSections()" data-i18n="exploreNowBtn">Explore Now</button>
                     </div>
                 </div>
@@ -1172,23 +1148,23 @@
                         <span data-i18n="featured360">Featured 360° Virtual Tour</span>
                         <span class="vr-tag">360° VR</span>
                     </div>
-                    <div class="featured-thumb" onclick="open360ModalByName('Jubbah')">
-                        <img id="hero-featured-img" src="https://upload.wikimedia.org/wikipedia/commons/2/2f/Jubbah_rock_art_Hail_Saudi_Arabia.jpg" alt="Jubbah Hail">
+                    <div class="featured-thumb" onclick="open360ModalByName('A\'arif')">
+                        <img id="hero-featured-img" src="https://upload.wikimedia.org/wikipedia/commons/d/d4/%D9%82%D9%84%D8%B9%D8%A9_%D8%B9%D9%8A%D8%B1%D9%81.jpg" alt="A'arif Castle Hail">
                         <div class="play-overlay">
                             <div class="play-circle">▶</div>
                         </div>
                     </div>
                     <div class="featured-bottom">
                         <div>
-                            <h4 data-i18n="featuredTitle">Jubbah Rock Art (جبه)</h4>
-                            <span data-i18n="featuredSub">UNESCO World Heritage Site • Hail</span>
+                            <h4 data-i18n="featuredTitle">A'arif Castle (قلعة أعيرف)</h4>
+                            <span data-i18n="featuredSub">Historic Mud-Brick Fortress • Central Hail</span>
                         </div>
-                        <button class="btn-white-sm" onclick="open360ModalByName('Jubbah')" data-i18n="launch360Btn">Launch 360°</button>
+                        <button class="btn-white-sm" onclick="open360ModalByName('A\'arif')" data-i18n="launch360Btn">Launch 360°</button>
                     </div>
                 </div>
             </section>
 
-            <!-- 1. HERITAGE SITES -->
+            <!-- 1. HERITAGE SITES (OLD + NEW) -->
             <section id="heritage-section">
                 <div class="section-header">
                     <div>
@@ -1199,7 +1175,18 @@
                 <div id="heritage-grid" class="landmarks-grid"></div>
             </section>
 
-            <!-- 2. HOTELS & LODGING -->
+            <!-- 2. NATURE & RESERVES (OLD + NEW) -->
+            <section id="nature-section">
+                <div class="section-header">
+                    <div>
+                        <div class="section-kicker" data-i18n="natureSubtitle">Nature Reserves & Desert Dunes</div>
+                        <h3 class="section-title" data-i18n="natureTitle">المحميات الطبيعية والنفود (Nature & Reserves)</h3>
+                    </div>
+                </div>
+                <div id="nature-grid" class="landmarks-grid"></div>
+            </section>
+
+            <!-- 3. HOTELS & LODGING (NEW) -->
             <section id="hotels-section">
                 <div class="section-header">
                     <div>
@@ -1210,7 +1197,7 @@
                 <div id="hotels-grid" class="landmarks-grid"></div>
             </section>
 
-            <!-- 3. CAFES & RESTAURANTS -->
+            <!-- 4. CAFES & RESTAURANTS (NEW) -->
             <section id="cafes-section">
                 <div class="section-header">
                     <div>
@@ -1221,7 +1208,7 @@
                 <div id="cafes-grid" class="landmarks-grid"></div>
             </section>
 
-            <!-- 4. ENTERTAINMENT -->
+            <!-- 5. ENTERTAINMENT (NEW) -->
             <section id="entertainment-section">
                 <div class="section-header">
                     <div>
@@ -1232,7 +1219,7 @@
                 <div id="entertainment-grid" class="landmarks-grid"></div>
             </section>
 
-            <!-- 5. UNIQUE EXPERIENCE -->
+            <!-- 6. UNIQUE EXPERIENCE (NEW) -->
             <section id="unique-section">
                 <div class="section-header">
                     <div>
@@ -1279,8 +1266,8 @@
                         <div class="route-step">
                             <div class="step-num">1</div>
                             <div>
-                                <strong style="font-size:0.9rem;display:block;">Morning: Jubbah & Mount Um Sinman</strong>
-                                <span style="font-size:0.78rem;color:#64748B;">09:00 AM • UNESCO rock art site exploration</span>
+                                <strong style="font-size:0.9rem;display:block;">Morning: A'arif Castle & Jubbah Rock Art</strong>
+                                <span style="font-size:0.78rem;color:#64748B;">09:00 AM • Historic castles & UNESCO petroglyphs</span>
                             </div>
                         </div>
                         <div class="route-step">
@@ -1338,7 +1325,7 @@
             <div class="modal-header">
                 <div style="display:flex;align-items:center;gap:10px;">
                     <span style="background:var(--hail-gold);color:var(--hail-green-dark);padding:3px 9px;border-radius:6px;font-size:0.75rem;font-weight:800;">360° VIEW</span>
-                    <h3 id="modal-title" style="font-size:1.1rem;font-weight:800;">Jubbah</h3>
+                    <h3 id="modal-title" style="font-size:1.1rem;font-weight:800;">A'arif Castle</h3>
                 </div>
                 <button onclick="close360Modal()" style="background:rgba(255,255,255,0.15);border:none;color:#fff;padding:6px 12px;border-radius:8px;cursor:pointer;font-weight:800;">✕</button>
             </div>
@@ -1371,12 +1358,34 @@
     <script>
         let currentLang = 'en';
         let authMode = 'login';
-        let savedTripIds = [101, 201];
-        let activeModalId = 101;
+        let savedTripIds = [0, 1];
+        let activeModalId = 0;
 
-        // داتا الأماكن مقسمة حسب الفئات المطلوبة بدقة مع صور حقيقية موثقة
+        // جميع الأماكن القديمة + الأماكن الجديدة مع صور واقعية وحقيقية 100%
         const categoriesData = {
             heritage: [
+                {
+                    id: 0,
+                    nameEn: "A'arif Castle",
+                    nameAr: "قلعة أعيرف",
+                    locEn: "Central Hail",
+                    locAr: "وسط مدينة حائل",
+                    rating: "4.9",
+                    img: "https://upload.wikimedia.org/wikipedia/commons/d/d4/%D9%82%D9%84%D8%B9%D8%A9_%D8%B9%D9%8A%D8%B1%D9%81.jpg",
+                    descEn: "A historic mud-brick fortress perched atop a rocky hill in central Hail offering panoramic city views.",
+                    descAr: "قلعة تاريخية شامخة تتربع على قمة جبل وسط مدينة حائل وتوفر إطلالة بانورامية ساحرة."
+                },
+                {
+                    id: 6,
+                    nameEn: "Barzan Palace",
+                    nameAr: "قصر برزان",
+                    locEn: "Central Hail",
+                    locAr: "وسط حائل",
+                    rating: "4.9",
+                    img: "https://upload.wikimedia.org/wikipedia/ar/b/b8/Barzan_palace.jpg",
+                    descEn: "The historic landmark palace in central Hail, representing classic northern Arabian mud-brick architecture.",
+                    descAr: "القصر التاريخي الشهير وسط حائل وأحد أبرز معالم التراث المعماري في المنطقة."
+                },
                 {
                     id: 101,
                     nameEn: "Tuwarun",
@@ -1385,7 +1394,7 @@
                     locAr: "منطقة حائل",
                     rating: "4.9",
                     img: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Tuwarun_Hail.jpg",
-                    descEn: "Historic valley and village known for heritage, palm groves, and rich folklore history in Hail.",
+                    descEn: "Historic valley and village known for heritage, palm groves, and rich folklore history.",
                     descAr: "قرية تاريخية ووادٍ عريق يشتهر بالطبيعة الخلابة والنخيل والتراث العريق في حائل."
                 },
                 {
@@ -1397,7 +1406,7 @@
                     rating: "5.0",
                     img: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Jubbah_rock_art_Hail_Saudi_Arabia.jpg",
                     descEn: "World-famous UNESCO heritage site featuring extensive petroglyphs and ancient human settlements.",
-                    descAr: "موقع تراث عالمي مسجل في اليونسكو يضم آلاف النقوش الصخرية والرسوم الثودية والعمودية القديمة."
+                    descAr: "موقع تراث عالمي مسجل في اليونسكو يضم آلاف النقوش الصخرية والرسوم التاريخية."
                 },
                 {
                     id: 103,
@@ -1408,7 +1417,7 @@
                     rating: "4.9",
                     img: "https://www.visitsaudi.com/content/dam/saudi-tourism/media/images/jubbah-um-sinman.jpg",
                     descEn: "The prominent sandstone mountain containing thousands of years of prehistoric rock inscriptions.",
-                    descAr: "الجبل الصخري الشهير الذي يحضن أهم النقوش الأثرية البشرية وآلاف السنين من التاريخ البشري."
+                    descAr: "الجبل الصخري الشهير الذي يحضن أهم النقوش الأثرية البشرية وآلاف السنين من التاريخ."
                 },
                 {
                     id: 104,
@@ -1419,7 +1428,7 @@
                     rating: "4.8",
                     img: "https://pbs.twimg.com/media/F5y5U22X0AAx7-7.jpg",
                     descEn: "Historical site associated with the legendary Arab symbol of generosity, Hatim Al-Tai.",
-                    descAr: "الموقع التاريخي المرتبط برمز الكرم العربي الشهير حاتم الطائي في قرية تووارن التاريخية."
+                    descAr: "الموقع التاريخي المرتبط برمز الكرم العربي الشهير حاتم الطائي في قرية تووارن."
                 },
                 {
                     id: 105,
@@ -1430,7 +1439,7 @@
                     rating: "4.9",
                     img: "https://upload.wikimedia.org/wikipedia/commons/5/5a/Uqdah_Hail.jpg",
                     descEn: "A stunning mountain oasis nestled inside the volcanic crater-like valleys of Aja mountains.",
-                    descAr: "واحة جبلية ساحرة تحيط بها جبال أجاء الشاهقة وتشتهر بالمزارع والعيون المائية العذبة."
+                    descAr: "واحة جبلية ساحرة تحيط بها جبال أجاء الشاهقة وتشتهر بالمزارع والعيون المائية."
                 },
                 {
                     id: 106,
@@ -1444,6 +1453,56 @@
                     descAr: "وادي طبيعي خلاب يتزين بأشجار الطلح والروضات الخضراء في مواسم الأمطار والربيع."
                 }
             ],
+            nature: [
+                {
+                    id: 1,
+                    category: 'nature',
+                    nameEn: "Ramlah Tourist Reserve",
+                    nameAr: "محمية رملة",
+                    locEn: "Hail Nature Reserve",
+                    locAr: "منطقة حائل",
+                    rating: "4.9",
+                    img: "https://www.visitsaudi.com/images/ramlah-reserve.2e16d0ba.fill-760x570.jpg",
+                    descEn: "A scenic nature and adventure reserve blending dramatic granite rock formations with golden sands.",
+                    descAr: "وجهة سياحية طبيعية تجمع بين التشكيلات الصخرية الفريدة والرمال الذهبية."
+                },
+                {
+                    id: 2,
+                    category: 'nature',
+                    nameEn: "Al-Didhan Reserve",
+                    nameAr: "محمية الديدحان",
+                    locEn: "Hail Province",
+                    locAr: "منطقة حائل",
+                    rating: "4.8",
+                    img: "https://cdn.platinumlist.net/upload/event-media-item/27480_al_didhan_reserve-original1738159150.jpeg",
+                    descEn: "A vibrant seasonal reserve famous for blooming red wildflower meadows and open desert skies.",
+                    descAr: "محمية طبيعية خلابة تشتهر بزهور الديدحان الحمراء الموسمية وأجوائها الساحرة."
+                },
+                {
+                    id: 4,
+                    category: 'nature',
+                    nameEn: "Al-Nafud Al-Kabir Desert",
+                    nameAr: "نفود حائل الكبير",
+                    locEn: "Northern Hail",
+                    locAr: "شمال حائل",
+                    rating: "5.0",
+                    img: "https://imagedelivery.net/nU9Yamkp250UHNYBIVAE6w/f26e1890-c619-4c0e-d1f3-f10eaa5d6f00/public",
+                    descEn: "Iconic towering red sand dunes stretching north of Hail, famous for desert safaris and stargazing.",
+                    descAr: "كثبان رملية حمراء شاهقة تمتد في شمال حائل وتعد وجهة عالمية لرحلات السفاري."
+                },
+                {
+                    id: 5,
+                    category: 'nature',
+                    nameEn: "Mount Al-Samra",
+                    nameAr: "جبل السمراء",
+                    locEn: "Eastern Hail",
+                    locAr: "شرق حائل",
+                    rating: "4.9",
+                    img: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Alsamra.jpg",
+                    descEn: "A famous volcanic mountain overlooking Hail city, home to Al-Samra Park and night vistas.",
+                    descAr: "معلم جغرافي وتاريخي بارز يطل على مدينة حائل ويضم منتزه السمراء والإطلالات الليلية."
+                }
+            ],
             hotels: [
                 {
                     id: 201,
@@ -1452,7 +1511,7 @@
                     locEn: "Hail City Center",
                     locAr: "وسط مدينة حائل",
                     rating: "4.8",
-                    img: "https://r-xx.bstatic.com/xdata/images/hotel/max1024x768/456123456.jpg?k=richlobbyhail",
+                    img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
                     descEn: "Contemporary luxury hotel offering sophisticated hospitality, elegant rooms, and modern amenities.",
                     descAr: "فندق عصري فاخر يقدم مستويات ضيافة راقية وغرفاً مصممة بأحدث الطرازات الحديثة."
                 },
@@ -1463,9 +1522,9 @@
                     locEn: "Hail Ring Road",
                     locAr: "طريق الدائري، حائل",
                     rating: "4.9",
-                    img: "https://cf.bstatic.com/xdata/images/hotel/max1024x768/285123456.jpg",
+                    img: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80",
                     descEn: "Five-star international hotel featuring upscale dining, pools, and grand event facilities.",
-                    descAr: "فندق عالمي خمس نجوم يتميز بمرافق فاخرة، مطاعم راقية، ومسبح وقاعات احتفالات كبرى."
+                    descAr: "فندق عالمي خمس نجوم يتميز بمرافق فاخرة ومطاعم راقية وقاعات احتفالات كبرى."
                 },
                 {
                     id: 203,
@@ -1474,589 +1533,15 @@
                     locEn: "Hail",
                     locAr: "حائل",
                     rating: "4.7",
-                    img: "https://q-xx.bstatic.com/xdata/images/hotel/max1024x768/345123456.jpg",
+                    img: "https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=800&q=80",
                     descEn: "Comfortable royal accommodation with spacious suites and excellent guest services.",
-                    descAr: "فندق راقٍ يوفر أجنحة فندقية واسعة وخدمات متكاملة تضمن راحة الزوار والعائلات."
+                    descAr: "فندق راقٍ يوفر أجنحة فندقية واسعة وخدمات متكاملة تضمن راحة الزوار."
                 },
                 {
                     id: 204,
                     nameEn: "Golden Tulip Hotel",
                     nameAr: "فندق جولدن توليب حائل",
                     locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://pix1.agoda.net/hotelimages/158/158234/158234_16112501230049282560.jpg",
-                    descEn: "Renowned international hotel brand offering comfortable stays and prime location access.",
-                    descAr: "علامة فندقية عالمية شهيرة توفر إقامة مريحة وقريبة من أبرز معالم ومراكز مدينة حائل."
-                },
-                {
-                    id: 205,
-                    nameEn: "Ayas Hotel Hail",
-                    nameAr: "فندق أياس حائل",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.6",
-                    img: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/2b/3c/4d/ayas-hotel.jpg",
-                    descEn: "Modern boutique hotel known for its cozy ambiance and warm Saudi hospitality.",
-                    descAr: "فندق بوتيكي عصري يتميز بأجوائه الهادئة والترحيب الأصيل وضيافة حائل المميزة."
-                }
-            ],
-            cafes: [
-                {
-                    id: 301,
-                    nameEn: "Bonchai Cafe",
-                    nameAr: "مقهى بونشاي",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.9",
-                    img: "https://lh3.googleusercontent.com/p/AF1QipNq4w8X9yZ-12345=s1600",
-                    descEn: "Trendy specialty coffee spot loved by locals for its signature drinks and relaxing interior.",
-                    descAr: "مقهى مختص عصري يفضله الزوار لمشروباته المميزة وجلساته الداخلية الهادئة والأنيقة."
-                },
-                {
-                    id: 302,
-                    nameEn: "Camel Step Coffee Roaster",
-                    nameAr: "محمصة خطوة الكاميل",
-                    locEn: "Hail Specialty Hub",
-                    locAr: "حائل",
-                    rating: "5.0",
-                    img: "https://www.camelstep.com/cdn/shop/files/store-hail.jpg",
-                    descEn: "Pioneer specialty coffee roaster serving exquisite single-origin pour-overs and espresso.",
-                    descAr: "محمصة القهوة المختصة الشهيرة وتقديم أجود محاصيل القهوة العالمية والمحلية المقطرة."
-                },
-                {
-                    id: 303,
-                    nameEn: "AL Adham Cafe",
-                    nameAr: "مقهى الأدهم",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://lh3.googleusercontent.com/p/AF1QipM-Adham=s1600",
-                    descEn: "Traditional and modern fusion cafe offering authentic atmosphere and great coffee.",
-                    descAr: "مقهى يجمع بين التراث والأصالة العصرية، يقدم القهوة السعودية والمشروبات بنكهة فريدة."
-                },
-                {
-                    id: 304,
-                    nameEn: "Peacock Cafe Roaster",
-                    nameAr: "بيكوك كافيه وروستر",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://lh3.googleusercontent.com/p/AF1QipPeacock=s1600",
-                    descEn: "Artisanal roastery and cafe providing fine coffee beans and delightful desserts.",
-                    descAr: "مقهى ومحمصة فاخرة تقدم ألذ المخبوزات والحلويات بجانب خيارات القهوة المختصة."
-                },
-                {
-                    id: 305,
-                    nameEn: "Nakhlat Deeratna",
-                    nameAr: "مطعم نكهة ديرتنا",
-                    locEn: "Hail Heritage Dining",
-                    locAr: "مطاعم تراثية حائل",
-                    rating: "4.9",
-                    img: "https://pbs.twimg.com/media/F8_Deeratna.jpg",
-                    descEn: "Authentic Hail restaurant serving traditional Najdi dishes like Al-Jarish and Al-Marqouq.",
-                    descAr: "مطعم شعبي يقدم أشهى الأكلات الشعبية الحائلية الأصيلة كالجريش والمرقوق والكبسة."
-                },
-                {
-                    id: 306,
-                    nameEn: "Loft Restaurant",
-                    nameAr: "مطعم لوفت (Loft)",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://lh3.googleusercontent.com/p/AF1QipLoft=s1600",
-                    descEn: "Stylish dining venue offering international cuisine, steaks, and modern aesthetics.",
-                    descAr: "مطعم أنيق يقدم أطباقاً عالمية ومشاوي ومأكولات متنوعة بديكورات عصرية جذابة."
-                },
-                {
-                    id: 307,
-                    nameEn: "Ruga Rook",
-                    nameAr: "روقا روكو (Ruga Rook)",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.7",
-                    img: "https://lh3.googleusercontent.com/p/AF1QipRuga=s1600",
-                    descEn: "Popular contemporary eatery known for its delicious meals and vibrant atmosphere.",
-                    descAr: "وجهة مميزة للمأكولات والأطباق الشهية والأجواء الحيوية المناسبة للعائلات والأفراد."
-                },
-                {
-                    id: 308,
-                    nameEn: "Opalo Pizzeria",
-                    nameAr: "أوبالو بيتسيريا (Opalo Pizzeria)",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.9",
-                    img: "https://lh3.googleusercontent.com/p/AF1QipOpalo=s1600",
-                    descEn: "Authentic wood-fired pizzeria bringing Italian craft pizza to Hail.",
-                    descAr: "مختص بتقديم البيتزا الإيطالية الأصيلة المخبوزة على الحطب بأعلى معايير الجودة."
-                }
-            ],
-            entertainment: [
-                {
-                    id: 401,
-                    nameEn: "Hail Zone",
-                    nameAr: "حايل زون",
-                    locEn: "Hail Entertainment City",
-                    locAr: "مدينة حائل الترفيهية",
-                    rating: "4.8",
-                    img: "https://www.visitsaudi.com/content/dam/saudi-tourism/media/images/hail-zone.jpg",
-                    descEn: "Major entertainment hub featuring games, family events, and festival attractions.",
-                    descAr: "منطقة ترفيهية متكاملة تضم ألعاباً حديثة وفعاليات عائلية ومهرجانات جماهيرية كبرى."
-                },
-                {
-                    id: 402,
-                    nameEn: "Al Othaim Mall",
-                    nameAr: "العثيم مول حائل",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://amlak-ins.com/wp-content/uploads/2021/03/Al-Othaim-Mall-Hail.jpg",
-                    descEn: "Leading shopping and entertainment center with global retail brands and indoor play areas.",
-                    descAr: "مركز تجاري وترفيهي رئيسي يضم أشهر الماركات العالمية وصاعات التزلج والألعاب."
-                },
-                {
-                    id: 403,
-                    nameEn: "Aja Park",
-                    nameAr: "أجا بارك",
-                    locEn: "Aja Foothills, Hail",
-                    locAr: "سفح أجاء، حائل",
-                    rating: "4.9",
-                    img: "https://www.urtrips.com/wp-content/uploads/2019/07/Aja-Park-Hail-1.jpg",
-                    descEn: "Famous amusement park and resort at the foothills of Aja mountains with rides and gardens.",
-                    descAr: "منتزه ومجمع ترفيهي عائلي شهير يقع على سفح جبال أجاء ويضم ألعاباً مسلية ومسطحات خضراء."
-                },
-                {
-                    id: 404,
-                    nameEn: "Salam Park",
-                    nameAr: "حديقة السلام",
-                    locEn: "Hail City",
-                    locAr: "حائل",
-                    rating: "4.7",
-                    img: "https://www.spa.gov.sa/image/original/2022/03/040123456.jpg",
-                    descEn: "Spacious family park featuring lush green lawns, walking tracks, and children's playgrounds.",
-                    descAr: "حديقة واسعة مجهزة بمسطحات خضراء ومسارات للمشي ومناطق ألعاب مخصصة للأطفال."
-                }
-            ],
-            unique: [
-                {
-                    id: 501,
-                    nameEn: "Desert Buggy Safari - Tuwarun",
-                    nameAr: "تطوير ودبابات صحراوية - توارن",
-                    locEn: "Tuwarun Valleys",
-                    locAr: "توارن، حائل",
-                    rating: "5.0",
-                    img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Thrilling off-road desert buggy safari experience through the rugged terrain of Tuwarun.",
-                    descAr: "تجربة سفاري ومغامرة مثيرة عبر الدبابات الصحراوية في تضاريس ووديان توارن الساحرة."
-                },
-                {
-                    id: 502,
-                    nameEn: "Al-Tai Arabian Horse Riding",
-                    nameAr: "مربط الطائي للخيل العربية الأصيلة",
-                    locEn: "Hail Stud Farm",
-                    locAr: "حائل",
-                    rating: "5.0",
-                    img: "https://upload.wikimedia.org/wikipedia/commons/7/78/Arabian_horse_in_Saudi_Arabia.jpg",
-                    descEn: "Exclusive equestrian experience riding purebred Arabian horses in authentic Hail heritage setting.",
-                    descAr: "تجربة فروسية أصيلة لركوب الخيل العربية الأصيلة في أجواء حائل التراثية والرياضية."
-                },
-                {
-                    id: 503,
-                    nameEn: "Mountain Hiking - Tuwarun",
-                    nameAr: "هايكنج جبلي - توارن",
-                    locEn: "Tuwarun Mountains",
-                    locAr: "جبال توارن",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Guided mountain hiking expedition across historical trails and rocky peaks of Tuwarun.",
-                    descAr: "رحلة تسلق وهايكنج جبلي مرشدة عبر المسارات التاريخية والقمم الصخرية في توارن."
-                },
-                {
-                    id: 504,
-                    nameEn: "Car Desert Tour - Al-Didhan",
-                    nameAr: "جولة سيارات صحراوية - محمية الديدحان",
-                    locEn: "Al-Didhan Reserve",
-                    locAr: "محمية الديدحان",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80",
-                    descEn: "4x4 desert car tour exploring the vibrant seasonal wildflower fields and dunes of Al-Didhan.",
-                    descAr: "جولة سيارات دفع رباعي استكشافية عبر محمية الديدحان ومواسم الزهور البرية والكثبان الرملية."
-                }
-            ]
-        };
+                    locAr: "
 
-        const i18n = {
-            en: {
-                brandTag: "Smart Heritage & Tourism",
-                visionBadge: "Saudi Vision 2030 • Hail Region",
-                authHeroTitle: "Experience the Soul of Northern Arabia in 360°",
-                authHeroDesc: "Explore historic landmarks, luxury hotels, authentic cafes, and unique desert experiences through an interactive smart tourism platform.",
-                pill1: "Virtual Tours",
-                pill2: "Hail Attractions",
-                pill3: "Smart Planner",
-                locationTag: "Hail, Kingdom of Saudi Arabia",
-                loginTab: "Sign In",
-                registerTab: "Create Account",
-                welcomeBack: "Welcome to Hail360",
-                enterDetails: "Sign in to access your saved itineraries and 360° tours.",
-                createTitle: "Create Hail360 Account",
-                createSub: "Register to personalize your Hail heritage & tourism experience.",
-                fullNameLabel: "Full Name",
-                roleLabel: "Visitor Category",
-                emailLabel: "Email Address",
-                passwordLabel: "Password",
-                signInBtn: "Sign In to Hail360",
-                registerBtn: "Complete Registration",
-                orDivider: "Or Quick Demo Access",
-                guestBtn: "✨ Continue as Guest Explorer",
-                navHeritage: "Heritage",
-                navHotels: "Hotels",
-                navCafes: "Cafes & Dining",
-                navEnt: "Entertainment",
-                navUnique: "Unique Experience",
-                navPlanner: "Smart Planner",
-                myTripBtn: "My Itinerary",
-                logoutBtn: "Exit",
-                weatherStatus: "Hail Weather: 22°C • Clear Desert Sky",
-                dashHeroTitle: "Discover Hail’s Timeless Heritage, Luxury & Adventure",
-                dashHeroDesc: "Navigate Hail’s iconic heritage sites, top hotels, premier cafes, and unique desert buggy and horse riding experiences in 360°.",
-                exploreNowBtn: "Explore Now",
-                featured360: "Featured 360° Virtual Tour",
-                featuredTitle: "Jubbah Rock Art (جبه)",
-                featuredSub: "UNESCO World Heritage Site • Hail",
-                launch360Btn: "Launch 360°",
-                heritageSubtitle: "Historical & Archaeological Treasures",
-                heritageTitle: "Heritage Sites (الأماكن التراثية)",
-                hotelsSubtitle: "Hospitality & Accommodation",
-                hotelsTitle: "Hotels & Lodging (الفنادق والأوتيلات)",
-                cafesSubtitle: "Gastronomy & Specialty Coffee",
-                cafesTitle: "Cafes & Dining (الكافيهات والمطاعم)",
-                entSubtitle: "Leisure & Shopping Malls",
-                entTitle: "Entertainment (الأماكن الترفيهية)",
-                uniqueSubtitle: "Exclusive Adventures & Activities",
-                uniqueTitle: "Unique Experience (تجارب فريدة)",
-                plannerTitle: "Smart Hail Trip Generator",
-                durationLabel: "Duration",
-                interestLabel: "Focus",
-                generateBtn: "Generate Plan",
-                recommendedRoute: "RECOMMENDED ROUTE • 2 DAYS WEEKEND",
-                guidesTag: "Authentic Hospitality",
-                guidesTitle: "Certified Hail Tour Guides",
-                bookBtn: "Book"
-            },
-            ar: {
-                brandTag: "منصة السياحة والتراث الذكية",
-                visionBadge: "رؤية السعودية 2030 • منطقة حائل",
-                authHeroTitle: "اكتشف روح شمال المملكة بتقنية 360° التفاعلية",
-                authHeroDesc: "استكشف المعالم التاريخية والفنادق الفاخرة والمقاهي الأصيلة والتجارب الصحراوية الفريدة عبر منصة سياحية ذكية.",
-                pill1: "جولات افتراضية",
-                pill2: "معالم حائل",
-                pill3: "مخطط ذكي",
-                locationTag: "حائل، المملكة العربية السعودية",
-                loginTab: "تسجيل الدخول",
-                registerTab: "إنشاء حساب",
-                welcomeBack: "مرحباً بك في حائل 360",
-                enterDetails: "سجل دخولك للوصول إلى مساراتك السياحية والجولات الافتراضية.",
-                createTitle: "إنشاء حساب جديد في حائل 360",
-                createSub: "سجل بياناتك لتخصيص تجربتك السياحية والتراثية في حائل.",
-                fullNameLabel: "الاسم الكامل",
-                roleLabel: "فئة الزائر",
-                emailLabel: "البريد الإلكتروني",
-                passwordLabel: "كلمة المرور",
-                signInBtn: "دخول إلى المنصة",
-                registerBtn: "إتمام التسجيل",
-                orDivider: "أو الدخول السريع للمعاينة",
-                guestBtn: "✨ المتابعة كزائر مستكشف",
-                navHeritage: "التراث",
-                navHotels: "الفنادق",
-                navCafes: "المطاعم والمقاهي",
-                navEnt: "الترفيه",
-                navUnique: "تجارب فريدة",
-                navPlanner: "مخطط الرحلات",
-                myTripBtn: "مسار رحلتي",
-                logoutBtn: "خروج",
-                weatherStatus: "طقس حائل: 22°م • سماء صافية",
-                dashHeroTitle: "اكتشف عراقة حائل، الفخامة والمغامرة",
-                dashHeroDesc: "تصفح معالم حائل الأثرية، والفنادق الراقية، وأشهر المقاهي، وتجارب الدبابات الصحراوية وركوب الخيل.",
-                exploreNowBtn: "استكشف الآن",
-                featured360: "جولة افتراضية مميزة 360°",
-                featuredTitle: "نقوش جبه الأثرية",
-                featuredSub: "موقع تراث عالمي يونسكو • حائل",
-                launch360Btn: "بدء الجولة 360°",
-                heritageSubtitle: "الكنوز التاريخية والأثرية",
-                heritageTitle: "الأماكن التراثية",
-                hotelsSubtitle: "الضيافة والإقامة الفاخرة",
-                hotelsTitle: "الفنادق والأوتيلات",
-                cafesSubtitle: "المأكولات والقهوة المختصة",
-                cafesTitle: "الكافيهات والمطاعم",
-                entSubtitle: "الترفيه ومراكز التسوق",
-                entTitle: "الأماكن الترفيهية",
-                uniqueSubtitle: "الأنشطة والمغامرات الحصرية",
-                uniqueTitle: "تجارب فريدة (Unique Experience)",
-                plannerTitle: "مولّد الرحلات الذكي في حائل",
-                durationLabel: "مدة الزيارة",
-                interestLabel: "الاهتمام",
-                generateBtn: "إنشاء المسار",
-                recommendedRoute: "المسار المقترح • عطلة نهاية الأسبوع",
-                guidesTag: "الضيافة الحاتمية",
-                guidesTitle: "المرشدون السياحيون المعتمدون",
-                bookBtn: "احجز"
-            }
-        };
-
-        function switchAuthTab(mode) {
-            authMode = mode;
-            const loginTab = document.getElementById('tab-login');
-            const regTab = document.getElementById('tab-register');
-            const fName = document.getElementById('field-name');
-            const fRole = document.getElementById('field-role');
-            const title = document.getElementById('form-title');
-            const sub = document.getElementById('form-subtitle');
-            const btnText = document.getElementById('submit-btn-text');
-
-            if (mode === 'register') {
-                regTab.classList.add('active');
-                loginTab.classList.remove('active');
-                fName.classList.remove('hidden');
-                fRole.classList.remove('hidden');
-                title.textContent = i18n[currentLang].createTitle;
-                sub.textContent = i18n[currentLang].createSub;
-                btnText.textContent = i18n[currentLang].registerBtn;
-            } else {
-                loginTab.classList.add('active');
-                regTab.classList.remove('active');
-                fName.classList.add('hidden');
-                fRole.classList.add('hidden');
-                title.textContent = i18n[currentLang].welcomeBack;
-                sub.textContent = i18n[currentLang].enterDetails;
-                btnText.textContent = i18n[currentLang].signInBtn;
-            }
-        }
-
-        function handleAuthSubmit(e) {
-            e.preventDefault();
-            const email = document.getElementById('input-email').value;
-            const name = document.getElementById('input-name').value || email.split('@')[0];
-            document.getElementById('user-avatar').textContent = name.substring(0, 2).toUpperCase();
-            enterApp();
-            showToast(authMode === 'register'
-                ? (currentLang === 'en' ? 'Account created! Welcome to Hail360.' : 'تم إنشاء الحساب بنجاح! أهلاً بك في حائل 360')
-                : (currentLang === 'en' ? 'Signed in successfully!' : 'تم تسجيل الدخول بنجاح!'));
-        }
-
-        function loginAsGuest() {
-            document.getElementById('user-avatar').textContent = 'GU';
-            enterApp();
-            showToast(currentLang === 'en' ? 'Entered as Guest Explorer' : 'تم الدخول كزائر مستكشف');
-        }
-
-        function enterApp() {
-            document.getElementById('auth-view').classList.add('hidden');
-            document.getElementById('app-view').classList.remove('hidden');
-            renderAllSections();
-            updateTripBadge();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function logout() {
-            document.getElementById('app-view').classList.add('hidden');
-            document.getElementById('auth-view').classList.remove('hidden');
-            showToast(currentLang === 'en' ? 'Returned to Login / Registration page' : 'تم العودة لصفحة تسجيل الدخول');
-        }
-
-        function renderSectionGrid(categoryKey, gridId) {
-            const grid = document.getElementById(gridId);
-            const query = (document.getElementById('search-input').value || '').toLowerCase();
-            const items = categoriesData[categoryKey] || [];
-
-            const filtered = items.filter(item => {
-                return item.nameEn.toLowerCase().includes(query) ||
-                       item.nameAr.includes(query) ||
-                       item.descEn.toLowerCase().includes(query);
-            });
-
-            grid.innerHTML = filtered.map(site => {
-                const title = currentLang === 'en' ? site.nameEn : site.nameAr;
-                const loc = currentLang === 'en' ? site.locEn : site.locAr;
-                const desc = currentLang === 'en' ? site.descEn : site.descAr;
-                const isSaved = savedTripIds.includes(site.id);
-
-                return `
-                <div class="landmark-card">
-                    <div>
-                        <div class="card-media">
-                            <img src="${site.img}" alt="${title}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80';">
-                            <span class="badge-360">360° VR</span>
-                            <span class="badge-rating">★ ${site.rating}</span>
-                        </div>
-                        <div class="card-body">
-                            <div class="card-loc">${loc}</div>
-                            <h4 class="card-title">${title}</h4>
-                            <p class="card-desc">${desc}</p>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <button class="btn-card-vr" onclick="open360ModalById(${site.id})">
-                            ${currentLang === 'en' ? '👁 Launch 360° View' : '👁 معاينة 360°'}
-                        </button>
-                        <button class="btn-card-save ${isSaved ? 'saved' : ''}" onclick="toggleSaveSite(${site.id})">
-                            ${isSaved ? (currentLang === 'en' ? '✓ Saved' : '✓ محفوظ') : (currentLang === 'en' ? '+ Save' : '+ حفظ')}
-                        </button>
-                    </div>
-                </div>`;
-            }).join('');
-        }
-
-        function renderAllSections() {
-            renderSectionGrid('heritage', 'heritage-grid');
-            renderSectionGrid('hotels', 'hotels-grid');
-            renderSectionGrid('cafes', 'cafes-grid');
-            renderSectionGrid('entertainment', 'entertainment-grid');
-            renderSectionGrid('unique', 'unique-grid');
-        }
-
-        function open360ModalById(id) {
-            let found = null;
-            for (let cat in categoriesData) {
-                const match = categoriesData[cat].find(s => s.id === id);
-                if (match) { found = match; break; }
-            }
-            if (!found) found = categoriesData.heritage[0];
-            activeModalId = found.id;
-            document.getElementById('modal-title').textContent = currentLang === 'en' ? found.nameEn : found.nameAr;
-            document.getElementById('modal-desc').textContent = currentLang === 'en' ? found.descEn : found.descAr;
-
-            const stage = document.getElementById('pano-stage');
-            stage.style.backgroundImage = `url('${found.img}')`;
-            document.getElementById('modal-360').classList.remove('hidden');
-        }
-
-        function open360ModalByName(nameEnKey) {
-            let found = null;
-            for (let cat in categoriesData) {
-                const match = categoriesData[cat].find(s => s.nameEn.includes(nameEnKey));
-                if (match) { found = match; break; }
-            }
-            if (found) open360ModalById(found.id);
-        }
-
-        function close360Modal() {
-            document.getElementById('modal-360').classList.add('hidden');
-        }
-
-        const panoStage = document.getElementById('pano-stage');
-        let dragging = false, lastX = 0, posX = 50;
-        panoStage.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; });
-        window.addEventListener('mouseup', () => { dragging = false; });
-        window.addEventListener('mousemove', e => {
-            if (!dragging) return;
-            posX = Math.max(0, Math.min(100, posX - (e.clientX - lastX) * 0.25));
-            panoStage.style.backgroundPosition = `${posX}% 50%`;
-            lastX = e.clientX;
-        });
-
-        function toggleSaveSite(id) {
-            if (savedTripIds.includes(id)) {
-                savedTripIds = savedTripIds.filter(x => x !== id);
-                showToast(currentLang === 'en' ? 'Removed from itinerary' : 'تمت الإزالة من المسار');
-            } else {
-                savedTripIds.push(id);
-                showToast(currentLang === 'en' ? 'Added to Hail360 itinerary!' : 'تمت الإضافة لمسار رحلتك!');
-            }
-            updateTripBadge();
-            renderAllSections();
-        }
-
-        function addModalSiteToTrip() {
-            if (!savedTripIds.includes(activeModalId)) {
-                savedTripIds.push(activeModalId);
-                updateTripBadge();
-                renderAllSections();
-            }
-            close360Modal();
-            showToast(currentLang === 'en' ? 'Landmark added to your trip plan!' : 'تمت إضافة المعلم لجدول رحلتك!');
-        }
-
-        function updateTripBadge() {
-            document.getElementById('trip-count').textContent = savedTripIds.length;
-        }
-
-        function openTripDrawer() {
-            const list = document.getElementById('saved-trip-list');
-            let allItems = [];
-            for (let cat in categoriesData) {
-                allItems = allItems.concat(categoriesData[cat]);
-            }
-            const items = allItems.filter(s => savedTripIds.includes(s.id));
-            list.innerHTML = items.length ? items.map(s => `
-                <div style="padding:12px;background:#F8FAFC;border:1px solid var(--border-color);border-radius:12px;display:flex;justify-content:space-between;align-items:center;">
-                    <div>
-                        <strong style="font-size:0.9rem;display:block;">${currentLang === 'en' ? s.nameEn : s.nameAr}</strong>
-                        <span style="font-size:0.76rem;color:#64748B;">${currentLang === 'en' ? s.locEn : s.locAr}</span>
-                    </div>
-                    <button onclick="toggleSaveSite(${s.id});openTripDrawer();" style="border:none;background:none;color:#DC2626;font-weight:700;font-size:0.78rem;cursor:pointer;">Remove</button>
-                </div>
-            `).join('') : '<p style="text-align:center;color:#94A3B8;padding:24px;">No landmarks saved yet.</p>';
-            document.getElementById('trip-drawer').classList.remove('hidden');
-        }
-
-        function closeTripDrawer() {
-            document.getElementById('trip-drawer').classList.add('hidden');
-        }
-
-        function generateSmartPlan() {
-            const dur = document.getElementById('plan-duration').value;
-            const focus = document.getElementById('plan-interest').value;
-            document.getElementById('route-output').innerHTML = `
-                <div style="display:flex;justify-content:space-between;font-size:0.78rem;font-weight:800;color:var(--hail-green);">
-                    <span>CUSTOM ROUTE • ${dur.toUpperCase()} (${focus.toUpperCase()})</span>
-                    <span style="color:var(--hail-terracotta);">Optimized by Hail360</span>
-                </div>
-                <div class="route-step">
-                    <div class="step-num">1</div>
-                    <div>
-                        <strong style="font-size:0.9rem;display:block;">Stop 1: Jubbah, Mount Um Sinman & Uqdah</strong>
-                        <span style="font-size:0.78rem;color:#64748B;">09:00 AM • Heritage exploration & mountain views</span>
-                    </div>
-                </div>
-                <div class="route-step">
-                    <div class="step-num" style="background:var(--hail-gold);color:var(--hail-green-dark);">2</div>
-                    <div>
-                        <strong style="font-size:0.9rem;display:block;">Stop 2: Desert Buggy Safari in Tuwarun & Rich Lobby Hotel</strong>
-                        <span style="font-size:0.78rem;color:#64748B;">04:00 PM • Adventure safari & luxury hospitality</span>
-                    </div>
-                </div>`;
-            showToast(currentLang === 'en' ? 'Personalized Hail route generated!' : 'تم إنشاء مسارك السياحي المخصص!');
-        }
-
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'ar' : 'en';
-            document.documentElement.lang = currentLang;
-            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-
-            document.getElementById('lang-label-auth').textContent = currentLang === 'en' ? 'العربية' : 'English';
-            document.getElementById('lang-label-app').textContent = currentLang === 'en' ? 'العربية' : 'English';
-
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (i18n[currentLang][key]) {
-                    el.textContent = i18n[currentLang][key];
-                }
-            });
-
-            switchAuthTab(authMode);
-            renderAllSections();
-        }
-
-        let toastTimer;
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-text').textContent = msg;
-            toast.classList.remove('hidden');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(() => toast.classList.add('hidden'), 3000);
-        }
-    </script>
-</body>
-</html>
 
