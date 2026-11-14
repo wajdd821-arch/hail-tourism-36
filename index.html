@@ -53,28 +53,4 @@
         .card-media img { width: 100%; height: 100%; object-fit: cover; }
         .card-body { padding: 20px; }
         .card-title { font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 8px; }
-        .card-footer { padding: 0 20px 20px; display: flex; gap: 8px; }
-        .btn-card-vr { flex: 1; background: var(--hail-green); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; }
-    </style>
-</head>
-<body>
-
-    <div id="toast" class="toast hidden"><span id="toast-text">Action completed</span></div>
-
-    <!-- AUTHENTICATION -->
-    <div id="auth-view" class="auth-wrapper">
-        <div class="auth-brand-panel">
-            <h1>Hail<span>360</span></h1>
-            <p>Smart Heritage & Tourism Platform</p>
-            <button type="button" class="lang-btn" onclick="toggleLanguage()">🌐 <span id="lang-label-auth">العربية</span></button>
-        </div>
-        <div class="auth-form-panel">
-            <div class="auth-card">
-                <div class="tab-switcher">
-                    <button type="button" id="tab-login" class="tab-btn active" onclick="switchAuthTab('login')">Sign In</button>
-                    <button type="button" id="tab-register" class="tab-btn" onclick="switchAuthTab('register')">Create Account</button>
-                </div>
-                <form onsubmit="handleAuthSubmit(event)">
-                    <div class="form-group">
-                        <label>Email Address</label>
-                        <input type="email" id="
+        .card-footer {
