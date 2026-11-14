@@ -49,6 +49,11 @@
         .card-title { font-size: 1.1rem; font-weight: 800; color: #0F172A; margin-bottom: 6px; }
         .card-footer { padding: 0 18px 18px; }
         .btn-card-vr { width: 100%; background: var(--hail-green); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        
+        /* AI Assistant & Guides Styling */
+        .ai-chat-box { background: var(--surface); border-radius: var(--radius-xl); border: 1px solid var(--border-color); padding: 24px; margin-top: 40px; box-shadow: var(--shadow-md); }
+        .chat-messages { height: 180px; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 12px; overflow-y: auto; margin-bottom: 14px; font-size: 0.9rem; }
+        .chat-input-row { display: flex; gap: 10px; }
     </style>
 </head>
 <body>
@@ -94,7 +99,7 @@
             <section class="hero-banner">
                 <div>
                     <h2>Discover Hail’s Timeless Heritage & Luxury</h2>
-                    <p>Explore heritage sites, hotels, cafes, and unique desert experiences.</p>
+                    <p>Explore heritage sites, hotels, cafes, unique experiences, and certified local guides.</p>
                 </div>
             </section>
 
@@ -116,6 +121,25 @@
             <section style="margin-top:30px;">
                 <h3>Unique Experience (تجارب فريدة)</h3>
                 <div id="unique-grid" class="landmarks-grid"></div>
+            </section>
+
+            <!-- Certified Tour Guides Section -->
+            <section style="margin-top:40px;">
+                <h3>Certified Tour Guides (المرشدون السياحيون المعتمدون)</h3>
+                <div id="guides-grid" class="landmarks-grid"></div>
+            </section>
+
+            <!-- AI Assistant Section -->
+            <section class="ai-chat-box">
+                <h3 style="margin-bottom: 12px; color: var(--hail-green);">🤖 Hail360 AI Assistant (المساعد الذكي)</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 12px;">Ask anything about Hail's heritage, cafes, or best travel plans.</p>
+                <div id="chat-messages" class="chat-messages">
+                    <div><strong>AI:</strong> Welcome! Ask me about Hail tourist spots, weather, or heritage tours.</div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="chat-input" class="form-control" placeholder="Type your question here...">
+                    <button type="button" class="btn-primary" style="width: 120px;" onclick="sendAiMessage()">Send</button>
+                </div>
             </section>
         </main>
     </div>
@@ -152,6 +176,11 @@
             ]
         };
 
+        var guidesData = [
+            { id: 701, nameEn: "Fahad Al-Shammari", nameAr: "فهد الشمري", specEn: "Heritage & History Expert", specAr: "خبير التراث والتاريخ", img: "IMG_4367.jpeg" },
+            { id: 702, nameEn: "Noura Al-Rasheed", nameAr: "نورة الرشيد", specEn: "Desert Safari & Adventure Guide", specAr: "مرشدة المغامرات والسفاري", img: "IMG_4406.jpeg" }
+        ];
+
         function enterApp() {
             document.getElementById('auth-view').classList.add('hidden');
             document.getElementById('app-view').classList.remove('hidden');
@@ -181,11 +210,26 @@
             }).join('');
         }
 
+        function renderGuidesGrid() {
+            var grid = document.getElementById('guides-grid');
+            if (!grid) return;
+            grid.innerHTML = guidesData.map(function(guide) {
+                var name = currentLang === 'en' ? guide.nameEn : guide.nameAr;
+                var spec = currentLang === 'en' ? guide.specEn : guide.specAr;
+                return '<div class="landmark-card">' +
+                    '<div><div class="card-media"><img src="' + guide.img + '" alt="' + name + '"></div>' +
+                    '<div class="card-body"><h4 class="card-title">' + name + '</h4><p style="font-size:0.84rem;color:var(--text-muted);">' + spec + '</p></div></div>' +
+                    '<div class="card-footer"><button type="button" class="btn-card-vr" onclick="showToast(\'Contact request sent to ' + name + '\')">📞 Book Guide</button></div>' +
+                '</div>';
+            }).join('');
+        }
+
         function renderAllSections() {
             renderSectionGrid('heritage', 'heritage-grid');
             renderSectionGrid('hotels', 'hotels-grid');
             renderSectionGrid('cafes', 'cafes-grid');
             renderSectionGrid('unique', 'unique-grid');
+            renderGuidesGrid();
         }
 
         function toggleLanguage() {
@@ -202,6 +246,19 @@
             document.getElementById('toast-text').textContent = msg;
             toast.classList.remove('hidden');
             setTimeout(function() { toast.classList.add('hidden'); }, 2500);
+        }
+
+        function sendAiMessage() {
+            var input = document.getElementById('chat-input');
+            var text = input.value.trim();
+            if (!text) return;
+            var box = document.getElementById('chat-messages');
+            box.innerHTML += '<div style="margin-top:6px;"><strong>You:</strong> ' + text + '</div>';
+            input.value = '';
+            setTimeout(function() {
+                box.innerHTML += '<div style="margin-top:6px; color:var(--hail-green);"><strong>AI:</strong> Hail has amazing heritage sites like Jubbah and Tuwarun! Let me know if you need a tour guide or hotel recommendation.</div>';
+                box.scrollTop = box.scrollHeight;
+            }, 600);
         }
     </script>
 </body>
