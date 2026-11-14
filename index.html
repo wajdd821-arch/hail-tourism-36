@@ -4,956 +4,209 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hail360 | Smart Tourism & Heritage Guide</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --hail-green: #14452F;
             --hail-green-dark: #0D2E1F;
+            --hail-green-light: #E8F1EC;
             --hail-gold: #C8963E;
+            --hail-gold-dark: #A67828;
             --hail-gold-light: #F6EEDB;
             --hail-sand: #FAF7F2;
+            --surface: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border-color: #E2E8F0;
+            --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
+            --shadow-md: 0 10px 25px rgba(15, 23, 42, 0.08);
+            --radius-md: 12px;
+            --radius-lg: 18px;
+            --radius-xl: 24px;
         }
-        body {
-            font-family: 'Inter', 'Tajawal', sans-serif;
-            background-color: var(--hail-sand);
-            color: #1E293B;
-            overflow-x: hidden;
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: var(--hail-sand); color: var(--text-main); line-height: 1.6; }
+        .hidden { display: none !important; }
+        .toast {
+            position: fixed; bottom: 24px; right: 24px; z-index: 9999;
+            background: var(--hail-green-dark); color: #fff; padding: 14px 20px;
+            border-radius: var(--radius-md); box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-weight: 600;
         }
-        [dir="rtl"] body {
-            font-family: 'Tajawal', 'Inter', sans-serif;
-        }
-        .pano-stage {
-            height: 360px;
-            width: 100%;
-            background-color: #0F172A;
-            background-size: 165% 100%;
-            background-position: 50% 50%;
-            cursor: grab;
-            user-select: none;
-            transition: background-position 0.05s linear;
-        }
-        .pano-stage:active {
-            cursor: grabbing;
-        }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
+        .auth-wrapper { min-height: 100vh; display: flex; flex-direction: row; }
+        .auth-brand-panel { flex: 1; background: var(--hail-green-dark); color: #FFFFFF; padding: 48px; display: flex; flex-direction: column; justify-content: space-between; }
+        .lang-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); color: #fff; padding: 8px 14px; border-radius: 10px; cursor: pointer; }
+        .auth-form-panel { flex: 1; display: flex; align-items: center; justify-content: center; padding: 32px; background: var(--hail-sand); }
+        .auth-card { width: 100%; max-width: 450px; background: var(--surface); border-radius: var(--radius-xl); padding: 36px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
+        .tab-switcher { display: grid; grid-template-columns: 1fr 1fr; background: #F1F5F9; padding: 5px; border-radius: 14px; margin-bottom: 24px; }
+        .tab-btn { border: none; background: transparent; padding: 10px; border-radius: 10px; font-weight: 700; color: var(--text-muted); cursor: pointer; }
+        .tab-btn.active { background: var(--surface); color: var(--hail-green); box-shadow: var(--shadow-sm); }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 6px; }
+        .form-control { width: 100%; padding: 12px 14px; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 12px; font-size: 0.92rem; }
+        .btn-primary { width: 100%; padding: 14px; background: var(--hail-green); color: #FFFFFF; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .btn-guest { width: 100%; padding: 12px; background: var(--hail-gold-light); color: var(--hail-green-dark); border: 1px solid rgba(200,150,62,0.45); border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 15px; }
+        .navbar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.96); border-bottom: 1px solid var(--border-color); }
+        .nav-container { max-width: 1240px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
+        .main-container { max-width: 1240px; margin: 0 auto; padding: 28px 24px; }
+        .hero-banner { background: var(--hail-green); border-radius: var(--radius-xl); padding: 40px; color: #FFFFFF; margin-bottom: 40px; }
+        .landmarks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 24px; margin-bottom: 30px; }
+        .landmark-card { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border-color); overflow: hidden; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; justify-content: space-between; }
+        .card-media { position: relative; height: 205px; background: #E2E8F0; }
+        .card-media img { width: 100%; height: 100%; object-fit: cover; }
+        .card-body { padding: 20px; }
+        .card-title { font-size: 1.15rem; font-weight: 800; color: #0F172A; margin-bottom: 8px; }
+        .card-footer { padding: 0 20px 20px; display: flex; gap: 8px; }
+        .btn-card-vr { flex: 1; background: var(--hail-green); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
-<body class="antialiased selection:bg-[#C8963E] selection:text-white">
+<body>
 
-    <!-- Toast Notification -->
-    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden bg-[#0D2E1F] text-white px-5 py-3.5 rounded-2xl border border-[#C8963E]/50 shadow-2xl flex items-center gap-3 text-sm font-semibold transition-all">
-        <span class="w-6 h-6 rounded-full bg-[#C8963E] text-[#0D2E1F] flex items-center justify-center font-bold">✓</span>
-        <span id="toast-text">Action completed</span>
-    </div>
+    <div id="toast" class="toast hidden"><span id="toast-text">Action completed</span></div>
 
-    <!-- VIEW 1: AUTHENTICATION SCREEN -->
-    <div id="auth-view" class="min-h-screen flex flex-col lg:flex-row">
-        <!-- Brand Hero Panel -->
-        <div class="lg:w-1/2 bg-gradient-to-br from-[#0D2E1F] via-[#14452F] to-[#1C5B3F] text-white p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden">
-            <div class="relative z-10 flex items-center justify-between gap-4">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-[#C8963E] text-[#0D2E1F] flex items-center justify-center shadow-lg font-extrabold text-xl">
-                        H360
-                    </div>
-                    <div>
-                        <h1 class="text-2xl font-extrabold tracking-tight">Hail<span class="text-[#C8963E]">360</span></h1>
-                        <p class="text-xs uppercase tracking-widest text-[#F6EEDB]/80" data-i18n="brandTag">Smart Heritage & Tourism</p>
-                    </div>
-                </div>
-                <button type="button" onclick="toggleLanguage()" class="bg-white/10 hover:bg-white/20 border border-white/25 text-white px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition">
-                    <span>🌐</span>
-                    <span id="lang-label-auth">العربية</span>
-                </button>
-            </div>
-
-            <div class="relative z-10 my-10 max-w-xl">
-                <span class="inline-block bg-[#C8963E]/20 border border-[#C8963E]/40 text-[#F6EEDB] px-4 py-1.5 rounded-full text-xs font-bold mb-5" data-i18n="visionBadge">
-                    Saudi Vision 2030 • Hail Province
-                </span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold leading-tight mb-4" data-i18n="authHeroTitle">
-                    Experience the Soul of Northern Arabia in 360°
-                </h2>
-                <p class="text-white/85 text-base mb-8 leading-relaxed" data-i18n="authHeroDesc">
-                    Explore Hail’s historic landmarks, luxury hotels, authentic cafes, and unique desert experiences through an interactive smart tourism platform.
-                </p>
-                <div class="grid grid-cols-3 gap-3">
-                    <div class="bg-white/10 border border-white/15 p-4 rounded-2xl">
-                        <strong class="block text-xl font-extrabold text-[#C8963E]">360°</strong>
-                        <span class="text-xs text-white/80" data-i18n="pill1">Virtual Tours</span>
-                    </div>
-                    <div class="bg-white/10 border border-white/15 p-4 rounded-2xl">
-                        <strong class="block text-xl font-extrabold text-[#C8963E]">27</strong>
-                        <span class="text-xs text-white/80" data-i18n="pill2">Hail Destinations</span>
-                    </div>
-                    <div class="bg-white/10 border border-white/15 p-4 rounded-2xl">
-                        <strong class="block text-xl font-extrabold text-[#C8963E]">AI</strong>
-                        <span class="text-xs text-white/80" data-i18n="pill3">Smart Planner</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="relative z-10 flex flex-wrap justify-between gap-2 text-xs text-white/60">
-                <span>© 2026 Hail360 Graduation Project</span>
-                <span data-i18n="locationTag">Hail, Kingdom of Saudi Arabia</span>
-            </div>
+    <!-- AUTHENTICATION -->
+    <div id="auth-view" class="auth-wrapper">
+        <div class="auth-brand-panel">
+            <h1>Hail<span>360</span></h1>
+            <p>Smart Heritage & Tourism Platform</p>
+            <button type="button" class="lang-btn" onclick="toggleLanguage()">🌐 <span id="lang-label-auth">العربية</span></button>
         </div>
-
-        <!-- Auth Form Panel -->
-        <div class="lg:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-[#FAF7F2]">
-            <div class="w-full max-w-md bg-white rounded-3xl p-8 shadow-xl border border-slate-200/80">
-                <div class="grid grid-cols-2 bg-slate-100 p-1.5 rounded-2xl mb-6">
-                    <button type="button" id="tab-login" onclick="switchAuthTab('login')" class="py-2.5 rounded-xl text-sm font-bold bg-white text-[#14452F] shadow-sm transition" data-i18n="loginTab">
-                        Sign In
-                    </button>
-                    <button type="button" id="tab-register" onclick="switchAuthTab('register')" class="py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:text-slate-800 transition" data-i18n="registerTab">
-                        Create Account
-                    </button>
+        <div class="auth-form-panel">
+            <div class="auth-card">
+                <div class="tab-switcher">
+                    <button type="button" id="tab-login" class="tab-btn active" onclick="switchAuthTab('login')">Sign In</button>
+                    <button type="button" id="tab-register" class="tab-btn" onclick="switchAuthTab('register')">Create Account</button>
                 </div>
-
-                <div class="mb-6">
-                    <h3 id="form-title" class="text-2xl font-extrabold text-slate-900" data-i18n="welcomeBack">Welcome to Hail360</h3>
-                    <p id="form-subtitle" class="text-sm text-slate-500 mt-1" data-i18n="enterDetails">Sign in to access your saved itineraries and 360° tours.</p>
-                </div>
-
-                <form onsubmit="handleAuthSubmit(event)" class="space-y-4">
-                    <div id="field-name" class="hidden">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5" data-i18n="fullNameLabel">Full Name</label>
-                        <input type="text" id="input-name" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-[#14452F]" placeholder="Wajd Al-Shammari">
+                <form onsubmit="handleAuthSubmit(event)">
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="input-email" class="form-control" required value="visitor@hail360.sa">
                     </div>
-
-                    <div id="field-role" class="hidden">
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5" data-i18n="roleLabel">Visitor Category</label>
-                        <select id="input-role" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-[#14452F]">
-                            <option value="Tourist">Visitor / Tourist</option>
-                            <option value="Local">Hail Resident</option>
-                            <option value="Guide">Certified Local Tour Guide</option>
-                        </select>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="input-password" class="form-control" required value="••••••••">
                     </div>
-
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5" data-i18n="emailLabel">Email Address</label>
-                        <input type="email" id="input-email" required value="visitor@hail360.sa" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-[#14452F]">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider text-slate-600 mb-1.5" data-i18n="passwordLabel">Password</label>
-                        <input type="password" id="input-password" required value="••••••••••••" class="w-full px-4 py-3 bg-slate-50 border border-slate-300 rounded-xl text-sm focus:outline-none focus:border-[#14452F]">
-                    </div>
-
-                    <button type="submit" class="w-full py-3.5 bg-[#14452F] hover:bg-[#0D2E1F] text-white rounded-xl font-bold text-sm shadow-lg shadow-[#14452F]/25 transition flex items-center justify-center gap-2">
-                        <span id="submit-btn-text" data-i18n="signInBtn">Sign In to Hail360</span>
-                        <span>→</span>
-                    </button>
+                    <button type="submit" class="btn-primary" id="submit-btn-text">Sign In to Hail360</button>
                 </form>
-
-                <div class="relative my-6 text-center">
-                    <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div>
-                    <span class="relative bg-white px-3 text-xs font-bold uppercase text-slate-400" data-i18n="orDivider">Or Quick Demo Access</span>
-                </div>
-
-                <button type="button" onclick="loginAsGuest()" class="w-full py-3.5 bg-[#F6EEDB] hover:bg-[#EFE0BE] text-[#0D2E1F] border border-[#C8963E]/50 rounded-xl font-bold text-sm transition" data-i18n="guestBtn">
-                    ✨ Continue as Guest Explorer
-                </button>
+                <button type="button" class="btn-guest" onclick="loginAsGuest()">✨ Continue as Guest Explorer</button>
             </div>
         </div>
     </div>
 
-    <!-- VIEW 2: MAIN PLATFORM DASHBOARD -->
+    <!-- MAIN APP -->
     <div id="app-view" class="hidden">
-        <!-- Sticky Top Navbar -->
-        <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex items-center justify-between gap-4">
-                <div class="flex items-center gap-2.5 cursor-pointer" onclick="window.scrollTo({top:0,behavior:'smooth'})">
-                    <div class="w-10 h-10 rounded-xl bg-[#C8963E] text-[#0D2E1F] flex items-center justify-center font-extrabold text-sm">H360</div>
-                    <span class="text-xl font-extrabold text-[#0D2E1F]">Hail<span class="text-[#C8963E]">360</span></span>
-                </div>
-
-                <nav class="hidden md:flex items-center gap-5 text-sm font-bold text-slate-600 overflow-x-auto no-scrollbar">
-                    <a href="#heritage-section" class="hover:text-[#14452F] whitespace-nowrap" data-i18n="navHeritage">Heritage</a>
-                    <a href="#hotels-section" class="hover:text-[#14452F] whitespace-nowrap" data-i18n="navHotels">Hotels</a>
-                    <a href="#cafes-section" class="hover:text-[#14452F] whitespace-nowrap" data-i18n="navCafes">Cafes & Dining</a>
-                    <a href="#entertainment-section" class="hover:text-[#14452F] whitespace-nowrap" data-i18n="navEnt">Entertainment</a>
-                    <a href="#unique-section" class="hover:text-[#14452F] whitespace-nowrap" data-i18n="navUnique">Unique Experience</a>
-                    <a href="#planner-section" class="hover:text-[#14452F] whitespace-nowrap" data-i18n="navPlanner">Smart Planner</a>
-                </nav>
-
-                <div class="flex items-center gap-2">
-                    <button type="button" onclick="toggleLanguage()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-xl text-xs font-bold transition">
-                        🌐 <span id="lang-label-app">العربية</span>
-                    </button>
-                    <button type="button" onclick="openTripDrawer()" class="bg-[#F6EEDB] border border-[#C8963E]/50 text-[#0D2E1F] px-3 py-2 rounded-xl text-xs font-bold flex items-center gap-1.5">
-                        <span>📍</span>
-                        <span class="hidden sm:inline" data-i18n="myTripBtn">My Itinerary</span>
-                        <span id="trip-count" class="bg-[#14452F] text-white px-2 py-0.5 rounded-full text-[11px] font-extrabold">2</span>
-                    </button>
-                    <div id="user-avatar" class="w-9 h-9 rounded-full bg-[#14452F] text-[#C8963E] font-extrabold text-xs flex items-center justify-center">WA</div>
-                    <button type="button" onclick="logout()" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 px-3 py-2 rounded-xl text-xs font-bold transition" data-i18n="logoutBtn">
-                        Exit
-                    </button>
+        <header class="navbar">
+            <div class="nav-container">
+                <h1>Hail360</h1>
+                <div>
+                    <button type="button" class="lang-btn" style="color:#000;" onclick="toggleLanguage()">🌐 <span id="lang-label-app">العربية</span></button>
+                    <button type="button" class="btn-primary" style="padding:6px 12px; display:inline-block; width:auto;" onclick="logout()">Exit</button>
                 </div>
             </div>
         </header>
-
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-            <!-- Hero Banner -->
-            <section class="bg-gradient-to-br from-[#0D2E1F] via-[#14452F] to-[#1F5E42] rounded-3xl p-6 sm:p-10 text-white grid lg:grid-cols-12 gap-8 items-center shadow-2xl mb-12">
-                <div class="lg:col-span-7">
-                    <div class="inline-flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-1.5 rounded-full text-xs font-bold text-[#F6EEDB] mb-4">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        <span data-i18n="weatherStatus">Hail Weather: 22°C • Clear Desert Sky</span>
-                    </div>
-                    <h2 class="text-2xl sm:text-4xl font-extrabold leading-tight mb-4" data-i18n="dashHeroTitle">
-                        Discover Hail’s Timeless Heritage, Luxury & Adventure
-                    </h2>
-                    <p class="text-white/85 text-sm sm:text-base mb-6 max-w-2xl" data-i18n="dashHeroDesc">
-                        Explore Hail’s iconic heritage sites, luxury hotels, specialty cafes, entertainment hubs, and unique desert buggy & horse riding experiences in 360°.
-                    </p>
-                    <div class="bg-white p-1.5 rounded-2xl flex gap-2 max-w-lg shadow-lg">
-                        <input type="text" id="search-input" onkeyup="renderAllSections()" placeholder="Search Tuwarun, Jubbah, Rich Lobby, Bonchai..." class="flex-1 px-4 py-2.5 text-sm text-slate-900 rounded-xl focus:outline-none">
-                        <button type="button" onclick="renderAllSections()" class="bg-[#C8963E] hover:bg-[#b58431] text-[#0D2E1F] px-5 py-2.5 rounded-xl text-sm font-extrabold transition" data-i18n="exploreNowBtn">
-                            Explore
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Featured 360 Card -->
-                <div class="lg:col-span-5 bg-white/10 border border-white/20 rounded-2xl p-4 backdrop-blur-sm">
-                    <div class="flex justify-between items-center text-xs font-extrabold uppercase text-[#C8963E] mb-3">
-                        <span data-i18n="featured360">Featured 360° Virtual Tour</span>
-                        <span class="bg-[#0D2E1F] text-white px-2.5 py-1 rounded-lg">360° VR</span>
-                    </div>
-                    <div onclick="open360ModalById(102)" class="relative h-44 rounded-xl overflow-hidden cursor-pointer group mb-3 bg-gradient-to-br from-[#14452F] to-[#C8963E]">
-                        <img src="https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80" referrerpolicy="no-referrer" alt="Jubbah Rock Art" onerror="this.style.display='none';" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <div class="absolute inset-0 bg-black/30 flex items-center justify-center">
-                            <div class="w-12 h-12 rounded-full bg-white text-[#14452F] flex items-center justify-center font-black shadow-xl">▶</div>
-                        </div>
-                    </div>
-                    <div class="flex items-center justify-between gap-3">
-                        <div>
-                            <h4 class="font-extrabold text-base" data-i18n="featuredTitle">Jubbah Rock Art (جبه)</h4>
-                            <span class="text-xs text-white/75" data-i18n="featuredSub">UNESCO World Heritage Site • Hail</span>
-                        </div>
-                        <button type="button" onclick="open360ModalById(102)" class="bg-white text-[#0D2E1F] px-4 py-2 rounded-xl text-xs font-extrabold hover:bg-[#F6EEDB] transition whitespace-nowrap" data-i18n="launch360Btn">
-                            Launch 360°
-                        </button>
-                    </div>
+        <main class="main-container">
+            <section class="hero-banner">
+                <div>
+                    <h2>Discover Hail’s Timeless Heritage & Luxury</h2>
+                    <p>Explore heritage sites, hotels, cafes, and unique desert experiences.</p>
                 </div>
             </section>
 
-            <!-- 1. HERITAGE SITES -->
-            <section id="heritage-section" class="mb-14">
-                <div class="mb-6">
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#A67828]" data-i18n="heritageSubtitle">Historical & Archaeological Treasures</span>
-                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1" data-i18n="heritageTitle">Heritage Sites (الأماكن التراثية)</h3>
-                </div>
-                <div id="heritage-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <section>
+                <h3>Heritage & Landmarks (الأماكن التراثية)</h3>
+                <div id="heritage-grid" class="landmarks-grid"></div>
             </section>
 
-            <!-- 2. HOTELS -->
-            <section id="hotels-section" class="mb-14">
-                <div class="mb-6">
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#A67828]" data-i18n="hotelsSubtitle">Hospitality & Luxury Stays</span>
-                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1" data-i18n="hotelsTitle">Hotels & Lodging (الفنادق والأوتيلات)</h3>
-                </div>
-                <div id="hotels-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <section style="margin-top:30px;">
+                <h3>Hotels & Lodging (الفنادق والأوتيلات)</h3>
+                <div id="hotels-grid" class="landmarks-grid"></div>
             </section>
 
-            <!-- 3. CAFES & RESTAURANTS -->
-            <section id="cafes-section" class="mb-14">
-                <div class="mb-6">
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#A67828]" data-i18n="cafesSubtitle">Specialty Coffee & Dining</span>
-                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1" data-i18n="cafesTitle">Cafes & Restaurants (الكافيهات والمطاعم)</h3>
-                </div>
-                <div id="cafes-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            <section style="margin-top:30px;">
+                <h3>Cafes & Dining (الكافيهات والمطاعم)</h3>
+                <div id="cafes-grid" class="landmarks-grid"></div>
             </section>
 
-            <!-- 4. ENTERTAINMENT -->
-            <section id="entertainment-section" class="mb-14">
-                <div class="mb-6">
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#A67828]" data-i18n="entSubtitle">Parks, Malls & Family Leisure</span>
-                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1" data-i18n="entTitle">Entertainment (الأماكن الترفيهية)</h3>
-                </div>
-                <div id="entertainment-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-            </section>
-
-            <!-- 5. UNIQUE EXPERIENCE -->
-            <section id="unique-section" class="mb-14">
-                <div class="mb-6">
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#A67828]" data-i18n="uniqueSubtitle">Exclusive Adventures & Desert Activities</span>
-                    <h3 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1" data-i18n="uniqueTitle">Unique Experience (التجارب الفريدة)</h3>
-                </div>
-                <div id="unique-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-            </section>
-
-            <!-- SMART PLANNER & TOUR GUIDES -->
-            <section id="planner-section" class="grid lg:grid-cols-12 gap-8 mt-12">
-                <div class="lg:col-span-7 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#A67828]">AI Route Optimizer</span>
-                    <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1 mb-5" data-i18n="plannerTitle">Smart Hail Trip Generator</h3>
-
-                    <div class="grid sm:grid-cols-3 gap-3 mb-5">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1" data-i18n="durationLabel">Duration</label>
-                            <select id="plan-duration" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm">
-                                <option value="1 Day">1 Day Express</option>
-                                <option value="2 Days" selected>2 Days Weekend</option>
-                                <option value="3 Days">3 Days Full Hail Tour</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-600 mb-1" data-i18n="interestLabel">Focus</label>
-                            <select id="plan-interest" class="w-full px-3 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm">
-                                <option value="Heritage & Castles">Heritage & Castles</option>
-                                <option value="Desert Buggy & Nature">Desert Buggy & Nature</option>
-                                <option value="Hotels & Cafes">Hotels & Cafes</option>
-                            </select>
-                        </div>
-                        <div class="flex items-end">
-                            <button type="button" onclick="generateSmartPlan()" class="w-full py-2.5 bg-[#14452F] hover:bg-[#0D2E1F] text-white rounded-xl font-bold text-sm transition" data-i18n="generateBtn">
-                                Generate Plan
-                            </button>
-                        </div>
-                    </div>
-
-                    <div id="route-output" class="bg-[#FAF7F2] border border-[#C8963E]/40 rounded-2xl p-5 space-y-3">
-                        <div class="flex justify-between text-xs font-extrabold text-[#14452F]">
-                            <span>RECOMMENDED ROUTE • 2 DAYS WEEKEND</span>
-                            <span class="text-[#A64B2A]">Hail Province</span>
-                        </div>
-                        <div class="bg-white border border-slate-200 rounded-xl p-3.5 flex items-center gap-3">
-                            <span class="w-7 h-7 rounded-full bg-[#14452F] text-white font-extrabold text-xs flex items-center justify-center shrink-0">1</span>
-                            <div>
-                                <strong class="block text-sm text-slate-900">Morning: Jubbah Rock Art & Mount Um Sinman</strong>
-                                <span class="text-xs text-slate-500">09:00 AM • UNESCO heritage tour & ancient petroglyphs</span>
-                            </div>
-                        </div>
-                        <div class="bg-white border border-slate-200 rounded-xl p-3.5 flex items-center gap-3">
-                            <span class="w-7 h-7 rounded-full bg-[#C8963E] text-[#0D2E1F] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>
-                            <div>
-                                <strong class="block text-sm text-slate-900">Afternoon: Desert Buggy Safari in Tuwarun & Camel Step Cafe</strong>
-                                <span class="text-xs text-slate-500">04:00 PM • Off-road desert adventure & specialty coffee</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-5 bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm">
-                    <span class="text-xs font-extrabold uppercase tracking-wider text-[#A67828]" data-i18n="guidesTag">Authentic Hospitality</span>
-                    <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 mt-1 mb-5" data-i18n="guidesTitle">Certified Hail Tour Guides</h3>
-
-                    <div class="space-y-4">
-                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex items-center justify-between gap-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-11 h-11 rounded-full bg-[#14452F] text-[#C8963E] font-extrabold flex items-center justify-center">FA</div>
-                                <div>
-                                    <strong class="block text-sm text-slate-900">Faisal Al-Shammari</strong>
-                                    <span class="text-xs text-slate-500">Tuwarun & Jubbah Expert • ★ 4.9</span>
-                                </div>
-                            </div>
-                            <button type="button" onclick="showToast('Booking request sent to Faisal Al-Shammari!')" class="bg-[#14452F] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#0D2E1F] transition" data-i18n="bookBtn">Book</button>
-                        </div>
-
-                        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex items-center justify-between gap-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-11 h-11 rounded-full bg-[#A64B2A] text-white font-extrabold flex items-center justify-center">NA</div>
-                                <div>
-                                    <strong class="block text-sm text-slate-900">Noura Al-Tamimi</strong>
-                                    <span class="text-xs text-slate-500">Al-Tai Horse Stud & Culture • ★ 5.0</span>
-                                </div>
-                            </div>
-                            <button type="button" onclick="showToast('Booking request sent to Noura Al-Tamimi!')" class="bg-[#14452F] text-white px-4 py-2 rounded-xl text-xs font-bold hover:bg-[#0D2E1F] transition" data-i18n="bookBtn">Book</button>
-                        </div>
-                    </div>
-                </div>
+            <section style="margin-top:30px;">
+                <h3>Unique Experience (تجارب فريدة)</h3>
+                <div id="unique-grid" class="landmarks-grid"></div>
             </section>
         </main>
-
-        <footer class="bg-[#0D2E1F] text-white/75 py-6 px-6 text-xs mt-12">
-            <div class="max-w-7xl mx-auto flex flex-wrap justify-between gap-2">
-                <div><strong class="text-white">Hail360</strong> | Smart Tourism & Heritage Information System</div>
-                <div>MIS Graduation Project • Hail, Kingdom of Saudi Arabia</div>
-            </div>
-        </footer>
-    </div>
-
-    <!-- 360° INTERACTIVE PANORAMA MODAL -->
-    <div id="modal-360" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-3xl w-full overflow-hidden shadow-2xl">
-            <div class="bg-[#0D2E1F] text-white px-6 py-4 flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <span class="bg-[#C8963E] text-[#0D2E1F] px-2.5 py-1 rounded-lg text-xs font-extrabold">360° VIEW</span>
-                    <h3 id="modal-title" class="text-lg font-extrabold">Jubbah Rock Art</h3>
-                </div>
-                <button type="button" onclick="close360Modal()" class="bg-white/15 hover:bg-white/25 text-white px-3 py-1.5 rounded-xl text-sm font-extrabold">✕</button>
-            </div>
-            <div id="pano-stage" class="pano-stage relative flex items-end p-5">
-                <div class="bg-black/75 text-white px-4 py-2 rounded-xl text-xs border border-white/20">
-                    ↔ Drag left or right across the photo to rotate 360° view
-                </div>
-            </div>
-            <div class="p-6 bg-[#FAF7F2] flex flex-wrap items-center justify-between gap-4">
-                <p id="modal-desc" class="text-sm text-slate-600 max-w-lg"></p>
-                <button type="button" onclick="addModalSiteToTrip()" class="bg-[#14452F] hover:bg-[#0D2E1F] text-white px-5 py-3 rounded-xl text-xs font-extrabold transition">
-                    + Add to Itinerary
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- SAVED ITINERARY DRAWER -->
-    <div id="trip-drawer" class="fixed inset-0 z-50 hidden bg-slate-950/60 flex justify-end">
-        <div class="bg-white w-full max-w-md h-full p-6 flex flex-col justify-between shadow-2xl">
-            <div>
-                <div class="flex justify-between items-center pb-4 border-b border-slate-200">
-                    <h3 class="text-lg font-extrabold text-[#0D2E1F]">My Hail360 Itinerary</h3>
-                    <button type="button" onclick="closeTripDrawer()" class="bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-xl text-sm font-extrabold">✕</button>
-                </div>
-                <div id="saved-trip-list" class="mt-4 space-y-3 max-h-[72vh] overflow-y-auto"></div>
-            </div>
-            <button type="button" onclick="closeTripDrawer();showToast('Itinerary confirmed for your Hail visit!')" class="w-full py-3.5 bg-[#14452F] text-white rounded-xl font-bold text-sm">
-                Confirm Trip Schedule
-            </button>
-        </div>
     </div>
 
     <script>
         var currentLang = 'en';
         var authMode = 'login';
-        var savedTripIds = [101, 201];
-        var activeModalId = 101;
 
-        // Verified high-reliability Unsplash CDN photography URLs
         var categoriesData = {
             heritage: [
-                {
-                    id: 101,
-                    nameEn: "Tuwarun (توارن)",
-                    nameAr: "توارن",
-                    locEn: "Hail Province",
-                    locAr: "منطقة حائل",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1547234935-80c7145ec969?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Historic valley and oasis village in Hail renowned for palm groves, dramatic red granite mountains, and ancient Arabian heritage.",
-                    descAr: "قرية تاريخية ووادٍ عريق في حائل يشتهر بالنخيل والجبال الجرانيتية الحمراء والتراث العربي الأصيل."
-                },
-                {
-                    id: 102,
-                    nameEn: "Jubbah Rock Art (جبه)",
-                    nameAr: "جبه",
-                    locEn: "UNESCO World Heritage",
-                    locAr: "موقع التراث العالمي يونسكو",
-                    rating: "5.0",
-                    img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80",
-                    descEn: "UNESCO World Heritage Site featuring thousands of prehistoric Thamudic rock inscriptions and desert carvings.",
-                    descAr: "موقع تراث عالمي مسجل في اليونسكو يضم آلاف النقوش الصخرية والرسوم الثمودية القديمة."
-                },
-                {
-                    id: 103,
-                    nameEn: "Mount Um Sinman (جبل أم سنمان)",
-                    nameAr: "جبل أم سنمان",
-                    locEn: "Jubbah, Hail",
-                    locAr: "جبة، حائل",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Iconic two-humped sandstone mountain overlooking Jubbah, preserving over 10,000 years of human rock art.",
-                    descAr: "الجبل الصخري الشهير المطل على جبة، ويحفظ أكثر من 10 آلاف عام من النقوش الأثرية البشرية."
-                },
-                {
-                    id: 104,
-                    nameEn: "Hatim Al-Tai Palace (قصر حاتم الطائي)",
-                    nameAr: "قصر حاتم الطائي",
-                    locEn: "Tuwarun, Hail",
-                    locAr: "توارن، حائل",
-                    rating: "4.8",
-                    img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Historic mud-brick fortress and archaeological landmark linked to the legendary Arab symbol of generosity, Hatim Al-Tai.",
-                    descAr: "معلم أثري وتاريخي عريق مرتبط برمز الكرم العربي الشهير حاتم الطائي في منطقة حائل."
-                },
-                {
-                    id: 105,
-                    nameEn: "Uqdah Village (عقده)",
-                    nameAr: "عقده",
-                    locEn: "Aja Mountains, Hail",
-                    locAr: "جبال أجاء، حائل",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Picturesque mountain basin surrounded by towering granite peaks of Aja, known for lush palm farms and natural springs.",
-                    descAr: "واحة جبلية ساحرة تحيط بها قمم جبال أجاء الشاهقة وتشتهر بالمزارع والعيون المائية العذبة."
-                },
-                {
-                    id: 106,
-                    nameEn: "Shuaib Jaw (شعيب جو)",
-                    nameAr: "شعيب جو",
-                    locEn: "Hail Valleys",
-                    locAr: "شعاب حائل",
-                    rating: "4.8",
-                    img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Scenic desert valley lined with wild acacia trees and granite outcrops, ideal for spring picnics and stargazing.",
-                    descAr: "وادي طبيعي خلاب يتزين بأشجار الطلح والتكوينات الصخرية، يعد وجهة مثالية للتنزه في حائل."
-                }
+                { id: 101, nameEn: "Tuwarun", nameAr: "توارن", locEn: "Hail", locAr: "حائل", rating: "4.9", img: "https://images.unsplash.com/photo-1547234935-80c7145ec969?auto=format&fit=crop&w=800&q=80", descEn: "Historic valley and village.", descAr: "قرية تاريخية ووادٍ عريق." },
+                { id: 102, nameEn: "Jubbah Rock Art", nameAr: "جبه", locEn: "UNESCO", locAr: "يونسكو", rating: "5.0", img: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Jubbah_rock_art_Hail_Saudi_Arabia.jpg", descEn: "UNESCO heritage site.", descAr: "موقع تراث عالمي." },
+                { id: 103, nameEn: "Mount Um Sinman", nameAr: "جبل أم سنمان", locEn: "Jubbah", locAr: "جبة", rating: "4.9", img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80", descEn: "Sandstone mountain.", descAr: "الجبل الصخري الشهير." },
+                { id: 104, nameEn: "Hatim Al-Tai Palace", nameAr: "قصر حاتم الطائي", locEn: "Tuwarun", locAr: "توارن", rating: "4.8", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80", descEn: "Historical generosity site.", descAr: "الموقع التاريخي المرتبط بحاتم الطائي." },
+                { id: 105, nameEn: "Uqdah Village", nameAr: "عقده", locEn: "Aja Mountains", locAr: "جبال أجاء", rating: "4.9", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80", descEn: "Mountain oasis.", descAr: "واحة جبلية ساحرة." },
+                { id: 106, nameEn: "Shuaib Jaw", nameAr: "شعيب جو", locEn: "Hail Valleys", locAr: "شعاب حائل", rating: "4.7", img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80", descEn: "Scenic seasonal valley.", descAr: "وادي طبيعي خلاب." }
             ],
             hotels: [
-                {
-                    id: 201,
-                    nameEn: "Rich Lobby Hotel",
-                    nameAr: "فندق ريتش لوبي",
-                    locEn: "Hail City",
-                    locAr: "مدينة حائل",
-                    rating: "4.8",
-                    img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Modern upscale hotel offering refined hospitality, stylish suites, and convenient access to Hail attractions.",
-                    descAr: "فندق عصري فاخر يقدم مستويات ضيافة راقية وأجنحة أنيقة قريبة من أبرز معالم حائل."
-                },
-                {
-                    id: 202,
-                    nameEn: "Millennium Hail Hotel",
-                    nameAr: "فندق ميلينيوم حائل",
-                    locEn: "Hail Ring Road",
-                    locAr: "الطريق الدائري، حائل",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Five-star international hotel featuring luxury rooms, fine dining restaurants, swimming pool, and conference halls.",
-                    descAr: "فندق عالمي خمس نجوم يتميز بغرف فاخرة، مطاعم راقية، مسبح، وقاعات مؤتمرات واحتفالات كبرى."
-                },
-                {
-                    id: 203,
-                    nameEn: "Suknai Royal Hotel",
-                    nameAr: "فندق سكنى رويال",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.7",
-                    img: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Elegant royal hotel offering spacious family suites, executive lounges, and attentive guest care.",
-                    descAr: "فندق راقٍ يوفر أجنحة عائلية واسعة وخدمات فندقية متكاملة تضمن إقامة مريحة للزوار."
-                },
-                {
-                    id: 204,
-                    nameEn: "Golden Tulip Hotel",
-                    nameAr: "فندق جولدن توليب حائل",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Renowned international hospitality destination combining comfort, business amenities, and central location.",
-                    descAr: "علامة فندقية عالمية شهيرة تجمع بين الراحة والخدمات المتكاملة والموقع الحيوي في حائل."
-                },
-                {
-                    id: 205,
-                    nameEn: "Ayas Hotel Hail",
-                    nameAr: "فندق أياس حائل",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.7",
-                    img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Contemporary boutique hotel celebrated for warm Saudi hospitality and tranquil modern interiors.",
-                    descAr: "فندق بوتيكي عصري يتميز بأجوائه الهادئة وتصميمه الحديث وكرم الضيافة الحائلية."
-                }
+                { id: 201, nameEn: "Rich Lobby Hotel", nameAr: "ريتش لوبي فندق", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80", descEn: "Contemporary luxury hotel.", descAr: "فندق عصري فاخر." },
+                { id: 202, nameEn: "Millennium Hail Hotel", nameAr: "فندق ميلينيوم حائل", locEn: "Hail", locAr: "حائل", rating: "4.9", img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80", descEn: "Five-star hotel.", descAr: "فندق عالمي خمس نجوم." },
+                { id: 203, nameEn: "Suknai Royal Hotel", nameAr: "فندق سكنى رويال", locEn: "Hail", locAr: "حائل", rating: "4.7", img: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80", descEn: "Comfortable royal accommodation.", descAr: "فندق راقٍ يوفر أجنحة واسعة." },
+                { id: 204, nameEn: "Golden Tulip Hotel", nameAr: "فندق جولدن توليب حائل", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80", descEn: "Renowned brand hotel.", descAr: "علامة فندقية عالمية شهيرة." },
+                { id: 205, nameEn: "Ayas Hotel Hail", nameAr: "فندق أياس حائل", locEn: "Hail", locAr: "حائل", rating: "4.6", img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80", descEn: "Modern boutique hotel.", descAr: "فندق بوتيكي عصري." }
             ],
             cafes: [
-                {
-                    id: 301,
-                    nameEn: "Bonchai Cafe",
-                    nameAr: "مقهى بونشاي (Bonchai)",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Trendy specialty coffee lounge known for signature handcrafted drinks and minimalist architecture.",
-                    descAr: "مقهى مختص عصري يشتهر بمشروباته المبتكرة وجلساته الهادئة وتصميمه الأنيق."
-                },
-                {
-                    id: 302,
-                    nameEn: "Camel Step Coffee Roaster",
-                    nameAr: "محمصة خطوة جمل (Camel Step)",
-                    locEn: "Hail Specialty Hub",
-                    locAr: "حائل",
-                    rating: "5.0",
-                    img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Leading Saudi specialty coffee roaster offering single-origin pour-overs, espresso, and freshly roasted beans.",
-                    descAr: "رائدة القهوة المختصة في المملكة، تقدم أجود محاصيل القهوة المقطرة والإسبريسو المحمصة بعناية."
-                },
-                {
-                    id: 303,
-                    nameEn: "AL Adham Cafe",
-                    nameAr: "مقهى الأدهم (AL Adham)",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Warm cultural cafe blending authentic Hail heritage aesthetics with premium Arabic and specialty coffee.",
-                    descAr: "مقهى يجمع بين أصالة التراث الحائلي والأجواء العصرية مع تشكيلة مميزة من القهوة والحلويات."
-                },
-                {
-                    id: 304,
-                    nameEn: "Peacock Cafe Roaster",
-                    nameAr: "بيكوك كافيه روستر (Peacock)",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Artisanal coffee roastery and bakery serving freshly baked pastries alongside specialty brews.",
-                    descAr: "مقهى ومحمصة فاخرة تقدم ألذ المخبوزات الطازجة بجانب خيارات القهوة المختصة."
-                },
-                {
-                    id: 305,
-                    nameEn: "Nakhlat Deeratna (نكهة ديرتنا)",
-                    nameAr: "مطعم نكهة ديرتنا",
-                    locEn: "Hail Traditional Dining",
-                    locAr: "حائل",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Authentic Hail culinary destination serving traditional local dishes such as Jareesh, Marqooq, and Kabsa.",
-                    descAr: "مطعم شعبي أصيل يقدم أشهى الأطباق الحائلية التقليدية مثل الجريش والمرقوق والكبسة."
-                },
-                {
-                    id: 306,
-                    nameEn: "Loft Restaurant (لوفت)",
-                    nameAr: "مطعم لوفت (Loft)",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Upscale contemporary restaurant offering international dishes, gourmet steaks, and vibrant evening dining.",
-                    descAr: "مطعم عصري أنيق يقدم أطباقاً عالمية فاخرة وأجواء راقية تناسب العائلات والزوار."
-                },
-                {
-                    id: 307,
-                    nameEn: "Ruga Rook (روقا روكو)",
-                    nameAr: "روقا روكو (Ruga Rook)",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.7",
-                    img: "https://images.unsplash.com/photo-1552566626-52f8b828add9?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Popular modern eatery known for creative dishes, refreshing mocktails, and lively atmosphere.",
-                    descAr: "وجهة مميزة للمأكولات العصرية والمشروبات المنعشة والأجواء الحيوية في مدينة حائل."
-                },
-                {
-                    id: 308,
-                    nameEn: "Opalo Pizzeria (أوبالو بيتسيريا)",
-                    nameAr: "أوبالو بيتسيريا (Opalo)",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Authentic Neapolitan wood-fired pizzeria crafting artisan pizzas with fresh Italian ingredients.",
-                    descAr: "مختص بتقديم البيتزا الإيطالية الأصيلة المخبوزة على الحطب بأجود المكونات الطازجة."
-                }
-            ],
-            entertainment: [
-                {
-                    id: 401,
-                    nameEn: "Hail Zone (حايل زون)",
-                    nameAr: "حايل زون",
-                    locEn: "Hail Entertainment Hub",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Vibrant outdoor entertainment destination featuring carnival rides, live shows, food trucks, and family festivals.",
-                    descAr: "منطقة ترفيهية متكاملة تضم ألعاباً حديثة وعروضاً حية ومطاعم وفعاليات عائلية كبرى."
-                },
-                {
-                    id: 402,
-                    nameEn: "Al Othaim Mall (العثيم مول)",
-                    nameAr: "العثيم مول حائل",
-                    locEn: "Hail",
-                    locAr: "حائل",
-                    rating: "4.8",
-                    img: "https://images.unsplash.com/photo-1519567241046-7f570eee3ce6?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Premier shopping and leisure mall hosting international retail brands, indoor amusement park, and dining court.",
-                    descAr: "مركز تسوق وترفيه رئيسي يضم أشهر الماركات العالمية وصالات الألعاب والمطاعم المتنوعة."
-                },
-                {
-                    id: 403,
-                    nameEn: "Aja Park (أجا بارك)",
-                    nameAr: "أجا بارك",
-                    locEn: "Aja Foothills, Hail",
-                    locAr: "سفح أجاء، حائل",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1563911302283-d2bc129e7570?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Scenic amusement park and family resort nestled at the foothills of Aja mountains with lakes and rides.",
-                    descAr: "منتزه ومجمع ترفيهي شهير على سفح جبال أجاء يضم بحيرات ومسطحات خضراء وألعاباً للعائلة."
-                },
-                {
-                    id: 404,
-                    nameEn: "Salam Park (حديقة السلام)",
-                    nameAr: "حديقة السلام",
-                    locEn: "Hail City",
-                    locAr: "حائل",
-                    rating: "4.7",
-                    img: "https://images.unsplash.com/photo-1496417263034-38ec4f0b665a?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Expansive green city park featuring walking tracks, shaded family seating, and children play zones.",
-                    descAr: "حديقة عامة واسعة مجهزة بمسارات للمشي ومسطحات خضراء ومناطق ألعاب مخصصة للأطفال."
-                }
+                { id: 301, nameEn: "Bonchai Cafe", nameAr: "مقهى بونشاي", locEn: "Hail", locAr: "حائل", rating: "4.9", img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80", descEn: "Specialty coffee spot.", descAr: "مقهى مختص عصري." },
+                { id: 302, nameEn: "Camel Step Coffee", nameAr: "محمصة خطوة الكاميل", locEn: "Hail", locAr: "حائل", rating: "5.0", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=800&q=80", descEn: "Pioneer specialty coffee.", descAr: "محمصة القهوة الشهيرة." },
+                { id: 303, nameEn: "AL Adham Cafe", nameAr: "مقهى الأدهم", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80", descEn: "Fusion cafe.", descAr: "مقهى يجمع بين التراث والأصالة." },
+                { id: 304, nameEn: "Peacock Cafe Roaster", nameAr: "بيكوك كافيه وروستر", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=800&q=80", descEn: "Artisanal roastery.", descAr: "محمصة ومقهى فاخر." }
             ],
             unique: [
-                {
-                    id: 501,
-                    nameEn: "Desert Buggy Safari - Tuwarun",
-                    nameAr: "سفاري الدبابات الصحراوية - توارن",
-                    locEn: "Tuwarun Valleys",
-                    locAr: "توارن، حائل",
-                    rating: "5.0",
-                    img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Adrenaline-filled desert buggy safari navigating golden dunes and historic mountain trails in Tuwarun.",
-                    descAr: "تجربة سفاري ومغامرة مثيرة بالدبابات الصحراوية بين الكثبان الرملية ومسارات توارن التاريخية."
-                },
-                {
-                    id: 502,
-                    nameEn: "Horse Riding - Al-Tai Arabian Stud",
-                    nameAr: "ركوب الخيل - مربط الطائي للخيل العربية الأصيلة",
-                    locEn: "Hail Equestrian Center",
-                    locAr: "حائل",
-                    rating: "5.0",
-                    img: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Authentic Arabian equestrian experience riding purebred Arabian horses at Al-Tai Stud in Hail.",
-                    descAr: "تجربة فروسية أصيلة لركوب الخيل العربية الأصيلة في مربط الطائي وسط أجواء حائل التراثية."
-                },
-                {
-                    id: 503,
-                    nameEn: "Mountain Hiking - Tuwarun",
-                    nameAr: "هايكنج جبلي - توارن",
-                    locEn: "Tuwarun Mountains",
-                    locAr: "جبال توارن",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80",
-                    descEn: "Guided mountain hiking expedition scaling rocky granite trails with panoramic views over Tuwarun.",
-                    descAr: "رحلة تسلق وهايكنج جبلي مرشدة عبر المسارات الصخرية بإطلالات بانورامية ساحرة على توارن."
-                },
-                {
-                    id: 504,
-                    nameEn: "Car Desert Tour - Al-Didhan Reserve",
-                    nameAr: "جولة سيارات صحراوية - محمية الديدحان",
-                    locEn: "Al-Didhan Reserve",
-                    locAr: "محمية الديدحان",
-                    rating: "4.9",
-                    img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80",
-                    descEn: "4x4 off-road desert expedition exploring wildflower meadows and pristine dunes in Al-Didhan Reserve.",
-                    descAr: "جولة سيارات دفع رباعي استكشافية عبر محمية الديدحان ومواسم الزهور البرية والكثبان الرملية."
-                }
+                { id: 501, nameEn: "Desert Buggy Safari - Tuwarun", nameAr: "تطعيس ودبابات صحراوية - توارن", locEn: "Tuwarun", locAr: "توارن", rating: "5.0", img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80", descEn: "Off-road buggy safari.", descAr: "تجربة سفاري ودبابات صحراوية." },
+                { id: 502, nameEn: "Al-Tai Arabian Horse Riding", nameAr: "مربط الطائي للخيل", locEn: "Hail", locAr: "حائل", rating: "5.0", img: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=800&q=80", descEn: "Equestrian experience.", descAr: "تجربة فروسية وركوب الخيل." },
+                { id: 503, nameEn: "Mountain Hiking - Tuwarun", nameAr: "هايكنج جبلي - توارن", locEn: "Tuwarun", locAr: "توارن", rating: "4.9", img: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80", descEn: "Mountain hiking.", descAr: "رحلة تسلق وهايكنج جبلي." },
+                { id: 504, nameEn: "Car Desert Tour - Al-Didhan", nameAr: "جولة سيارات صحراوية - الديدحان", locEn: "Al-Didhan", locAr: "محمية الديدحان", rating: "4.9", img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80", descEn: "4x4 desert tour.", descAr: "جولة سيارات دفع رباعي." }
             ]
-        };
-
-        var i18n = {
-            en: {
-                brandTag: "Smart Heritage & Tourism",
-                visionBadge: "Saudi Vision 2030 • Hail Province",
-                authHeroTitle: "Experience the Soul of Northern Arabia in 360°",
-                authHeroDesc: "Explore Hail’s historic landmarks, luxury hotels, authentic cafes, and unique desert experiences through an interactive smart tourism platform.",
-                pill1: "Virtual Tours",
-                pill2: "Hail Destinations",
-                pill3: "Smart Planner",
-                locationTag: "Hail, Kingdom of Saudi Arabia",
-                loginTab: "Sign In",
-                registerTab: "Create Account",
-                welcomeBack: "Welcome to Hail360",
-                enterDetails: "Sign in to access your saved itineraries and 360° tours.",
-                createTitle: "Create Hail360 Account",
-                createSub: "Register to personalize your Hail heritage & tourism experience.",
-                fullNameLabel: "Full Name",
-                roleLabel: "Visitor Category",
-                emailLabel: "Email Address",
-                passwordLabel: "Password",
-                signInBtn: "Sign In to Hail360",
-                registerBtn: "Complete Registration",
-                orDivider: "Or Quick Demo Access",
-                guestBtn: "✨ Continue as Guest Explorer",
-                navHeritage: "Heritage",
-                navHotels: "Hotels",
-                navCafes: "Cafes & Dining",
-                navEnt: "Entertainment",
-                navUnique: "Unique Experience",
-                navPlanner: "Smart Planner",
-                myTripBtn: "My Itinerary",
-                logoutBtn: "Exit",
-                weatherStatus: "Hail Weather: 22°C • Clear Desert Sky",
-                dashHeroTitle: "Discover Hail’s Timeless Heritage, Luxury & Adventure",
-                dashHeroDesc: "Explore Hail’s iconic heritage sites, luxury hotels, specialty cafes, entertainment hubs, and unique desert buggy & horse riding experiences in 360°.",
-                exploreNowBtn: "Explore",
-                featured360: "Featured 360° Virtual Tour",
-                featuredTitle: "Jubbah Rock Art (جبه)",
-                featuredSub: "UNESCO World Heritage Site • Hail",
-                launch360Btn: "Launch 360°",
-                heritageSubtitle: "Historical & Archaeological Treasures",
-                heritageTitle: "Heritage Sites (الأماكن التراثية)",
-                hotelsSubtitle: "Hospitality & Luxury Stays",
-                hotelsTitle: "Hotels & Lodging (الفنادق والأوتيلات)",
-                cafesSubtitle: "Specialty Coffee & Dining",
-                cafesTitle: "Cafes & Restaurants (الكافيهات والمطاعم)",
-                entSubtitle: "Parks, Malls & Family Leisure",
-                entTitle: "Entertainment (الأماكن الترفيهية)",
-                uniqueSubtitle: "Exclusive Adventures & Desert Activities",
-                uniqueTitle: "Unique Experience (التجارب الفريدة)",
-                plannerTitle: "Smart Hail Trip Generator",
-                durationLabel: "Duration",
-                interestLabel: "Focus",
-                generateBtn: "Generate Plan",
-                guidesTag: "Authentic Hospitality",
-                guidesTitle: "Certified Hail Tour Guides",
-                bookBtn: "Book"
-            },
-            ar: {
-                brandTag: "منصة السياحة والتراث الذكية",
-                visionBadge: "رؤية السعودية 2030 • منطقة حائل",
-                authHeroTitle: "اكتشف روح شمال المملكة بتقنية 360° التفاعلية",
-                authHeroDesc: "استكشف معالم حائل التاريخية والفنادق الفاخرة والمقاهي الأصيلة والتجارب الصحراوية الفريدة عبر منصة سياحية ذكية.",
-                pill1: "جولات افتراضية",
-                pill2: "معالم حائل",
-                pill3: "مخطط ذكي",
-                locationTag: "حائل، المملكة العربية السعودية",
-                loginTab: "تسجيل الدخول",
-                registerTab: "إنشاء حساب",
-                welcomeBack: "مرحباً بك في حائل 360",
-                enterDetails: "سجل دخولك للوصول إلى مساراتك السياحية والجولات الافتراضية.",
-                createTitle: "إنشاء حساب جديد في حائل 360",
-                createSub: "سجل بياناتك لتخصيص تجربتك السياحية والتراثية في حائل.",
-                fullNameLabel: "الاسم الكامل",
-                roleLabel: "فئة الزائر",
-                emailLabel: "البريد الإلكتروني",
-                passwordLabel: "كلمة المرور",
-                signInBtn: "دخول إلى المنصة",
-                registerBtn: "إتمام التسجيل",
-                orDivider: "أو الدخول السريع للمعاينة",
-                guestBtn: "✨ المتابعة كزائر مستكشف",
-                navHeritage: "التراث",
-                navHotels: "الفنادق",
-                navCafes: "المطاعم والمقاهي",
-                navEnt: "الترفيه",
-                navUnique: "تجارب فريدة",
-                navPlanner: "مخطط الرحلات",
-                myTripBtn: "مسار رحلتي",
-                logoutBtn: "خروج",
-                weatherStatus: "طقس حائل: 22°م • سماء صافية",
-                dashHeroTitle: "اكتشف عراقة حائل، الفخامة والمغامرة",
-                dashHeroDesc: "تصفح معالم حائل الأثرية، والفنادق الراقية، وأشهر المقاهي، وتجارب الدبابات الصحراوية وركوب الخيل بتقنية 360°.",
-                exploreNowBtn: "بحث",
-                featured360: "جولة افتراضية مميزة 360°",
-                featuredTitle: "نقوش جبه الأثرية",
-                featuredSub: "موقع تراث عالمي يونسكو • حائل",
-                launch360Btn: "بدء الجولة 360°",
-                heritageSubtitle: "الكنوز التاريخية والأثرية",
-                heritageTitle: "الأماكن التراثية",
-                hotelsSubtitle: "الضيافة والإقامة الفاخرة",
-                hotelsTitle: "الفنادق والأوتيلات",
-                cafesSubtitle: "المأكولات والقهوة المختصة",
-                cafesTitle: "الكافيهات والمطاعم",
-                entSubtitle: "الترفيه ومراكز التسوق",
-                entTitle: "الأماكن الترفيهية",
-                uniqueSubtitle: "الأنشطة والمغامرات الحصرية",
-                uniqueTitle: "التجارب الفريدة (Unique Experience)",
-                plannerTitle: "مولّد الرحلات الذكي في حائل",
-                durationLabel: "مدة الزيارة",
-                interestLabel: "الاهتمام",
-                generateBtn: "إنشاء المسار",
-                guidesTag: "الضيافة الحاتمية",
-                guidesTitle: "المرشدون السياحيون المعتمدون",
-                bookBtn: "احجز"
-            }
         };
 
         function switchAuthTab(mode) {
             authMode = mode;
-            var loginTab = document.getElementById('tab-login');
-            var regTab = document.getElementById('tab-register');
-            var fName = document.getElementById('field-name');
-            var fRole = document.getElementById('field-role');
-            var title = document.getElementById('form-title');
-            var sub = document.getElementById('form-subtitle');
-            var btnText = document.getElementById('submit-btn-text');
-
-            if (mode === 'register') {
-                regTab.className = "py-2.5 rounded-xl text-sm font-bold bg-white text-[#14452F] shadow-sm transition";
-                loginTab.className = "py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:text-slate-800 transition";
-                fName.classList.remove('hidden');
-                fRole.classList.remove('hidden');
-                title.textContent = i18n[currentLang].createTitle;
-                sub.textContent = i18n[currentLang].createSub;
-                btnText.textContent = i18n[currentLang].registerBtn;
-            } else {
-                loginTab.className = "py-2.5 rounded-xl text-sm font-bold bg-white text-[#14452F] shadow-sm transition";
-                regTab.className = "py-2.5 rounded-xl text-sm font-bold text-slate-500 hover:text-slate-800 transition";
-                fName.classList.add('hidden');
-                fRole.classList.add('hidden');
-                title.textContent = i18n[currentLang].welcomeBack;
-                sub.textContent = i18n[currentLang].enterDetails;
-                btnText.textContent = i18n[currentLang].signInBtn;
-            }
+            document.getElementById('tab-login').classList.toggle('active', mode === 'login');
+            document.getElementById('tab-register').classList.toggle('active', mode === 'register');
+            document.getElementById('submit-btn-text').textContent = mode === 'register' ? 'Complete Registration' : 'Sign In to Hail360';
         }
 
         function handleAuthSubmit(e) {
             if (e) e.preventDefault();
-            var email = document.getElementById('input-email').value || 'visitor@hail360.sa';
-            var name = document.getElementById('input-name').value || email.split('@')[0];
-            document.getElementById('user-avatar').textContent = name.substring(0, 2).toUpperCase();
             enterApp();
-            showToast(currentLang === 'en' ? 'Welcome to Hail360!' : 'أهلاً بك في منصة حائل 360!');
         }
 
         function loginAsGuest() {
-            document.getElementById('user-avatar').textContent = 'GU';
             enterApp();
-            showToast(currentLang === 'en' ? 'Entered as Guest Explorer' : 'تم الدخول كزائر مستكشف');
         }
 
         function enterApp() {
             document.getElementById('auth-view').classList.add('hidden');
             document.getElementById('app-view').classList.remove('hidden');
             renderAllSections();
-            updateTripBadge();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function logout() {
             document.getElementById('app-view').classList.add('hidden');
             document.getElementById('auth-view').classList.remove('hidden');
-            showToast(currentLang === 'en' ? 'Signed out' : 'تم تسجيل الخروج');
         }
 
         function renderSectionGrid(categoryKey, gridId) {
             var grid = document.getElementById(gridId);
             if (!grid) return;
-            var query = (document.getElementById('search-input').value || '').toLowerCase();
             var items = categoriesData[categoryKey] || [];
-
-            var filtered = items.filter(function(item) {
-                return item.nameEn.toLowerCase().indexOf(query) !== -1 ||
-                       item.nameAr.indexOf(query) !== -1 ||
-                       item.descEn.toLowerCase().indexOf(query) !== -1;
-            });
-
-            grid.innerHTML = filtered.map(function(site) {
+            grid.innerHTML = items.map(function(site) {
                 var title = currentLang === 'en' ? site.nameEn : site.nameAr;
                 var loc = currentLang === 'en' ? site.locEn : site.locAr;
                 var desc = currentLang === 'en' ? site.descEn : site.descAr;
-                var isSaved = savedTripIds.indexOf(site.id) !== -1;
-
-                return '<div class="bg-white rounded-2xl border border-slate-200/90 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between">' +
-                    '<div>' +
-                        '<div class="relative h-52 bg-gradient-to-br from-[#14452F] to-[#C8963E] overflow-hidden">' +
-                            '<img src="' + site.img + '" referrerpolicy="no-referrer" alt="' + title + '" onerror="this.style.display=\'none\';" class="w-full h-full object-cover">' +
-                            '<span class="absolute top-3 left-3 bg-slate-900/75 text-white px-3 py-1 rounded-full text-xs font-extrabold">360° VR</span>' +
-                            '<span class="absolute top-3 right-3 bg-white/95 text-slate-900 px-3 py-1 rounded-full text-xs font-extrabold shadow-sm">★ ' + site.rating + '</span>' +
-                        '</div>' +
-                        '<div class="p-5">' +
-                            '<div class="text-xs font-extrabold text-[#A67828] mb-1">' + loc + '</div>' +
-                            '<h4 class="text-lg font-extrabold text-slate-900 mb-2">' + title + '</h4>' +
-                            '<p class="text-xs sm:text-sm text-slate-500 leading-relaxed">' + desc + '</p>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="px-5 pb-5 flex gap-2">' +
-                        '<button type="button" onclick="open360ModalById(' + site.id + ')" class="flex-1 bg-[#14452F] hover:bg-[#0D2E1F] text-white py-2.5 px-3 rounded-xl text-xs font-bold transition">' +
-                            (currentLang === 'en' ? '👁 Launch 360°' : '👁 معاينة 360°') +
-                        '</button>' +
-                        '<button type="button" onclick="toggleSaveSite(' + site.id + ')" class="py-2.5 px-3.5 rounded-xl border text-xs font-bold transition ' + (isSaved ? 'bg-[#F6EEDB] border-[#C8963E] text-[#0D2E1F]' : 'bg-white border-slate-300 text-slate-700 hover:bg-slate-50') + '">' +
-                            (isSaved ? (currentLang === 'en' ? '✓ Saved' : '✓ محفوظ') : (currentLang === 'en' ? '+ Save' : '+ حفظ')) +
-                        '</button>' +
-                    '</div>' +
+                return '<div class="landmark-card">' +
+                    '<div><div class="card-media"><img src="' + site.img + '" alt="' + title + '"></div>' +
+                    '<div class="card-body"><div style="font-size:0.75rem;font-weight:700;color:var(--hail-gold-dark);">' + loc + '</div>' +
+                    '<h4 class="card-title">' + title + '</h4><p style="font-size:0.84rem;color:var(--text-muted);">' + desc + '</p></div></div>' +
+                    '<div class="card-footer"><button type="button" class="btn-card-vr" onclick="showToast(\'Loaded 360 view for ' + title + '\')">👁 360° View</button></div>' +
                 '</div>';
             }).join('');
         }
@@ -962,161 +215,23 @@
             renderSectionGrid('heritage', 'heritage-grid');
             renderSectionGrid('hotels', 'hotels-grid');
             renderSectionGrid('cafes', 'cafes-grid');
-            renderSectionGrid('entertainment', 'entertainment-grid');
             renderSectionGrid('unique', 'unique-grid');
-        }
-
-        function open360ModalById(id) {
-            var found = null;
-            for (var cat in categoriesData) {
-                var list = categoriesData[cat];
-                for (var i = 0; i < list.length; i++) {
-                    if (list[i].id === id) {
-                        found = list[i];
-                        break;
-                    }
-                }
-                if (found) break;
-            }
-            if (!found) found = categoriesData.heritage[0];
-            activeModalId = found.id;
-            document.getElementById('modal-title').textContent = currentLang === 'en' ? found.nameEn : found.nameAr;
-            document.getElementById('modal-desc').textContent = currentLang === 'en' ? found.descEn : found.descAr;
-
-            var stage = document.getElementById('pano-stage');
-            stage.style.backgroundImage = "url('" + found.img + "')";
-            document.getElementById('modal-360').classList.remove('hidden');
-        }
-
-        function close360Modal() {
-            document.getElementById('modal-360').classList.add('hidden');
-        }
-
-        var panoStage = document.getElementById('pano-stage');
-        var dragging = false, lastX = 0, posX = 50;
-        panoStage.addEventListener('mousedown', function(e) { dragging = true; lastX = e.clientX; });
-        window.addEventListener('mouseup', function() { dragging = false; });
-        window.addEventListener('mousemove', function(e) {
-            if (!dragging) return;
-            posX = Math.max(0, Math.min(100, posX - (e.clientX - lastX) * 0.25));
-            panoStage.style.backgroundPosition = posX + '% 50%';
-            lastX = e.clientX;
-        });
-
-        panoStage.addEventListener('touchstart', function(e) {
-            dragging = true;
-            lastX = e.touches[0].clientX;
-        });
-        window.addEventListener('touchend', function() { dragging = false; });
-        window.addEventListener('touchmove', function(e) {
-            if (!dragging) return;
-            var currentX = e.touches[0].clientX;
-            posX = Math.max(0, Math.min(100, posX - (currentX - lastX) * 0.25));
-            panoStage.style.backgroundPosition = posX + '% 50%';
-            lastX = currentX;
-        });
-
-        function toggleSaveSite(id) {
-            if (savedTripIds.indexOf(id) !== -1) {
-                savedTripIds = savedTripIds.filter(function(x) { return x !== id; });
-                showToast(currentLang === 'en' ? 'Removed from itinerary' : 'تمت الإزالة من المسار');
-            } else {
-                savedTripIds.push(id);
-                showToast(currentLang === 'en' ? 'Added to Hail360 itinerary!' : 'تمت الإضافة لمسار رحلتك!');
-            }
-            updateTripBadge();
-            renderAllSections();
-        }
-
-        function addModalSiteToTrip() {
-            if (savedTripIds.indexOf(activeModalId) === -1) {
-                savedTripIds.push(activeModalId);
-                updateTripBadge();
-                renderAllSections();
-            }
-            close360Modal();
-            showToast(currentLang === 'en' ? 'Landmark added to your trip!' : 'تمت إضافة المعلم لجدول رحلتك!');
-        }
-
-        function updateTripBadge() {
-            document.getElementById('trip-count').textContent = savedTripIds.length;
-        }
-
-        function openTripDrawer() {
-            var list = document.getElementById('saved-trip-list');
-            var allItems = [];
-            for (var cat in categoriesData) {
-                allItems = allItems.concat(categoriesData[cat]);
-            }
-            var items = allItems.filter(function(s) { return savedTripIds.indexOf(s.id) !== -1; });
-            list.innerHTML = items.length ? items.map(function(s) {
-                return '<div class="p-3.5 bg-slate-50 border border-slate-200 rounded-xl flex justify-between items-center">' +
-                    '<div>' +
-                        '<strong class="block text-sm text-slate-900">' + (currentLang === 'en' ? s.nameEn : s.nameAr) + '</strong>' +
-                        '<span class="text-xs text-slate-500">' + (currentLang === 'en' ? s.locEn : s.locAr) + '</span>' +
-                    '</div>' +
-                    '<button type="button" onclick="toggleSaveSite(' + s.id + ');openTripDrawer();" class="text-red-600 font-bold text-xs">Remove</button>' +
-                '</div>';
-            }).join('') : '<p class="text-center text-slate-400 py-8 text-sm">No destinations saved yet.</p>';
-            document.getElementById('trip-drawer').classList.remove('hidden');
-        }
-
-        function closeTripDrawer() {
-            document.getElementById('trip-drawer').classList.add('hidden');
-        }
-
-        function generateSmartPlan() {
-            var dur = document.getElementById('plan-duration').value;
-            var focus = document.getElementById('plan-interest').value;
-            document.getElementById('route-output').innerHTML =
-                '<div class="flex justify-between text-xs font-extrabold text-[#14452F]">' +
-                    '<span>CUSTOM ROUTE • ' + dur.toUpperCase() + ' (' + focus.toUpperCase() + ')</span>' +
-                    '<span class="text-[#A64B2A]">Optimized by Hail360</span>' +
-                '</div>' +
-                '<div class="bg-white border border-slate-200 rounded-xl p-3.5 flex items-center gap-3">' +
-                    '<span class="w-7 h-7 rounded-full bg-[#14452F] text-white font-extrabold text-xs flex items-center justify-center shrink-0">1</span>' +
-                    '<div>' +
-                        '<strong class="block text-sm text-slate-900">Stop 1: Jubbah Rock Art, Mount Um Sinman & Uqdah</strong>' +
-                        '<span class="text-xs text-slate-500">09:00 AM • Heritage exploration & mountain oasis views</span>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="bg-white border border-slate-200 rounded-xl p-3.5 flex items-center gap-3">' +
-                    '<span class="w-7 h-7 rounded-full bg-[#C8963E] text-[#0D2E1F] font-extrabold text-xs flex items-center justify-center shrink-0">2</span>' +
-                    '<div>' +
-                        '<strong class="block text-sm text-slate-900">Stop 2: Desert Buggy Safari in Tuwarun & Rich Lobby Hotel</strong>' +
-                        '<span class="text-xs text-slate-500">04:00 PM • Adventure safari & luxury hospitality</span>' +
-                    '</div>' +
-                '</div>';
-            showToast(currentLang === 'en' ? 'Personalized Hail route generated!' : 'تم إنشاء مسارك السياحي المخصص!');
         }
 
         function toggleLanguage() {
             currentLang = currentLang === 'en' ? 'ar' : 'en';
             document.documentElement.lang = currentLang;
             document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
-
             document.getElementById('lang-label-auth').textContent = currentLang === 'en' ? 'العربية' : 'English';
             document.getElementById('lang-label-app').textContent = currentLang === 'en' ? 'العربية' : 'English';
-
-            var elements = document.querySelectorAll('[data-i18n]');
-            for (var i = 0; i < elements.length; i++) {
-                var key = elements[i].getAttribute('data-i18n');
-                if (i18n[currentLang][key]) {
-                    elements[i].textContent = i18n[currentLang][key];
-                }
-            }
-
-            switchAuthTab(authMode);
             renderAllSections();
         }
 
-        var toastTimer;
         function showToast(msg) {
             var toast = document.getElementById('toast');
             document.getElementById('toast-text').textContent = msg;
             toast.classList.remove('hidden');
-            clearTimeout(toastTimer);
-            toastTimer = setTimeout(function() { toast.classList.add('hidden'); }, 3000);
+            setTimeout(function() { toast.classList.add('hidden'); }, 2500);
         }
     </script>
 </body>
