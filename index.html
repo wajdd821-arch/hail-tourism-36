@@ -19,7 +19,6 @@
             --border-color: #E2E8F0;
             --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.06);
             --shadow-md: 0 10px 25px rgba(15, 23, 42, 0.08);
-            --radius-md: 12px;
             --radius-lg: 18px;
             --radius-xl: 24px;
         }
@@ -29,7 +28,7 @@
         .toast {
             position: fixed; bottom: 24px; right: 24px; z-index: 9999;
             background: var(--hail-green-dark); color: #fff; padding: 14px 20px;
-            border-radius: var(--radius-md); box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-weight: 600;
+            border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-weight: 600;
         }
         .auth-wrapper { min-height: 100vh; display: flex; flex-direction: row; }
         .auth-brand-panel { flex: 1; background: var(--hail-green-dark); color: #FFFFFF; padding: 48px; display: flex; flex-direction: column; justify-content: space-between; }
@@ -138,31 +137,30 @@
 
         var categoriesData = {
             heritage: [
-                { id: 101, nameEn: "Tuwarun", nameAr: "توارن", locEn: "Hail", locAr: "حائل", rating: "4.9", img: "https://images.unsplash.com/photo-1547234935-80c7145ec969?auto=format&fit=crop&w=800&q=80", descEn: "Historic valley and village.", descAr: "قرية تاريخية ووادٍ عريق." },
-                { id: 102, nameEn: "Jubbah Rock Art", nameAr: "جبه", locEn: "UNESCO", locAr: "يونسكو", rating: "5.0", img: "https://upload.wikimedia.org/wikipedia/commons/2/2f/Jubbah_rock_art_Hail_Saudi_Arabia.jpg", descEn: "UNESCO heritage site.", descAr: "موقع تراث عالمي." },
-                { id: 103, nameEn: "Mount Um Sinman", nameAr: "جبل أم سنمان", locEn: "Jubbah", locAr: "جبة", rating: "4.9", img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80", descEn: "Sandstone mountain.", descAr: "الجبل الصخري الشهير." },
-                { id: 104, nameEn: "Hatim Al-Tai Palace", nameAr: "قصر حاتم الطائي", locEn: "Tuwarun", locAr: "توارن", rating: "4.8", img: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=800&q=80", descEn: "Historical generosity site.", descAr: "الموقع التاريخي المرتبط بحاتم الطائي." },
-                { id: 105, nameEn: "Uqdah Village", nameAr: "عقده", locEn: "Aja Mountains", locAr: "جبال أجاء", rating: "4.9", img: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=800&q=80", descEn: "Mountain oasis.", descAr: "واحة جبلية ساحرة." },
-                { id: 106, nameEn: "Shuaib Jaw", nameAr: "شعيب جو", locEn: "Hail Valleys", locAr: "شعاب حائل", rating: "4.7", img: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=80", descEn: "Scenic seasonal valley.", descAr: "وادي طبيعي خلاب." }
+                { id: 101, nameEn: "Tuwarun", nameAr: "توارن", locEn: "Hail", locAr: "حائل", rating: "4.9", img: "IMG_4367.jpeg", descEn: "Historic valley and village.", descAr: "قرية تاريخية ووادٍ عريق." },
+                { id: 102, nameEn: "Jubbah Rock Art", nameAr: "جبه", locEn: "UNESCO", locAr: "يونسكو", rating: "5.0", img: "IMG_4368.jpeg", descEn: "UNESCO heritage site.", descAr: "موقع تراث عالمي." },
+                { id: 103, nameEn: "Mount Um Sinman", nameAr: "جبل أم سنمان", locEn: "Jubbah", locAr: "جبة", rating: "4.9", img: "IMG_4369.jpeg", descEn: "Sandstone mountain.", descAr: "الجبل الصخري الشهير." },
+                { id: 104, nameEn: "Hatim Al-Tai Palace", nameAr: "قصر حاتم الطائي", locEn: "Tuwarun", locAr: "توارن", rating: "4.8", img: "IMG_4370.webp", descEn: "Historical generosity site.", descAr: "الموقع التاريخي المرتبط بحاتم الطائي." },
+                { id: 105, nameEn: "Uqdah Village", nameAr: "عقده", locEn: "Aja Mountains", locAr: "جبال أجاء", rating: "4.9", img: "IMG_4371.jpeg", descEn: "Mountain oasis.", descAr: "واحة جبلية ساحرة." },
+                { id: 106, nameEn: "Shuaib Jaw", nameAr: "شعيب جو", locEn: "Hail Valleys", locAr: "شعاب حائل", rating: "4.7", img: "IMG_4372.webp", descEn: "Scenic seasonal valley.", descAr: "وادي طبيعي خلاب." }
             ],
             hotels: [
-                { id: 201, nameEn: "Rich Lobby Hotel", nameAr: "ريتش لوبي فندق", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80", descEn: "Contemporary luxury hotel.", descAr: "فندق عصري فاخر." },
-                { id: 202, nameEn: "Millennium Hail Hotel", nameAr: "فندق ميلينيوم حائل", locEn: "Hail", locAr: "حائل", rating: "4.9", img: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80", descEn: "Five-star hotel.", descAr: "فندق عالمي خمس نجوم." },
-                { id: 203, nameEn: "Suknai Royal Hotel", nameAr: "فندق سكنى رويال", locEn: "Hail", locAr: "حائل", rating: "4.7", img: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?auto=format&fit=crop&w=800&q=80", descEn: "Comfortable royal accommodation.", descAr: "فندق راقٍ يوفر أجنحة واسعة." },
-                { id: 204, nameEn: "Golden Tulip Hotel", nameAr: "فندق جولدن توليب حائل", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80", descEn: "Renowned brand hotel.", descAr: "علامة فندقية عالمية شهيرة." },
-                { id: 205, nameEn: "Ayas Hotel Hail", nameAr: "فندق أياس حائل", locEn: "Hail", locAr: "حائل", rating: "4.6", img: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80", descEn: "Modern boutique hotel.", descAr: "فندق بوتيكي عصري." }
+                { id: 201, nameEn: "Rich Lobby Hotel", nameAr: "ريتش لوبي فندق", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "IMG_4373.jpeg", descEn: "Contemporary luxury hotel.", descAr: "فندق عصري فاخر." },
+                { id: 202, nameEn: "Millennium Hail Hotel", nameAr: "فندق ميلينيوم حائل", locEn: "Hail", locAr: "حائل", rating: "4.9", img: "IMG_4374.jpeg", descEn: "Five-star hotel.", descAr: "فندق عالمي خمس نجوم." },
+                { id: 203, nameEn: "Suknai Royal Hotel", nameAr: "فندق سكنى رويال", locEn: "Hail", locAr: "حائل", rating: "4.7", img: "IMG_4375.jpeg", descEn: "Comfortable royal accommodation.", descAr: "فندق راقٍ يوفر أجنحة واسعة." },
+                { id: 204, nameEn: "Golden Tulip Hotel", nameAr: "فندق جولدن توليب حائل", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "IMG_4376.jpeg", descEn: "Renowned brand hotel.", descAr: "علامة فندقية عالمية شهيرة." },
+                { id: 205, nameEn: "Ayas Hotel Hail", nameAr: "فندق أياس حائل", locEn: "Hail", locAr: "حائل", rating: "4.6", img: "IMG_4377.jpeg", descEn: "Modern boutique hotel.", descAr: "فندق بوتيكي عصري." }
             ],
             cafes: [
-                { id: 301, nameEn: "Bonchai Cafe", nameAr: "مقهى بونشاي", locEn: "Hail", locAr: "حائل", rating: "4.9", img: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80", descEn: "Specialty coffee spot.", descAr: "مقهى مختص عصري." },
-                { id: 302, nameEn: "Camel Step Coffee", nameAr: "محمصة خطوة الكاميل", locEn: "Hail", locAr: "حائل", rating: "5.0", img: "https://images.unsplash.com/photo-1497935586351-b67a49e012bf?auto=format&fit=crop&w=800&q=80", descEn: "Pioneer specialty coffee.", descAr: "محمصة القهوة الشهيرة." },
-                { id: 303, nameEn: "AL Adham Cafe", nameAr: "مقهى الأدهم", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80", descEn: "Fusion cafe.", descAr: "مقهى يجمع بين التراث والأصالة." },
-                { id: 304, nameEn: "Peacock Cafe Roaster", nameAr: "بيكوك كافيه وروستر", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?auto=format&fit=crop&w=800&q=80", descEn: "Artisanal roastery.", descAr: "محمصة ومقهى فاخر." }
+                { id: 301, nameEn: "Bonchai Cafe", nameAr: "مقهى بونشاي", locEn: "Hail", locAr: "حائل", rating: "4.9", img: "IMG_4379.jpeg", descEn: "Specialty coffee spot.", descAr: "مقهى مختص عصري." },
+                { id: 302, nameEn: "Camel Step Coffee", nameAr: "محمصة خطوة الكاميل", locEn: "Hail", locAr: "حائل", rating: "5.0", img: "IMG_4380.jpeg", descEn: "Pioneer specialty coffee.", descAr: "محمصة القهوة الشهيرة." },
+                { id: 303, nameEn: "AL Adham Cafe", nameAr: "مقهى الأدهم", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "IMG_4383.jpeg", descEn: "Fusion cafe.", descAr: "مقهى يجمع بين التراث والأصالة." },
+                { id: 304, nameEn: "Peacock Cafe Roaster", nameAr: "بيكوك كافيه وروستر", locEn: "Hail", locAr: "حائل", rating: "4.8", img: "IMG_4384.webp", descEn: "Artisanal roastery.", descAr: "محمصة ومقهى فاخر." }
             ],
             unique: [
-                { id: 501, nameEn: "Desert Buggy Safari - Tuwarun", nameAr: "تطعيس ودبابات صحراوية - توارن", locEn: "Tuwarun", locAr: "توارن", rating: "5.0", img: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=800&q=80", descEn: "Off-road buggy safari.", descAr: "تجربة سفاري ودبابات صحراوية." },
-                { id: 502, nameEn: "Al-Tai Arabian Horse Riding", nameAr: "مربط الطائي للخيل", locEn: "Hail", locAr: "حائل", rating: "5.0", img: "https://images.unsplash.com/photo-1553284965-83fd3e82fa5a?auto=format&fit=crop&w=800&q=80", descEn: "Equestrian experience.", descAr: "تجربة فروسية وركوب الخيل." },
-                { id: 503, nameEn: "Mountain Hiking - Tuwarun", nameAr: "هايكنج جبلي - توارن", locEn: "Tuwarun", locAr: "توارن", rating: "4.9", img: "https://images.unsplash.com/photo-1551632811-561732d1e306?auto=format&fit=crop&w=800&q=80", descEn: "Mountain hiking.", descAr: "رحلة تسلق وهايكنج جبلي." },
-                { id: 504, nameEn: "Car Desert Tour - Al-Didhan", nameAr: "جولة سيارات صحراوية - الديدحان", locEn: "Al-Didhan", locAr: "محمية الديدحان", rating: "4.9", img: "https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=800&q=80", descEn: "4x4 desert tour.", descAr: "جولة سيارات دفع رباعي." }
+                { id: 501, nameEn: "Desert Buggy Safari - Tuwarun", nameAr: "تطعيس ودبابات صحراوية - توارن", locEn: "Tuwarun", locAr: "توارن", rating: "5.0", img: "IMG_4385.jpeg", descEn: "Off-road buggy safari.", descAr: "تجربة سفاري ودبابات صحراوية." },
+                { id: 502, nameEn: "Al-Tai Arabian Horse Riding", nameAr: "مربط الطائي للخيل", locEn: "Hail", locAr: "حائل", rating: "5.0", img: "IMG_4387.jpeg", descEn: "Equestrian experience.", descAr: "تجربة فروسية وركوب الخيل." },
+                { id: 503, nameEn: "Mountain Hiking - Tuwarun", nameAr: "هايكنج جبلي - توارن", locEn: "Tuwarun", locAr: "توارن", rating: "4.9", img: "IMG_4388.jpeg", descEn: "Mountain hiking.", descAr: "رحلة تسلق وهايكنج جبلي." }
             ]
         };
 
@@ -236,3 +234,4 @@
     </script>
 </body>
 </html>
+
