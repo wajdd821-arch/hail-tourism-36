@@ -51,12 +51,10 @@
         .btn-card-vr { flex: 1; background: var(--hail-green); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
         .btn-card-booking { flex: 1; background: var(--hail-gold); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
         
-        /* AI Assistant & Booking Styling */
         .ai-chat-box { background: var(--surface); border-radius: var(--radius-xl); border: 1px solid var(--border-color); padding: 24px; margin-top: 40px; box-shadow: var(--shadow-md); }
         .chat-messages { height: 200px; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; overflow-y: auto; margin-bottom: 14px; font-size: 0.9rem; line-height: 1.5; }
         .chat-input-row { display: flex; gap: 10px; }
         
-        /* Booking Modal Styling */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .modal-card { background: var(--surface); width: 100%; max-width: 400px; border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
     </style>
@@ -69,7 +67,7 @@
     <div id="booking-modal" class="modal-overlay hidden">
         <div class="modal-card">
             <h3 id="booking-modal-title" style="margin-bottom: 14px; color: var(--hail-green);">حجز موعد الزيارة</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">اختر التاريخ واليوم المناسب لترتيب رحلتك:</p>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">اختر التاريخ واليوم المناسب لرحلتك:</p>
             <div class="form-group">
                 <label>اختر اليوم (Day)</label>
                 <select id="booking-day" class="form-control">
@@ -146,4 +144,43 @@
                 <div id="hotels-grid" class="landmarks-grid"></div>
             </section>
 
-            <section
+            <section style="margin-top:30px;">
+                <h3>Cafes & Dining (الكافيهات والمطاعم والمقاهي)</h3>
+                <div id="cafes-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Unique Experience (تجارب فريدة)</h3>
+                <div id="unique-grid" class="landmarks-grid"></div>
+            </section>
+
+            <!-- Certified Tour Guides Section -->
+            <section style="margin-top:40px;">
+                <h3>Certified Tour Guides (المرشدون السياحيون المعتمدون)</h3>
+                <div id="guides-grid" class="landmarks-grid"></div>
+            </section>
+
+            <!-- AI Assistant Section -->
+            <section class="ai-chat-box">
+                <h3 style="margin-bottom: 8px; color: var(--hail-green);">🤖 Hail360 AI Trip Planner & Assistant (المساعد الذكي لتخطيط الرحلات)</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">اسأل المساعد الذكي ليرتب لك جدولاً سياحياً متكاملاً في حائل حسب رغبتك!</p>
+                <div id="chat-messages" class="chat-messages">
+                    <div><strong>AI:</strong> مرحباً بك في مساعد حائل 360 الذكي! اكتب لي (اقترح جدول رحلة) وسأقوم بترتيب جدولك السياحي بالكامل مع الأماكن والمقاهي.</div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="chat-input" class="form-control" placeholder="اطلب ترتيب جدول سياحي (مثلاً: أريد جدول ليومين في حائل)...">
+                    <button type="button" class="btn-primary" style="width: 120px;" onclick="sendAiMessage()">Send</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        var currentLang = 'en';
+        var selectedPlaceForBooking = '';
+
+        var categoriesData = {
+            heritage: [
+                { id: 101, nameEn: "Tuwarun", nameAr: "توارن", locEn: "Hail", locAr: "حائل", img: "IMG_4367.jpeg", descEn: "Historic valley and village.", descAr: "قرية تاريخية ووادٍ عريق.", needsBooking: true },
+                { id: 102, nameEn: "Jubbah Rock Art", nameAr: "جبه", locEn: "UNESCO", locAr: "يونسكو", img: "IMG_4368.jpeg", descEn: "UNESCO heritage site.", descAr: "موقع تراث عالمي مسجل باليونسكو.", needsBooking: true },
+                { id: 103, nameEn: "Mount
