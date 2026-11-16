@@ -95,7 +95,7 @@
     </div>
 
     <!-- AUTHENTICATION -->
-    <div id="auth-view" class="auth-wrapper">
+    <div id="auth-view" style="display: flex;" class="auth-wrapper">
         <div class="auth-brand-panel">
             <h1>Hail<span>360</span></h1>
             <p>Smart Heritage & Tourism Platform</p>
@@ -252,19 +252,19 @@
         ];
 
         function enterApp() {
-            var auth = document.getElementById('auth-view');
-            var app = document.getElementById('app-view');
-            if (auth) auth.style.display = 'none';
-            if (app) app.classList.remove('hidden');
+            var authView = document.getElementById('auth-view');
+            var appView = document.getElementById('app-view');
+            if (authView) authView.style.display = 'none';
+            if (appView) appView.classList.remove('hidden');
             renderAllSections();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function logout() {
-            var auth = document.getElementById('auth-view');
-            var app = document.getElementById('app-view');
-            if (app) app.classList.add('hidden');
-            if (auth) auth.style.display = 'flex';
+            var authView = document.getElementById('auth-view');
+            var appView = document.getElementById('app-view');
+            if (appView) appView.classList.add('hidden');
+            if (authView) authView.style.display = 'flex';
         }
 
         function renderSectionGrid(categoryKey, gridId) {
@@ -383,4 +383,10 @@
             
             setTimeout(function() {
                 var reply = "<strong>AI Trip Planner:</strong> بناءً على رغبتك، إليك الجدول المقترح لرحلتك في حائل:<br>• <strong>الصباح:</strong> زيارة مواقع التراث والأماكن الترفيهية مثل مطل حاتم الطائي.<br>• <strong>الظهيرة:</strong> الغداء في مطعم نكهة ديرتنا أو الوادي المبارك.<br>• <strong>المساء:</strong> زيارة حايل زون وأجا بارك مع المرشد فهد الشمري!";
-                box.innerHTML += '<div
+                box.innerHTML += '<div style="margin-top:8px; color:var(--hail-green); background:#E8F1EC; padding:10px; border-radius:8px;">' + reply + '</div>';
+                box.scrollTop = box.scrollHeight;
+            }, 600);
+        }
+    </script>
+</body>
+</html>
