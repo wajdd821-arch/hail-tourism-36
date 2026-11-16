@@ -26,17 +26,7 @@
             background: var(--hail-green-dark); color: #fff; padding: 14px 20px;
             border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-weight: 600;
         }
-        .auth-wrapper { min-height: 100vh; display: flex; flex-direction: column; }
-        @media(min-width: 768px) { .auth-wrapper { flex-direction: row; } }
-        .auth-brand-panel { flex: 1; background: var(--hail-green-dark); color: #FFFFFF; padding: 36px; display: flex; flex-direction: column; justify-content: space-between; min-height: 250px; }
-        .lang-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); color: #fff; padding: 8px 14px; border-radius: 10px; cursor: pointer; width: fit-content; }
-        .auth-form-panel { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--hail-sand); }
-        .auth-card { width: 100%; max-width: 420px; background: var(--surface); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 6px; }
-        .form-control { width: 100%; padding: 12px 14px; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 12px; font-size: 0.92rem; }
-        .btn-primary { width: 100%; padding: 14px; background: var(--hail-green); color: #FFFFFF; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
-        .btn-guest { width: 100%; padding: 12px; background: var(--hail-gold-light); color: var(--hail-green-dark); border: 1px solid rgba(200,150,62,0.45); border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 12px; }
+        .lang-btn { background: rgba(20,69,47,0.1); border: 1px solid var(--hail-green); color: var(--hail-green); padding: 8px 14px; border-radius: 10px; cursor: pointer; font-weight: 700; }
         .navbar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.96); border-bottom: 1px solid var(--border-color); }
         .nav-container { max-width: 1240px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
         .main-container { max-width: 1240px; margin: 0 auto; padding: 28px 24px; }
@@ -54,12 +44,16 @@
         .btn-card-booking { flex: 1; background: var(--hail-gold); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
         
         .feature-box { background: var(--surface); border-radius: var(--radius-xl); border: 2px solid var(--hail-gold); padding: 24px; margin-bottom: 30px; box-shadow: var(--shadow-md); }
+        .form-control { width: 100%; padding: 12px 14px; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 12px; font-size: 0.92rem; }
+        .btn-primary { width: 100%; padding: 14px; background: var(--hail-green); color: #FFFFFF; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
         .budget-result { margin-top: 14px; padding: 14px; background: var(--hail-gold-light); border-radius: 12px; color: var(--hail-green-dark); font-size: 0.92rem; border: 1px solid rgba(200,150,62,0.4); }
         .chat-messages { height: 200px; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; overflow-y: auto; margin-bottom: 14px; font-size: 0.9rem; line-height: 1.5; }
         .chat-input-row { display: flex; gap: 10px; flex-wrap: wrap; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .modal-card { background: var(--surface); width: 100%; max-width: 400px; border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 6px; }
     </style>
 </head>
 <body>
@@ -89,43 +83,18 @@
             </div>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
                 <button type="button" class="btn-primary" onclick="confirmBooking()">تأكيد الحجز</button>
-                <button type="button" class="btn-guest" style="margin-top:0;" onclick="closeBookingModal()">إلغاء</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- AUTHENTICATION -->
-    <div id="auth-view" class="auth-wrapper">
-        <div class="auth-brand-panel">
-            <h1>Hail<span>360</span></h1>
-            <p>Smart Heritage & Tourism Platform</p>
-            <button type="button" class="lang-btn" onclick="toggleLanguage()">🌐 <span id="lang-label-auth">العربية</span></button>
-        </div>
-        <div class="auth-form-panel">
-            <div class="auth-card">
-                <h3 style="margin-bottom: 16px; color: var(--hail-green-dark);">Welcome to Hail360</h3>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="input-email" class="form-control" value="visitor@hail360.sa">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="input-password" class="form-control" value="••••••••">
-                </div>
-                <button type="button" class="btn-primary" onclick="enterApp()">Sign In to Hail360</button>
-                <button type="button" class="btn-guest" onclick="enterApp()">✨ Continue as Guest Explorer</button>
+                <button type="button" class="btn-primary" style="background:#C8963E;" onclick="closeBookingModal()">إلغاء</button>
             </div>
         </div>
     </div>
 
     <!-- MAIN APP -->
-    <div id="app-view" class="hidden">
+    <div>
         <header class="navbar">
             <div class="nav-container">
                 <h1>Hail360</h1>
                 <div>
-                    <button type="button" class="lang-btn" style="color:#000;" onclick="toggleLanguage()">🌐 <span id="lang-label-app">العربية</span></button>
-                    <button type="button" class="btn-primary" style="padding:6px 12px; display:inline-block; width:auto;" onclick="logout()">Exit</button>
+                    <button type="button" class="lang-btn" onclick="toggleLanguage()">🌐 <span id="lang-label-app">العربية</span></button>
                 </div>
             </div>
         </header>
@@ -137,7 +106,78 @@
                 </div>
             </section>
 
-            <!-- خانة تحديد الميزانية -->
+            <!-- خانة تحديد الميزانية بارزة في الأعلى -->
             <section class="feature-box">
                 <h3 style="margin-bottom: 8px; color: var(--hail-green);">💰 Trip Budget Planner (خانة تحديد ميزانية الرحلة)</h3>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">حدد ميزانيتك بالريال السعودي (SAR) لنقترح لك الخطة المناسبة لإقامتك وأنشطتك في حائل:</p>
+                <div class="chat-input-row">
+                    <input type="number" id="budget-input" class="form-control" style="flex: 1; min-width: 180px;" placeholder="أدخل المبلغ بالريال (مثلاً: 1500)" value="1500">
+                    <select id="budget-days" class="form-control" style="width: 160px;">
+                        <option value="1">يوم واحد (1 Day)</option>
+                        <option value="2" selected>يومين (2 Days)</option>
+                        <option value="3">3 أيام (3 Days)</option>
+                    </select>
+                    <button type="button" class="btn-primary" style="width: 150px;" onclick="calculateBudgetPlan()">احسب الخطة</button>
+                </div>
+                <div id="budget-output" class="budget-result hidden"></div>
+            </section>
+
+            <section>
+                <h3>Heritage & Landmarks (الأماكن التراثية)</h3>
+                <div id="heritage-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Hotels & Lodging (الفنادق والأوتيلات)</h3>
+                <div id="hotels-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Cafes & Dining (الكافيهات والمقاهي)</h3>
+                <div id="cafes-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Restaurants (المطاعم)</h3>
+                <div id="restaurants-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Entertainment Places (الأماكن الترفيهية)</h3>
+                <div id="entertainment-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Unique Experience (تجارب فريدة)</h3>
+                <div id="unique-grid" class="landmarks-grid"></div>
+            </section>
+
+            <!-- Certified Tour Guides Section -->
+            <section style="margin-top:40px;">
+                <h3>Certified Tour Guides (المرشدون السياحيون المعتمدون)</h3>
+                <div id="guides-grid" class="landmarks-grid"></div>
+            </section>
+
+            <!-- AI Assistant Section -->
+            <section class="feature-box" style="border-color: var(--hail-green);">
+                <h3 style="margin-bottom: 8px; color: var(--hail-green);">🤖 Hail360 AI Trip Planner & Assistant (المساعد الذكي لتخطيط الرحلات)</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">اسأل المساعد الذكي ليرتب لك جدولاً سياحياً متكاملاً في حائل حسب رغبتك!</p>
+                <div id="chat-messages" class="chat-messages">
+                    <div><strong>AI:</strong> مرحباً بك في مساعد حائل 360 الذكي! اكتب لي (اقترح جدول رحلة) وسأقوم بترتيب جدولك السياحي بالكامل.</div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="chat-input" class="form-control" style="flex: 1;" placeholder="اطلب ترتيب جدول سياحي (مثلاً: أريد جدول ليومين في حائل)...">
+                    <button type="button" class="btn-primary" style="width: 120px;" onclick="sendAiMessage()">Send</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        var currentLang = 'en';
+        var selectedPlaceForBooking = '';
+
+        var categoriesData = {
+            heritage: [
+                { id: 101, nameEn: "Tuwarun", nameAr: "توارن", locEn: "Hail", locAr: "حائل", img: "IMG_4367.jpeg", descEn: "Historic valley and village.", descAr: "قرية تاريخية ووادٍ عريق.", needsBooking: true },
+                { id: 102, nameEn: "Jubbah Rock Art", name
