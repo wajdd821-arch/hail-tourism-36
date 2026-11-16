@@ -26,7 +26,17 @@
             background: var(--hail-green-dark); color: #fff; padding: 14px 20px;
             border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); font-weight: 600;
         }
-        .lang-btn { background: rgba(20,69,47,0.1); border: 1px solid var(--hail-green); color: var(--hail-green); padding: 8px 14px; border-radius: 10px; cursor: pointer; font-weight: 700; }
+        .auth-wrapper { min-height: 100vh; display: flex; flex-direction: column; }
+        @media(min-width: 768px) { .auth-wrapper { flex-direction: row; } }
+        .auth-brand-panel { flex: 1; background: var(--hail-green-dark); color: #FFFFFF; padding: 36px; display: flex; flex-direction: column; justify-content: space-between; min-height: 250px; }
+        .lang-btn { background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.22); color: #fff; padding: 8px 14px; border-radius: 10px; cursor: pointer; width: fit-content; }
+        .auth-form-panel { flex: 1; display: flex; align-items: center; justify-content: center; padding: 24px; background: var(--hail-sand); }
+        .auth-card { width: 100%; max-width: 420px; background: var(--surface); border-radius: var(--radius-xl); padding: 32px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 6px; }
+        .form-control { width: 100%; padding: 12px 14px; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 12px; font-size: 0.92rem; }
+        .btn-primary { width: 100%; padding: 14px; background: var(--hail-green); color: #FFFFFF; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .btn-guest { width: 100%; padding: 12px; background: var(--hail-gold-light); color: var(--hail-green-dark); border: 1px solid rgba(200,150,62,0.45); border-radius: 12px; font-weight: 700; cursor: pointer; margin-top: 12px; }
         .navbar { position: sticky; top: 0; z-index: 100; background: rgba(255,255,255,0.96); border-bottom: 1px solid var(--border-color); }
         .nav-container { max-width: 1240px; margin: 0 auto; padding: 12px 24px; display: flex; align-items: center; justify-content: space-between; }
         .main-container { max-width: 1240px; margin: 0 auto; padding: 28px 24px; }
@@ -44,16 +54,12 @@
         .btn-card-booking { flex: 1; background: var(--hail-gold); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
         
         .feature-box { background: var(--surface); border-radius: var(--radius-xl); border: 2px solid var(--hail-gold); padding: 24px; margin-bottom: 30px; box-shadow: var(--shadow-md); }
-        .form-control { width: 100%; padding: 12px 14px; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 12px; font-size: 0.92rem; }
-        .btn-primary { width: 100%; padding: 14px; background: var(--hail-green); color: #FFFFFF; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; }
         .budget-result { margin-top: 14px; padding: 14px; background: var(--hail-gold-light); border-radius: 12px; color: var(--hail-green-dark); font-size: 0.92rem; border: 1px solid rgba(200,150,62,0.4); }
         .chat-messages { height: 200px; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; overflow-y: auto; margin-bottom: 14px; font-size: 0.9rem; line-height: 1.5; }
         .chat-input-row { display: flex; gap: 10px; flex-wrap: wrap; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .modal-card { background: var(--surface); width: 100%; max-width: 400px; border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 0.75rem; font-weight: 700; color: #475569; margin-bottom: 6px; }
     </style>
 </head>
 <body>
@@ -83,18 +89,43 @@
             </div>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
                 <button type="button" class="btn-primary" onclick="confirmBooking()">تأكيد الحجز</button>
-                <button type="button" class="btn-primary" style="background:#C8963E;" onclick="closeBookingModal()">إلغاء</button>
+                <button type="button" class="btn-guest" style="margin-top:0;" onclick="closeBookingModal()">إلغاء</button>
             </div>
         </div>
     </div>
 
-    <!-- MAIN APP (يفتح مباشرة بدون صفحة تسجيل دخول معلقة) -->
-    <div>
+    <!-- AUTHENTICATION (صفحة تسجيل الدخول المباشرة) -->
+    <div id="auth-view" style="display: flex;" class="auth-wrapper">
+        <div class="auth-brand-panel">
+            <h1>Hail<span>360</span></h1>
+            <p>Smart Heritage & Tourism Platform</p>
+            <button type="button" class="lang-btn" onclick="toggleLanguage()">🌐 <span id="lang-label-auth">العربية</span></button>
+        </div>
+        <div class="auth-form-panel">
+            <div class="auth-card">
+                <h3 style="margin-bottom: 16px; color: var(--hail-green-dark);">Welcome to Hail360</h3>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="input-email" class="form-control" value="visitor@hail360.sa">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="input-password" class="form-control" value="••••••••">
+                </div>
+                <button type="button" class="btn-primary" onclick="enterApp()">Sign In to Hail360</button>
+                <button type="button" class="btn-guest" onclick="enterApp()">✨ Continue as Guest Explorer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app-view" class="hidden">
         <header class="navbar">
             <div class="nav-container">
                 <h1>Hail360</h1>
                 <div>
-                    <button type="button" class="lang-btn" onclick="toggleLanguage()">🌐 <span id="lang-label-app">العربية</span></button>
+                    <button type="button" class="lang-btn" style="color:#000;" onclick="toggleLanguage()">🌐 <span id="lang-label-app">العربية</span></button>
+                    <button type="button" class="btn-primary" style="padding:6px 12px; display:inline-block; width:auto;" onclick="logout()">Exit</button>
                 </div>
             </div>
         </header>
@@ -106,7 +137,7 @@
                 </div>
             </section>
 
-            <!-- خانة تحديد الميزانية بارزة في الأعلى -->
+            <!-- خانة تحديد الميزانية -->
             <section class="feature-box">
                 <h3 style="margin-bottom: 8px; color: var(--hail-green);">💰 Trip Budget Planner (خانة تحديد ميزانية الرحلة)</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">حدد ميزانيتك بالريال السعودي (SAR) لنقترح لك الخطة المناسبة لإقامتك وأنشطتك في حائل:</p>
@@ -216,4 +247,135 @@
         };
 
         var guidesData = [
-            { id: 701, nameEn: "Fahad Al-Shammari", nameAr: "فهد الشمري", specEn: "Heritage & History Expert", specAr: "خبير التراث والآثار بحائل", img: "IMG_
+            { id: 701, nameEn: "Fahad Al-Shammari", nameAr: "فهد الشمري", specEn: "Heritage & History Expert", specAr: "خبير التراث والآثار بحائل", img: "IMG_4367.jpeg" },
+            { id: 702, nameEn: "Noura Al-Rasheed", nameAr: "نورة الرشيد", specEn: "Desert Safari & Adventure Guide", specAr: "مرشدة المغامرات والرحلات الصحراوية", img: "IMG_4406.jpeg" }
+        ];
+
+        function enterApp() {
+            var authView = document.getElementById('auth-view');
+            var appView = document.getElementById('app-view');
+            if (authView) authView.style.display = 'none';
+            if (appView) appView.classList.remove('hidden');
+            renderAllSections();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function logout() {
+            var authView = document.getElementById('auth-view');
+            var appView = document.getElementById('app-view');
+            if (appView) appView.classList.add('hidden');
+            if (authView) authView.style.display = 'flex';
+        }
+
+        function renderSectionGrid(categoryKey, gridId) {
+            var grid = document.getElementById(gridId);
+            if (!grid) return;
+            var items = categoriesData[categoryKey] || [];
+            grid.innerHTML = items.map(function(site) {
+                var title = currentLang === 'en' ? site.nameEn : site.nameAr;
+                var loc = currentLang === 'en' ? site.locEn : site.locAr;
+                var desc = currentLang === 'en' ? site.descEn : site.descAr;
+                var bookingBtnHtml = site.needsBooking ? '<button type="button" class="btn-card-booking" onclick="openBookingModal(\'' + title + '\')">📅 حجز موعد</button>' : '';
+
+                return '<div class="landmark-card">' +
+                    '<div><div class="card-media"><img src="' + site.img + '" alt="' + title + '"></div>' +
+                    '<div class="card-body"><div style="font-size:0.75rem;font-weight:700;color:var(--hail-gold-dark);">' + loc + '</div>' +
+                    '<h4 class="card-title">' + title + '</h4><p style="font-size:0.84rem;color:var(--text-muted);">' + desc + '</p></div></div>' +
+                    '<div class="card-footer"><button type="button" class="btn-card-vr" onclick="showToast(\'Loaded 360 view for ' + title + '\')">👁 360°</button>' + bookingBtnHtml + '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function renderGuidesGrid() {
+            var grid = document.getElementById('guides-grid');
+            if (!grid) return;
+            grid.innerHTML = guidesData.map(function(guide) {
+                var name = currentLang === 'en' ? guide.nameEn : guide.nameAr;
+                var spec = currentLang === 'en' ? guide.specEn : guide.specAr;
+                return '<div class="landmark-card">' +
+                    '<div><div class="card-media"><img src="' + guide.img + '" alt="' + name + '"></div>' +
+                    '<div class="card-body"><h4 class="card-title">' + name + '</h4><p style="font-size:0.84rem;color:var(--text-muted);">' + spec + '</p></div></div>' +
+                    '<div class="card-footer"><button type="button" class="btn-card-vr" onclick="showToast(\'تم إرسال طلب الحجز للمرشد ' + name + '\')">📞 حجز المرشد</button></div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function renderAllSections() {
+            renderSectionGrid('heritage', 'heritage-grid');
+            renderSectionGrid('hotels', 'hotels-grid');
+            renderSectionGrid('cafes', 'cafes-grid');
+            renderSectionGrid('restaurants', 'restaurants-grid');
+            renderSectionGrid('entertainment', 'entertainment-grid');
+            renderSectionGrid('unique', 'unique-grid');
+            renderGuidesGrid();
+        }
+
+        function calculateBudgetPlan() {
+            var amount = parseFloat(document.getElementById('budget-input').value);
+            var days = parseInt(document.getElementById('budget-days').value);
+            var out = document.getElementById('budget-output');
+
+            if (!amount || amount <= 0) {
+                showToast('الرجاء إدخال مبلغ صحيح للميزانية');
+                return;
+            }
+
+            var perDay = Math.round(amount / days);
+            var tierTitle = '';
+            var recommendation = '';
+
+            if (perDay < 500) {
+                tierTitle = 'الخطة الاقتصادية (Economic Plan)';
+                recommendation = '• <strong>الإقامة:</strong> فنادق اقتصادية مريحة.<br>• <strong>المطاعم والكافيهات:</strong> مطعم نكهة ديرتنا + قهوة في بنشاي.<br>• <strong>الأنشطة:</strong> جولة في المنطقة المركزية ومطل حاتم الطائي.';
+            } else if (perDay <= 1200) {
+                tierTitle = 'الخطة المتوازنة (Balanced Plan)';
+                recommendation = '• <strong>الإقامة:</strong> فندق سكنى رويال أو جولدن توليب.<br>• <strong>المطاعم والكافيهات:</strong> الوادي المبارك + خطوة جمل.<br>• <strong>الأنشطة:</strong> زيارة جبه وتوارن + أجا بارك.';
+            } else {
+                tierTitle = 'الخطة الفاخرة (Luxury VIP Plan)';
+                recommendation = '• <strong>الإقامة:</strong> فندق ميلينيوم حائل أو ريتش لوبي.<br>• <strong>المطاعم والكافيهات:</strong> القلعة القديمه وروقا روكو + بيكوك.<br>• <strong>الأنشطة:</strong> تطعيس ودبابات ومربط الطائي للخيل.';
+            }
+
+            out.innerHTML = '<strong>' + tierTitle + '</strong> (الميزانية الإجمالية: ' + amount + ' ريال لمدة ' + days + ' أيام | بمعدل ' + perDay + ' ريال يومياً):<br><div style="margin-top:6px;">' + recommendation + '</div>';
+            out.classList.remove('hidden');
+            showToast('تم تجهيز خطة الميزانية بنجاح!');
+        }
+
+        function openBookingModal(placeName) {
+            selectedPlaceForBooking = placeName;
+            document.getElementById('booking-modal-title').textContent = 'حجز موعد زيارة: ' + placeName;
+            document.getElementById('booking-modal').classList.remove('hidden');
+        }
+
+        function closeBookingModal() {
+            document.getElementById('booking-modal').classList.add('hidden');
+        }
+
+        function confirmBooking() {
+            var day = document.getElementById('booking-day').value;
+            var date = document.getElementById('booking-date').value;
+            closeBookingModal();
+            showToast('تم حجز ' + selectedPlaceForBooking + ' بنجاح ليوم ' + day + ' الموافق ' + date);
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            document.getElementById('lang-label-auth').textContent = currentLang === 'en' ? 'العربية' : 'English';
+            document.getElementById('lang-label-app').textContent = currentLang === 'en' ? 'العربية' : 'English';
+            renderAllSections();
+        }
+
+        function showToast(msg) {
+            var toast = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(function() { toast.classList.add('hidden'); }, 3000);
+        }
+
+        function sendAiMessage() {
+            var input = document.getElementById('chat-input');
+            var text = input.value.trim();
+            if (!text) return;
+            var box = document.getElementById('chat-messages');
+            box.innerHTML += '<div style="margin-top:6px;"><strong>
