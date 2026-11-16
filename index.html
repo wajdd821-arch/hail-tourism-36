@@ -43,17 +43,21 @@
         .hero-banner { background: var(--hail-green); border-radius: var(--radius-xl); padding: 36px; color: #FFFFFF; margin-bottom: 30px; }
         .landmarks-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .landmark-card { background: var(--surface); border-radius: 16px; border: 1px solid var(--border-color); overflow: hidden; box-shadow: 0 2px 8px rgba(15,23,42,0.06); display: flex; flex-direction: column; justify-content: space-between; }
+        
+        /* تصميم مكان الصور */
         .card-media { position: relative; height: 190px; background: #E2E8F0; }
         .card-media img { width: 100%; height: 100%; object-fit: cover; }
+        
         .card-body { padding: 18px; }
         .card-title { font-size: 1.1rem; font-weight: 800; color: #0F172A; margin-bottom: 6px; }
         .card-footer { padding: 0 18px 18px; display: flex; gap: 8px; }
         .btn-card-vr { flex: 1; background: var(--hail-green); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
         .btn-card-booking { flex: 1; background: var(--hail-gold); color: #FFFFFF; border: none; padding: 10px; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
         
-        .ai-chat-box { background: var(--surface); border-radius: var(--radius-xl); border: 1px solid var(--border-color); padding: 24px; margin-top: 40px; box-shadow: var(--shadow-md); }
+        .feature-box { background: var(--surface); border-radius: var(--radius-xl); border: 1px solid var(--border-color); padding: 24px; margin-top: 30px; box-shadow: var(--shadow-md); }
+        .budget-result { margin-top: 14px; padding: 14px; background: var(--hail-gold-light); border-radius: 12px; color: var(--hail-green-dark); font-size: 0.92rem; border: 1px solid rgba(200,150,62,0.4); }
         .chat-messages { height: 200px; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: 12px; padding: 14px; overflow-y: auto; margin-bottom: 14px; font-size: 0.9rem; line-height: 1.5; }
-        .chat-input-row { display: flex; gap: 10px; }
+        .chat-input-row { display: flex; gap: 10px; flex-wrap: wrap; }
         
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 20px; }
         .modal-card { background: var(--surface); width: 100%; max-width: 400px; border-radius: var(--radius-xl); padding: 28px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); }
@@ -82,7 +86,7 @@
             </div>
             <div class="form-group">
                 <label>التاريخ (Date)</label>
-                <input type="date" id="booking-date" class="form-control" value="2026-06-01">
+                <input type="date" id="booking-date" class="form-control" value="2026-11-20">
             </div>
             <div style="display: flex; gap: 10px; margin-top: 20px;">
                 <button type="button" class="btn-primary" onclick="confirmBooking()">تأكيد الحجز</button>
@@ -109,7 +113,6 @@
                     <label>Password</label>
                     <input type="password" id="input-password" class="form-control" value="••••••••">
                 </div>
-                <!-- زر مباشر بدون فورم عشان يفتح فوراً بدون تعليق -->
                 <button type="button" class="btn-primary" onclick="enterApp()">Sign In to Hail360</button>
                 <button type="button" class="btn-guest" onclick="enterApp()">✨ Continue as Guest Explorer</button>
             </div>
@@ -131,8 +134,24 @@
             <section class="hero-banner">
                 <div>
                     <h2>Discover Hail’s Timeless Heritage & Luxury</h2>
-                    <p>Explore heritage sites, hotels, cafes, unique experiences, and certified local guides.</p>
+                    <p>Explore heritage sites, hotels, cafes, restaurants, entertainment, budget planning, and certified local guides.</p>
                 </div>
+            </section>
+
+            <!-- خانة تحديد الميزانية -->
+            <section class="feature-box" style="margin-top: 0; margin-bottom: 30px;">
+                <h3 style="margin-bottom: 8px; color: var(--hail-green);">💰 Trip Budget Planner (تحديد ميزانية الرحلة)</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">حدد ميزانيتك بالريال السعودي (SAR) لنقترح لك الخطة المناسبة لإقامتك وأنشطتك في حائل:</p>
+                <div class="chat-input-row">
+                    <input type="number" id="budget-input" class="form-control" style="flex: 1; min-width: 180px;" placeholder="أدخل المبلغ بالريال (مثلاً: 1500)" value="1500">
+                    <select id="budget-days" class="form-control" style="width: 160px;">
+                        <option value="1">يوم واحد (1 Day)</option>
+                        <option value="2" selected>يومين (2 Days)</option>
+                        <option value="3">3 أيام (3 Days)</option>
+                    </select>
+                    <button type="button" class="btn-primary" style="width: 150px;" onclick="calculateBudgetPlan()">احسب الخطة</button>
+                </div>
+                <div id="budget-output" class="budget-result hidden"></div>
             </section>
 
             <section>
@@ -146,8 +165,18 @@
             </section>
 
             <section style="margin-top:30px;">
-                <h3>Cafes & Dining (الكافيهات والمطاعم والمقاهي)</h3>
+                <h3>Cafes & Dining (الكافيهات والمقاهي)</h3>
                 <div id="cafes-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Restaurants (المطاعم)</h3>
+                <div id="restaurants-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Entertainment Places (الأماكن الترفيهية)</h3>
+                <div id="entertainment-grid" class="landmarks-grid"></div>
             </section>
 
             <section style="margin-top:30px;">
@@ -162,14 +191,14 @@
             </section>
 
             <!-- AI Assistant Section -->
-            <section class="ai-chat-box">
+            <section class="feature-box">
                 <h3 style="margin-bottom: 8px; color: var(--hail-green);">🤖 Hail360 AI Trip Planner & Assistant (المساعد الذكي لتخطيط الرحلات)</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">اسأل المساعد الذكي ليرتب لك جدولاً سياحياً متكاملاً في حائل حسب رغبتك!</p>
                 <div id="chat-messages" class="chat-messages">
-                    <div><strong>AI:</strong> مرحباً بك في مساعد حائل 360 الذكي! اكتب لي (اقترح جدول رحلة) وسأقوم بترتيب جدولك السياحي بالكامل مع الأماكن والمقاهي.</div>
+                    <div><strong>AI:</strong> مرحباً بك في مساعد حائل 360 الذكي! اكتب لي (اقترح جدول رحلة) وسأقوم بترتيب جدولك السياحي بالكامل.</div>
                 </div>
                 <div class="chat-input-row">
-                    <input type="text" id="chat-input" class="form-control" placeholder="اطلب ترتيب جدول سياحي (مثلاً: أريد جدول ليومين في حائل)...">
+                    <input type="text" id="chat-input" class="form-control" style="flex: 1;" placeholder="اطلب ترتيب جدول سياحي (مثلاً: أريد جدول ليومين في حائل)...">
                     <button type="button" class="btn-primary" style="width: 120px;" onclick="sendAiMessage()">Send</button>
                 </div>
             </section>
@@ -180,22 +209,18 @@
         var currentLang = 'en';
         var selectedPlaceForBooking = '';
 
-        // أكواد الصور الدقيقة والمعتمدة 100% كما طلبتِ وبدون أي تغيير
+        // أسماء الصور والبيانات المتكاملة (تقدري تحطي أسماء صورك الحقيقية في خانة img لكل عنصر)
         var categoriesData = {
             heritage: [
                 { id: 101, nameEn: "Tuwarun", nameAr: "توارن", locEn: "Hail", locAr: "حائل", img: "IMG_4367.jpeg", descEn: "Historic valley and village.", descAr: "قرية تاريخية ووادٍ عريق.", needsBooking: true },
                 { id: 102, nameEn: "Jubbah Rock Art", nameAr: "جبه", locEn: "UNESCO", locAr: "يونسكو", img: "IMG_4368.jpeg", descEn: "UNESCO heritage site.", descAr: "موقع تراث عالمي مسجل باليونسكو.", needsBooking: true },
                 { id: 103, nameEn: "Mount Um Sinman", nameAr: "جبل أم سنمان", locEn: "Jubbah", locAr: "جبة", img: "IMG_4369.jpeg", descEn: "Sandstone mountain.", descAr: "الجبل الصخري الشهير.", needsBooking: false },
-                { id: 104, nameEn: "Hatim Al-Tai Palace", nameAr: "قصر حاتم الطائي", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4370.webp", descEn: "Historical generosity site.", descAr: "الموقع التاريخي المرتبط بحاتم الطائي.", needsBooking: false },
-                { id: 105, nameEn: "Uqdah Village", nameAr: "عقده", locEn: "Aja Mountains", locAr: "جبال أجاء", img: "IMG_4371.jpeg", descEn: "Mountain oasis.", descAr: "واحة جبلية ساحرة.", needsBooking: false },
-                { id: 106, nameEn: "Shuaib Jaw", nameAr: "شعيب جو", locEn: "Hail Valleys", locAr: "شعاب حائل", img: "IMG_4372.webp", descEn: "Scenic seasonal valley.", descAr: "وادي طبيعي خلاب.", needsBooking: false }
+                { id: 104, nameEn: "Hatim Al-Tai Palace", nameAr: "قصر حاتم الطائي", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4370.webp", descEn: "Historical generosity site.", descAr: "الموقع التاريخي المرتبط بحاتم الطائي.", needsBooking: false }
             ],
             hotels: [
                 { id: 201, nameEn: "Rich Lobby Hotel", nameAr: "ريتش لوبي فندق", locEn: "Hail", locAr: "حائل", img: "IMG_4373.jpeg", descEn: "Contemporary luxury hotel.", descAr: "فندق عصري فاخر.", needsBooking: true },
                 { id: 202, nameEn: "Millennium Hail Hotel", nameAr: "فندق ميلينيوم حائل", locEn: "Hail", locAr: "حائل", img: "IMG_4374.jpeg", descEn: "Five-star hotel.", descAr: "فندق عالمي خمس نجوم.", needsBooking: true },
-                { id: 203, nameEn: "Suknai Royal Hotel", nameAr: "فندق سكنى رويال", locEn: "Hail", locAr: "حائل", img: "IMG_4375.jpeg", descEn: "Comfortable royal accommodation.", descAr: "فندق راقٍ يوفر أجنحة واسعة.", needsBooking: true },
-                { id: 204, nameEn: "Golden Tulip Hotel", nameAr: "فندق جولدن توليب حائل", locEn: "Hail", locAr: "حائل", img: "IMG_4376.jpeg", descEn: "Renowned brand hotel.", descAr: "علامة فندقية عالمية شهيرة.", needsBooking: true },
-                { id: 205, nameEn: "Ayas Hotel Hail", nameAr: "فندق أياس حائل", locEn: "Hail", locAr: "حائل", img: "IMG_4377.jpeg", descEn: "Modern boutique hotel.", descAr: "فندق بوتيكي عصري.", needsBooking: true }
+                { id: 203, nameEn: "Suknai Royal Hotel", nameAr: "فندق سكنى رويال", locEn: "Hail", locAr: "حائل", img: "IMG_4375.jpeg", descEn: "Comfortable royal accommodation.", descAr: "فندق راقٍ يوفر أجنحة واسعة.", needsBooking: true }
             ],
             cafes: [
                 { id: 301, nameEn: "Camel Step Coffee", nameAr: "خطوة جمل", locEn: "Hail", locAr: "حائل", img: "IMG_4383.jpeg", descEn: "Pioneer specialty coffee.", descAr: "محمصة القهوة الشهيرة.", needsBooking: false },
@@ -203,10 +228,23 @@
                 { id: 303, nameEn: "AL Adham Cafe", nameAr: "الأدهم", locEn: "Hail", locAr: "حائل", img: "IMG_4403.jpeg", descEn: "Fusion cafe.", descAr: "مقهى يجمع بين التراث والأصالة.", needsBooking: false },
                 { id: 304, nameEn: "Peacock Cafe Roaster", nameAr: "بيكوك", locEn: "Hail", locAr: "حائل", img: "IMG_4405.jpeg", descEn: "Artisanal roastery.", descAr: "محمصة ومقهى فاخر.", needsBooking: false }
             ],
+            restaurants: [
+                { id: 401, nameEn: "Nakat Deeretna", nameAr: "نكهة ديرتنا", locEn: "Hail", locAr: "حائل", img: "rest1.jpeg", descEn: "Traditional local dishes.", descAr: "أطباق شعبية وتراثية أصيلة.", needsBooking: false },
+                { id: 402, nameEn: "Al-Wadi Al-Mubarak", nameAr: "الوادي المبارك", locEn: "Hail", locAr: "حائل", img: "rest2.jpeg", descEn: "Family restaurant.", descAr: "مطعم عائلي مميز.", needsBooking: false },
+                { id: 403, nameEn: "Roga Roko", nameAr: "روقا روكو", locEn: "Hail", locAr: "حائل", img: "rest3.jpeg", descEn: "Modern dining.", descAr: "مطعم وجبات عصرية.", needsBooking: false },
+                { id: 404, nameEn: "Old Castle", nameAr: "القلعه القديمه", locEn: "Hail", locAr: "حائل", img: "rest4.jpeg", descEn: "Heritage restaurant.", descAr: "مطعم بطابع تراثي قديم.", needsBooking: false }
+            ],
+            entertainment: [
+                { id: 501, nameEn: "Al Othaim Mall", nameAr: "العثيم مول", locEn: "Hail", locAr: "حائل", img: "ent1.jpeg", descEn: "Shopping & entertainment center.", descAr: "مركز تسوق وترفيه متكامل.", needsBooking: false },
+                { id: 502, nameEn: "Hatim Al-Tai Viewpoint", nameAr: "مطل حاتم الطائي", locEn: "Hail", locAr: "حائل", img: "ent2.jpeg", descEn: "Scenic viewpoint.", descAr: "مطل سياحي خلاب بإطلالة مرتفعة.", needsBooking: false },
+                { id: 503, nameEn: "Central Area", nameAr: "المنطقه المركزيه", locEn: "Hail", locAr: "حائل", img: "ent3.jpeg", descEn: "Historic downtown area.", descAr: "المنطقة المركزية التاريخية والأسواق.", needsBooking: false },
+                { id: 504, nameEn: "Hail Zone", nameAr: "حايل زون", locEn: "Hail", locAr: "حائل", img: "ent4.jpeg", descEn: "Entertainment zone.", descAr: "منطقة فعاليات وترفيه عصرية.", needsBooking: true },
+                { id: 505, nameEn: "Aja Park", nameAr: "اجا بارك", locEn: "Hail", locAr: "حائل", img: "ent5.jpeg", descEn: "Amusement park.", descAr: "مدينة ملاهٍ وترفيه عائلية.", needsBooking: true }
+            ],
             unique: [
-                { id: 501, nameEn: "Desert Buggy Safari", nameAr: "تطعيس ودبابات", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4406.jpeg", descEn: "Off-road buggy safari.", descAr: "تجربة سفاري ودبابات صحراوية.", needsBooking: true },
-                { id: 502, nameEn: "Al-Tai Horse Riding", nameAr: "مربط الطائي", locEn: "Hail", locAr: "حائل", img: "IMG_4388.jpeg", descEn: "Equestrian experience.", descAr: "تجربة فروسية وركوب الخيل.", needsBooking: true },
-                { id: 503, nameEn: "Mountain Hiking", nameAr: "هايكينج", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4408.jpeg", descEn: "Mountain hiking.", descAr: "رحلة تسلق وهايكنج جبلي.", needsBooking: true }
+                { id: 601, nameEn: "Desert Buggy Safari", nameAr: "تطعيس ودبابات", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4406.jpeg", descEn: "Off-road buggy safari.", descAr: "تجربة سفاري ودبابات صحراوية.", needsBooking: true },
+                { id: 602, nameEn: "Al-Tai Horse Riding", nameAr: "مربط الطائي", locEn: "Hail", locAr: "حائل", img: "IMG_4388.jpeg", descEn: "Equestrian experience.", descAr: "تجربة فروسية وركوب الخيل.", needsBooking: true },
+                { id: 603, nameEn: "Mountain Hiking", nameAr: "هايكينج", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4408.jpeg", descEn: "Mountain hiking.", descAr: "رحلة تسلق وهايكنج جبلي.", needsBooking: true }
             ]
         };
 
@@ -264,8 +302,40 @@
             renderSectionGrid('heritage', 'heritage-grid');
             renderSectionGrid('hotels', 'hotels-grid');
             renderSectionGrid('cafes', 'cafes-grid');
+            renderSectionGrid('restaurants', 'restaurants-grid');
+            renderSectionGrid('entertainment', 'entertainment-grid');
             renderSectionGrid('unique', 'unique-grid');
             renderGuidesGrid();
+        }
+
+        function calculateBudgetPlan() {
+            var amount = parseFloat(document.getElementById('budget-input').value);
+            var days = parseInt(document.getElementById('budget-days').value);
+            var out = document.getElementById('budget-output');
+
+            if (!amount || amount <= 0) {
+                showToast('الرجاء إدخال مبلغ صحيح للميزانية');
+                return;
+            }
+
+            var perDay = Math.round(amount / days);
+            var tierTitle = '';
+            var recommendation = '';
+
+            if (perDay < 500) {
+                tierTitle = 'الخطة الاقتصادية (Economic Plan)';
+                recommendation = '• <strong>الإقامة:</strong> فنادق اقتصادية مريحة.<br>• <strong>المطاعم والكافيهات:</strong> مطعم نكهة ديرتنا + قهوة في بنشاي.<br>• <strong>الأنشطة:</strong> جولة في المنطقة المركزية ومطل حاتم الطائي.';
+            } else if (perDay <= 1200) {
+                tierTitle = 'الخطة المتوازنة (Balanced Plan)';
+                recommendation = '• <strong>الإقامة:</strong> فندق سكنى رويال أو جولدن توليب.<br>• <strong>المطاعم والكافيهات:</strong> الوادي المبارك + خطوة جمل.<br>• <strong>الأنشطة:</strong> زيارة جبه وتوارن + أجا بارك.';
+            } else {
+                tierTitle = 'الخطة الفاخرة (Luxury VIP Plan)';
+                recommendation = '• <strong>الإقامة:</strong> فندق ميلينيوم حائل أو ريتش لوبي.<br>• <strong>المطاعم والكافيهات:</strong> القلعة القديمه وروقا روكو + بيكوك.<br>• <strong>الأنشطة:</strong> تطعيس ودبابات ومربط الطائي للخيل.';
+            }
+
+            out.innerHTML = '<strong>' + tierTitle + '</strong> (الميزانية الإجمالية: ' + amount + ' ريال لمدة ' + days + ' أيام | بمعدل ' + perDay + ' ريال يومياً):<br><div style="margin-top:6px;">' + recommendation + '</div>';
+            out.classList.remove('hidden');
+            showToast('تم تجهيز خطة الميزانية بنجاح!');
         }
 
         function openBookingModal(placeName) {
@@ -310,7 +380,7 @@
             input.value = '';
             
             setTimeout(function() {
-                var reply = "<strong>AI Trip Planner:</strong> بناءً على رغبتك، إليك الجدول المقترح لرحلتك في حائل:<br>• <strong>الصباح:</strong> زيارة مواقع التراث (مثل جبه وقصر حاتم الطائي).<br>• <strong>الظهيرة:</strong> الاستراحة في كافيه خطوة جمل أو بنشاي.<br>• <strong>المساء:</strong> خوض تجربة التطعيس مع المرشد فهد الشمري وحجز الموعد مباشرة!";
+                var reply = "<strong>AI Trip Planner:</strong> بناءً على رغبتك، إليك الجدول المقترح لرحلتك في حائل:<br>• <strong>الصباح:</strong> زيارة مواقع التراث والأماكن الترفيهية مثل مطل حاتم الطائي.<br>• <strong>الظهيرة:</strong> الغداء في مطعم نكهة ديرتنا أو الوادي المبارك.<br>• <strong>المساء:</strong> زيارة حايل زون وأجا بارك مع المرشد فهد الشمري!";
                 box.innerHTML += '<div style="margin-top:8px; color:var(--hail-green); background:#E8F1EC; padding:10px; border-radius:8px;">' + reply + '</div>';
                 box.scrollTop = box.scrollHeight;
             }, 600);
