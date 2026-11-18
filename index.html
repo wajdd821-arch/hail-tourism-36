@@ -103,4 +103,286 @@
         </div>
         <div class="auth-form-panel">
             <div class="auth-card">
-                
+                <h3 style="margin-bottom: 16px; color: var(--hail-green-dark);">Welcome to Hail360</h3>
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="input-email" class="form-control" value="visitor@hail360.sa">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="input-password" class="form-control" value="••••••••">
+                </div>
+                <button type="button" class="btn-primary" onclick="enterApp()">Sign In to Hail360</button>
+                <button type="button" class="btn-guest" onclick="enterApp()">✨ Continue as Guest Explorer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="app-view" class="hidden">
+        <header class="navbar">
+            <div class="nav-container">
+                <h1>Hail360</h1>
+                <div>
+                    <button type="button" class="lang-btn" style="color:#000;" onclick="toggleLanguage()">🌐 <span id="lang-label-app">العربية</span></button>
+                    <button type="button" class="btn-primary" style="padding:6px 12px; display:inline-block; width:auto;" onclick="logout()">Exit</button>
+                </div>
+            </div>
+        </header>
+        <main class="main-container">
+            <section class="hero-banner">
+                <div>
+                    <h2>Discover Hail’s Timeless Heritage & Luxury</h2>
+                    <p>Explore heritage sites, hotels, cafes, restaurants, entertainment, budget planning, and certified local guides.</p>
+                </div>
+            </section>
+
+            <!-- خانة تحديد الميزانية -->
+            <section class="feature-box">
+                <h3 style="margin-bottom: 8px; color: var(--hail-green);">💰 Trip Budget Planner (خانة تحديد ميزانية الرحلة)</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">حدد ميزانيتك بالريال السعودي (SAR) لنقترح لك الخطة المناسبة لإقامتك وأنشطتك في حائل:</p>
+                <div class="chat-input-row">
+                    <input type="number" id="budget-input" class="form-control" style="flex: 1; min-width: 180px;" placeholder="أدخل المبلغ بالريال (مثلاً: 1500)" value="1500">
+                    <select id="budget-days" class="form-control" style="width: 160px;">
+                        <option value="1">يوم واحد (1 Day)</option>
+                        <option value="2" selected>يومين (2 Days)</option>
+                        <option value="3">3 أيام (3 Days)</option>
+                    </select>
+                    <button type="button" class="btn-primary" style="width: 150px;" onclick="calculateBudgetPlan()">احسب الخطة</button>
+                </div>
+                <div id="budget-output" class="budget-result hidden"></div>
+            </section>
+
+            <section>
+                <h3>Heritage & Landmarks (الأماكن التراثية)</h3>
+                <div id="heritage-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Hotels & Lodging (الفنادق والأوتيلات)</h3>
+                <div id="hotels-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Cafes & Dining (الكافيهات والمقاهي)</h3>
+                <div id="cafes-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Restaurants (المطاعم)</h3>
+                <div id="restaurants-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Entertainment Places (الأماكن الترفيهية)</h3>
+                <div id="entertainment-grid" class="landmarks-grid"></div>
+            </section>
+
+            <section style="margin-top:30px;">
+                <h3>Unique Experience (تجارب فريدة)</h3>
+                <div id="unique-grid" class="landmarks-grid"></div>
+            </section>
+
+            <!-- Certified Tour Guides Section -->
+            <section style="margin-top:40px;">
+                <h3>Certified Tour Guides (المرشدون السياحيون المعتمدون)</h3>
+                <div id="guides-grid" class="landmarks-grid"></div>
+            </section>
+
+            <!-- AI Assistant Section -->
+            <section class="feature-box" style="border-color: var(--hail-green);">
+                <h3 style="margin-bottom: 8px; color: var(--hail-green);">🤖 Hail360 AI Trip Planner & Assistant (المساعد الذكي لتخطيط الرحلات)</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">اسأل المساعد الذكي ليرتب لك جدولاً سياحياً متكاملاً في حائل حسب رغبتك!</p>
+                <div id="chat-messages" class="chat-messages">
+                    <div><strong>AI:</strong> مرحباً بك في مساعد حائل 360 الذكي! اكتب لي (اقترح جدول رحلة) وسأقوم بترتيب جدولك السياحي بالكامل.</div>
+                </div>
+                <div class="chat-input-row">
+                    <input type="text" id="chat-input" class="form-control" style="flex: 1;" placeholder="اطلب ترتيب جدول سياحي (مثلاً: أريد جدول ليومين في حائل)...">
+                    <button type="button" class="btn-primary" style="width: 120px;" onclick="sendAiMessage()">Send</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        var currentLang = 'en';
+        var selectedPlaceForBooking = '';
+
+        var categoriesData = {
+            heritage: [
+                { id: 101, nameEn: "Tuwarun", nameAr: "توارن", locEn: "Hail", locAr: "حائل", img: "IMG_4367.jpeg", descEn: "Historic valley and village.", descAr: "قرية تاريخية ووادٍ عريق.", needsBooking: true },
+                { id: 102, nameEn: "Jubbah Rock Art", nameAr: "جبه", locEn: "UNESCO", locAr: "يونسكو", img: "IMG_4368.jpeg", descEn: "UNESCO heritage site.", descAr: "موقع تراث عالمي مسجل باليونسكو.", needsBooking: true },
+                { id: 103, nameEn: "Mount Um Sinman", nameAr: "جبل أم سنمان", locEn: "Jubbah", locAr: "جبة", img: "IMG_4369.jpeg", descEn: "Sandstone mountain.", descAr: "الجبل الصخري الشهير.", needsBooking: false },
+                { id: 104, nameEn: "Hatim Al-Tai Palace", nameAr: "قصر حاتم الطائي", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4370.webp", descEn: "Historical generosity site.", descAr: "الموقع التاريخي المرتبط بحاتم الطائي.", needsBooking: false }
+            ],
+            hotels: [
+                { id: 201, nameEn: "Rich Lobby Hotel", nameAr: "ريتش لوبي فندق", locEn: "Hail", locAr: "حائل", img: "IMG_4373.jpeg", descEn: "Contemporary luxury hotel.", descAr: "فندق عصري فاخر.", needsBooking: true },
+                { id: 202, nameEn: "Millennium Hail Hotel", nameAr: "فندق ميلينيوم حائل", locEn: "Hail", locAr: "حائل", img: "IMG_4374.jpeg", descEn: "Five-star hotel.", descAr: "فندق عالمي خمس نجوم.", needsBooking: true },
+                { id: 203, nameEn: "Suknai Royal Hotel", nameAr: "فندق سكنى رويال", locEn: "Hail", locAr: "حائل", img: "IMG_4375.jpeg", descEn: "Comfortable royal accommodation.", descAr: "فندق راقٍ يوفر أجنحة واسعة.", needsBooking: true }
+            ],
+            cafes: [
+                { id: 301, nameEn: "Camel Step Coffee", nameAr: "خطوة جمل", locEn: "Hail", locAr: "حائل", img: "IMG_4383.jpeg", descEn: "Pioneer specialty coffee.", descAr: "محمصة القهوة الشهيرة.", needsBooking: false },
+                { id: 302, nameEn: "Bonchai Cafe", nameAr: "بنشاي", locEn: "Hail", locAr: "حائل", img: "IMG_4401.jpeg", descEn: "Specialty coffee spot.", descAr: "مقهى مختص عصري.", needsBooking: false },
+                { id: 303, nameEn: "AL Adham Cafe", nameAr: "الأدهم", locEn: "Hail", locAr: "حائل", img: "IMG_4403.jpeg", descEn: "Fusion cafe.", descAr: "مقهى يجمع بين التراث والأصالة.", needsBooking: false },
+                { id: 304, nameEn: "Peacock Cafe Roaster", nameAr: "بيكوك", locEn: "Hail", locAr: "حائل", img: "IMG_4405.jpeg", descEn: "Artisanal roastery.", descAr: "محمصة ومقهى فاخر.", needsBooking: false }
+            ],
+            restaurants: [
+                { id: 401, nameEn: "Nakat Deeretna", nameAr: "نكهة ديرتنا", locEn: "Hail", locAr: "حائل", img: "IMG_4414.jpeg", descEn: "Traditional local dishes.", descAr: "أطباق شعبية وتراثية أصيلة.", needsBooking: false },
+                { id: 402, nameEn: "Al-Wadi Al-Mubarak", nameAr: "الوادي المبارك", locEn: "Hail", locAr: "حائل", img: "IMG_4415.jpeg", descEn: "Family restaurant.", descAr: "مطعم عائلي مميز.", needsBooking: false },
+                { id: 403, nameEn: "Roga Roko", nameAr: "روقا روكو", locEn: "Hail", locAr: "حائل", img: "IMG_4416.jpeg", descEn: "Modern dining.", descAr: "مطعم وجبات عصرية.", needsBooking: false },
+                { id: 404, nameEn: "Old Castle", nameAr: "القلعه القديمه", locEn: "Hail", locAr: "حائل", img: "IMG_4417.jpeg", descEn: "Heritage restaurant.", descAr: "مطعم بطابع تراثي قديم.", needsBooking: false }
+            ],
+            entertainment: [
+                { id: 501, nameEn: "Al Othaim Mall", nameAr: "العثيم مول", locEn: "Hail", locAr: "حائل", img: "IMG_4431.jpeg", descEn: "Shopping & entertainment center.", descAr: "مركز تسوق وترفيه متكامل.", needsBooking: false },
+                { id: 502, nameEn: "Hatim Al-Tai Viewpoint", nameAr: "مطل حاتم الطائي", locEn: "Hail", locAr: "حائل", img: "IMG_4419.jpeg", descEn: "Scenic viewpoint.", descAr: "مطل سياحي خلاب بإطلالة مرتفعة.", needsBooking: false },
+                { id: 503, nameEn: "Central Area", nameAr: "المنطقه المركزيه", locEn: "Hail", locAr: "حائل", img: "IMG_4421.jpeg", descEn: "Historic downtown area.", descAr: "المنطقة المركزية التاريخية والأسواق.", needsBooking: false },
+                { id: 504, nameEn: "Hail Zone", nameAr: "حايل زون", locEn: "Hail", locAr: "حائل", img: "IMG_4422.jpeg", descEn: "Entertainment zone.", descAr: "منطقة فعاليات وترفيه عصرية.", needsBooking: true },
+                { id: 505, nameEn: "Aja Park", nameAr: "اجا بارك", locEn: "Hail", locAr: "حائل", img: "IMG_4423.jpeg", descEn: "Amusement park.", descAr: "مدينة ملاهٍ وترفيه عائلية.", needsBooking: true }
+            ],
+            unique: [
+                { id: 601, nameEn: "Desert Buggy Safari", nameAr: "تطعيس ودبابات", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4406.jpeg", descEn: "Off-road buggy safari.", descAr: "تجربة سفاري ودبابات صحراوية.", needsBooking: true },
+                { id: 602, nameEn: "Al-Tai Horse Riding", nameAr: "مربط الطائي", locEn: "Hail", locAr: "حائل", img: "IMG_4388.jpeg", descEn: "Equestrian experience.", descAr: "تجربة فروسية وركوب الخيل.", needsBooking: true },
+                { id: 603, nameEn: "Mountain Hiking", nameAr: "هايكينج", locEn: "Tuwarun", locAr: "توارن", img: "IMG_4408.jpeg", descEn: "Mountain hiking.", descAr: "رحلة تسلق وهايكنج جبلي.", needsBooking: true }
+            ]
+        };
+
+        var guidesData = [
+            { id: 701, nameEn: "Fahad Al-Shammari", nameAr: "فهد الشمري", specEn: "Heritage & History Expert", specAr: "خبير التراث والآثار بحائل", img: "IMG_4367.jpeg" },
+            { id: 702, nameEn: "Noura Al-Rasheed", nameAr: "نورة الرشيد", specEn: "Desert Safari & Adventure Guide", specAr: "مرشدة المغامرات والرحلات الصحراوية", img: "IMG_4406.jpeg" }
+        ];
+
+        function enterApp() {
+            document.getElementById('auth-view').style.display = 'none';
+            document.getElementById('app-view').classList.remove('hidden');
+            renderAllSections();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function logout() {
+            document.getElementById('app-view').classList.add('hidden');
+            document.getElementById('auth-view').style.display = 'flex';
+        }
+
+        function renderSectionGrid(categoryKey, gridId) {
+            var grid = document.getElementById(gridId);
+            if (!grid) return;
+            var items = categoriesData[categoryKey] || [];
+            grid.innerHTML = items.map(function(site) {
+                var title = currentLang === 'en' ? site.nameEn : site.nameAr;
+                var loc = currentLang === 'en' ? site.locEn : site.locAr;
+                var desc = currentLang === 'en' ? site.descEn : site.descAr;
+                var bookingBtnHtml = site.needsBooking ? '<button type="button" class="btn-card-booking" onclick="openBookingModal(\'' + title + '\')">📅 حجز موعد</button>' : '';
+
+                return '<div class="landmark-card">' +
+                    '<div><div class="card-media"><img src="' + site.img + '" alt="' + title + '"></div>' +
+                    '<div class="card-body"><div style="font-size:0.75rem;font-weight:700;color:var(--hail-gold-dark);">' + loc + '</div>' +
+                    '<h4 class="card-title">' + title + '</h4><p style="font-size:0.84rem;color:var(--text-muted);">' + desc + '</p></div></div>' +
+                    '<div class="card-footer"><button type="button" class="btn-card-vr" onclick="showToast(\'Loaded 360 view for ' + title + '\')">👁 360°</button>' + bookingBtnHtml + '</div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function renderGuidesGrid() {
+            var grid = document.getElementById('guides-grid');
+            if (!grid) return;
+            grid.innerHTML = guidesData.map(function(guide) {
+                var name = currentLang === 'en' ? guide.nameEn : guide.nameAr;
+                var spec = currentLang === 'en' ? guide.specEn : guide.specAr;
+                return '<div class="landmark-card">' +
+                    '<div><div class="card-media"><img src="' + guide.img + '" alt="' + name + '"></div>' +
+                    '<div class="card-body"><h4 class="card-title">' + name + '</h4><p style="font-size:0.84rem;color:var(--text-muted);">' + spec + '</p></div></div>' +
+                    '<div class="card-footer"><button type="button" class="btn-card-vr" onclick="showToast(\'تم إرسال طلب الحجز للمرشد ' + name + '\')">📞 حجز المرشد</button></div>' +
+                '</div>';
+            }).join('');
+        }
+
+        function renderAllSections() {
+            renderSectionGrid('heritage', 'heritage-grid');
+            renderSectionGrid('hotels', 'hotels-grid');
+            renderSectionGrid('cafes', 'cafes-grid');
+            renderSectionGrid('restaurants', 'restaurants-grid');
+            renderSectionGrid('entertainment', 'entertainment-grid');
+            renderSectionGrid('unique', 'unique-grid');
+            renderGuidesGrid();
+        }
+
+        function calculateBudgetPlan() {
+            var amount = parseFloat(document.getElementById('budget-input').value);
+            var days = parseInt(document.getElementById('budget-days').value);
+            var out = document.getElementById('budget-output');
+
+            if (!amount || amount <= 0) {
+                showToast('الرجاء إدخال مبلغ صحيح للميزانية');
+                return;
+            }
+
+            var perDay = Math.round(amount / days);
+            var tierTitle = '';
+            var recommendation = '';
+
+            if (perDay < 500) {
+                tierTitle = 'الخطة الاقتصادية (Economic Plan)';
+                recommendation = '• <strong>الإقامة:</strong> فنادق اقتصادية مريحة.<br>• <strong>المطاعم والكافيهات:</strong> مطعم نكهة ديرتنا + قهوة في بنشاي.<br>• <strong>الأنشطة:</strong> جولة في المنطقة المركزية ومطل حاتم الطائي.';
+            } else if (perDay <= 1200) {
+                tierTitle = 'الخطة المتوازنة (Balanced Plan)';
+                recommendation = '• <strong>الإقامة:</strong> فندق سكنى رويال أو جولدن توليب.<br>• <strong>المطاعم والكافيهات:</strong> الوادي المبارك + خطوة جمل.<br>• <strong>الأنشطة:</strong> زيارة جبه وتوارن + أجا بارك.';
+            } else {
+                tierTitle = 'الخطة الفاخرة (Luxury VIP Plan)';
+                recommendation = '• <strong>الإقامة:</strong> فندق ميلينيوم حائل أو ريتش لوبي.<br>• <strong>المطاعم والكافيهات:</strong> القلعة القديمه وروقا روكو + بيكوك.<br>• <strong>الأنشطة:</strong> تطعيس ودبابات ومربط الطائي للخيل.';
+            }
+
+            out.innerHTML = '<strong>' + tierTitle + '</strong> (الميزانية الإجمالية: ' + amount + ' ريال لمدة ' + days + ' أيام | بمعدل ' + perDay + ' ريال يومياً):<br><div style="margin-top:6px;">' + recommendation + '</div>';
+            out.classList.remove('hidden');
+            showToast('تم تجهيز خطة الميزانية بنجاح!');
+        }
+
+        function openBookingModal(placeName) {
+            selectedPlaceForBooking = placeName;
+            document.getElementById('booking-modal-title').textContent = 'حجز موعد زيارة: ' + placeName;
+            document.getElementById('booking-modal').style.display = 'flex';
+        }
+
+        function closeBookingModal() {
+            document.getElementById('booking-modal').style.display = 'none';
+        }
+
+        function confirmBooking() {
+            var day = document.getElementById('booking-day').value;
+            var date = document.getElementById('booking-date').value;
+            closeBookingModal();
+            showToast('تم حجز ' + selectedPlaceForBooking + ' بنجاح ليوم ' + day + ' الموافق ' + date);
+        }
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            document.getElementById('lang-label-auth').textContent = currentLang === 'en' ? 'العربية' : 'English';
+            document.getElementById('lang-label-app').textContent = currentLang === 'en' ? 'العربية' : 'English';
+            renderAllSections();
+        }
+
+        function showToast(msg) {
+            var toast = document.getElementById('toast');
+            document.getElementById('toast-text').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(function() { toast.classList.add('hidden'); }, 3000);
+        }
+
+        function sendAiMessage() {
+            var input = document.getElementById('chat-input');
+            var text = input.value.trim();
+            if (!text) return;
+            var box = document.getElementById('chat-messages');
+            box.innerHTML += '<div style="margin-top:6px;"><strong>You:</strong> ' + text + '</div>';
+            input.value = '';
+            
+            setTimeout(function() {
+                var reply = "<strong>AI Trip Planner:</strong> بناءً على رغبتك، إليك الجدول المقترح لرحلتك في حائل:<br>• <strong>الصباح:</strong> زيارة مواقع التراث والأماكن الترفيهية مثل مطل حاتم الطائي.<br>• <strong>الظهيرة:</strong> الغداء في مطعم نكهة ديرتنا أو الوادي المبارك.<br>• <strong>المساء:</strong> زيارة حايل زون وأجا بارك مع المرشد فهد الشمري!";
+                box.innerHTML += '<div style="margin-top:8px; color:var(--hail-green); background:#E8F1EC; padding:10px; border-radius:8px;">' + reply + '</div>';
+                box.scrollTop = box.scrollHeight;
+            }, 600);
+        }
+    </script>
+</body>
+</html>
